@@ -198,8 +198,9 @@ export default function RameshOpsDesk() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeSpreadsheet, setActiveSpreadsheet] = useState<"inventory" | "sales" | "suppliers" | "openPOs" | "storeMessages">("inventory");
   const [activeReceipt, setActiveReceipt] = useState<ProblemItem | null>(null);
+  const [isScanning, setIsScanning] = useState(false);
+  const [scanStep, setScanStep] = useState<string>("");
 
-  // Chat / Reasoning Assistant state
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [chatInput, setChatInput] = useState("");
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
@@ -222,6 +223,22 @@ export default function RameshOpsDesk() {
     }
   };
 
+  const handleRunScan = () => {
+    setIsScanning(true);
+    setScanStep("Reading inventory.csv across Belgaum, Hubli, Gokak...");
+    setTimeout(() => {
+      setScanStep("Cross-referencing sales burn rates against supplier lead times...");
+    }, 800);
+    setTimeout(() => {
+      setScanStep("Scanning open PO delivery logs and warehouse overnight messages...");
+    }, 1600);
+    setTimeout(() => {
+      setIsScanning(false);
+      setScanStep("");
+      setProblems(INITIAL_PROBLEMS);
+    }, 2400);
+  };
+
   const handleSendMessage = (e: React.FormEvent) => {
     e.preventDefault();
     if (!chatInput.trim()) return;
@@ -236,7 +253,6 @@ export default function RameshOpsDesk() {
     setChatMessages((prev) => [...prev, userMsg]);
     setChatInput("");
 
-    // Simulate Agent Domain Reasoning based on the 5 spreadsheets
     setTimeout(() => {
       let reply = "I analyzed our 5 spreadsheets: ";
       const lower = query.toLowerCase();
@@ -295,6 +311,14 @@ export default function RameshOpsDesk() {
 
         <div className="flex items-center gap-3">
           <button
+            onClick={handleRunScan}
+            disabled={isScanning}
+            className="px-3.5 py-1.5 rounded-lg border border-amber-500/40 bg-amber-500/10 hover:bg-amber-500/20 text-xs font-semibold text-amber-300 transition flex items-center gap-1.5 disabled:opacity-50"
+          >
+            <span>{isScanning ? "⏳" : "🔄"}</span>
+            <span>{isScanning ? "Ingesting Feeds..." : "Run Feed Ingestion"}</span>
+          </button>
+          <button
             onClick={() => setIsModalOpen(true)}
             className="px-3.5 py-1.5 rounded-lg border border-blue-500/30 bg-blue-500/10 hover:bg-blue-500/20 text-xs font-semibold text-blue-300 transition flex items-center gap-1.5"
           >
@@ -309,48 +333,60 @@ export default function RameshOpsDesk() {
         </div>
       </header>
 
-      {/* Main Body */}
+      {/* Main Content */}
       <main className="max-w-6xl w-full mx-auto px-4 sm:px-6 py-8 flex-1">
         {/* Morning Ingestion Banner */}
         <section className="rounded-2xl border border-slate-800 bg-gradient-to-br from-slate-900 to-slate-950 p-6 mb-8 relative">
-          <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
-            <span className="text-xs font-bold text-amber-400 uppercase tracking-widest">
-              Morning Ingestion Complete &bull; 8:30 AM
-            </span>
-            <span className="text-xs font-mono text-slate-400">
-              Cross-checked 5 files &bull; Belgaum &bull; Hubli &bull; Gokak
-            </span>
-          </div>
+          {isScanning ? (
+            <div className="py-6 flex flex-col items-center justify-center text-center">
+              <div className="w-8 h-8 border-2 border-amber-400 border-t-transparent rounded-full animate-spin mb-3"></div>
+              <span className="text-xs font-mono text-amber-300 font-bold uppercase tracking-wider mb-1">
+                Agent Ingestion In Progress
+              </span>
+              <p className="text-xs text-slate-400 animate-pulse">{scanStep}</p>
+            </div>
+          ) : (
+            <>
+              <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
+                <span className="text-xs font-bold text-amber-400 uppercase tracking-widest">
+                  Morning Ingestion Complete &bull; 8:30 AM
+                </span>
+                <span className="text-xs font-mono text-slate-400">
+                  Cross-checked 5 files &bull; Belgaum &bull; Hubli &bull; Gokak
+                </span>
+              </div>
 
-          <h2 className="text-2xl font-bold text-white mb-2">
-            3 High-Priority Issues Flagged for Today
-          </h2>
-          <p className="text-sm text-slate-300 max-w-3xl leading-relaxed">
-            The AI agent evaluated inventory burn-rates against supplier lead times and warehouse surpluses.
-            Decide on the quantified action drafts below to execute dispatch orders.
-          </p>
+              <h2 className="text-2xl font-bold text-white mb-2">
+                3 High-Priority Issues Flagged for Today
+              </h2>
+              <p className="text-sm text-slate-300 max-w-3xl leading-relaxed">
+                The AI agent evaluated inventory burn-rates against supplier lead times and warehouse surpluses.
+                Decide on the quantified action drafts below to execute dispatch orders.
+              </p>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6 pt-4 border-t border-slate-800">
-            <div>
-              <span className="text-xs text-slate-400 block">Stores Monitored</span>
-              <span className="text-base font-bold text-white">6 Locations</span>
-            </div>
-            <div>
-              <span className="text-xs text-slate-400 block">Imminent Stockout</span>
-              <span className="text-base font-bold text-red-400">Gokak (2 Days Left)</span>
-            </div>
-            <div>
-              <span className="text-xs text-slate-400 block">Overdue POs</span>
-              <span className="text-base font-bold text-amber-400">PO #4412 (+4 Days)</span>
-            </div>
-            <div>
-              <span className="text-xs text-slate-400 block">Idle Inventory</span>
-              <span className="text-base font-bold text-slate-300">Belgaum Depot</span>
-            </div>
-          </div>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6 pt-4 border-t border-slate-800">
+                <div>
+                  <span className="text-xs text-slate-400 block">Stores Monitored</span>
+                  <span className="text-base font-bold text-white">6 Locations</span>
+                </div>
+                <div>
+                  <span className="text-xs text-slate-400 block">Imminent Stockout</span>
+                  <span className="text-base font-bold text-red-400">Gokak (2 Days Left)</span>
+                </div>
+                <div>
+                  <span className="text-xs text-slate-400 block">Overdue POs</span>
+                  <span className="text-base font-bold text-amber-400">PO #4412 (+4 Days)</span>
+                </div>
+                <div>
+                  <span className="text-xs text-slate-400 block">Idle Inventory</span>
+                  <span className="text-base font-bold text-slate-300">Belgaum Depot</span>
+                </div>
+              </div>
+            </>
+          )}
         </section>
 
-        {/* Action Decision Queue */}
+        {/* Tab Filter and Status */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex gap-2">
             {(["ALL", "PENDING", "PROCESSED"] as const).map((tab) => (
@@ -372,6 +408,7 @@ export default function RameshOpsDesk() {
           </span>
         </div>
 
+        {/* Cards Queue */}
         <div className="space-y-6">
           {filtered.map((item) => (
             <div
@@ -421,7 +458,7 @@ export default function RameshOpsDesk() {
               </h3>
               <p className="text-sm text-slate-300 mb-4">{item.summary}</p>
 
-              {/* Quantified Evidence */}
+              {/* Numbers and Evidence */}
               <div className="p-4 rounded-xl bg-slate-950 border border-slate-800/80 mb-5">
                 <span className="text-[10px] font-bold text-amber-400 uppercase tracking-widest block mb-2">
                   Agent Evidence &amp; Numbers
@@ -451,7 +488,7 @@ export default function RameshOpsDesk() {
                 )}
               </div>
 
-              {/* Trade-Off Comparison */}
+              {/* Trade-off Comparison */}
               <div className="mb-5">
                 <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider block mb-2">
                   Trade-off Comparison:
@@ -484,7 +521,7 @@ export default function RameshOpsDesk() {
                 </div>
               </div>
 
-              {/* Ready Action Draft */}
+              {/* Action Draft */}
               <div className="p-4 rounded-xl border border-slate-800 bg-slate-950 flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
                   <div className="flex items-center gap-2 mb-1">
@@ -531,7 +568,7 @@ export default function RameshOpsDesk() {
         </div>
       </main>
 
-      {/* Floating Agent Reasoning Chat Widget */}
+      {/* Floating Copilot Widget */}
       <div className="fixed bottom-4 right-4 z-40">
         {!isChatOpen ? (
           <button
@@ -543,7 +580,6 @@ export default function RameshOpsDesk() {
           </button>
         ) : (
           <div className="w-96 rounded-2xl border border-slate-800 bg-slate-900 shadow-2xl flex flex-col h-[460px]">
-            {/* Chat Header */}
             <div className="p-3.5 border-b border-slate-800 bg-slate-950/80 rounded-t-2xl flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></div>
@@ -557,7 +593,6 @@ export default function RameshOpsDesk() {
               </button>
             </div>
 
-            {/* Chat Body */}
             <div className="p-3.5 overflow-y-auto flex-1 space-y-3 text-xs">
               {chatMessages.map((msg, i) => (
                 <div
@@ -578,7 +613,6 @@ export default function RameshOpsDesk() {
               ))}
             </div>
 
-            {/* Quick Prompts */}
             <div className="px-3 py-1.5 border-t border-slate-800/60 bg-slate-950/40 flex gap-1.5 overflow-x-auto no-scrollbar">
               <button
                 onClick={() => setChatInput("Why transfer filters to Gokak instead of ordering?")}
@@ -594,7 +628,6 @@ export default function RameshOpsDesk() {
               </button>
             </div>
 
-            {/* Chat Input */}
             <form onSubmit={handleSendMessage} className="p-2.5 border-t border-slate-800 bg-slate-950 rounded-b-2xl flex gap-2">
               <input
                 type="text"
@@ -614,7 +647,7 @@ export default function RameshOpsDesk() {
         )}
       </div>
 
-      {/* Modal: The 5 Raw Morning Spreadsheets */}
+      {/* 5 Source Feeds Inspector Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
           <div className="bg-slate-900 border border-slate-800 rounded-2xl max-w-4xl w-full max-h-[85vh] flex flex-col shadow-2xl">
@@ -635,7 +668,6 @@ export default function RameshOpsDesk() {
               </button>
             </div>
 
-            {/* Spreadsheet Tabs */}
             <div className="flex border-b border-slate-800 overflow-x-auto px-5 pt-3 gap-2 bg-slate-950/50">
               {(
                 [
@@ -660,7 +692,6 @@ export default function RameshOpsDesk() {
               ))}
             </div>
 
-            {/* Table Display */}
             <div className="p-5 overflow-auto flex-1 font-mono text-xs">
               {activeSpreadsheet === "inventory" && (
                 <table className="w-full text-left">
@@ -786,7 +817,7 @@ export default function RameshOpsDesk() {
         </div>
       )}
 
-      {/* Modal: Official Order Voucher Receipt */}
+      {/* Printable Official Voucher Modal */}
       {activeReceipt && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
           <div className="bg-slate-900 border border-emerald-500/40 rounded-2xl max-w-lg w-full p-6 shadow-2xl relative">
@@ -843,8 +874,14 @@ export default function RameshOpsDesk() {
 
             <div className="pt-2 flex gap-3">
               <button
+                onClick={() => window.print()}
+                className="w-1/2 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-xs font-bold text-white transition flex items-center justify-center gap-1.5"
+              >
+                <span>🖨️</span> Print Dispatch Slip
+              </button>
+              <button
                 onClick={() => setActiveReceipt(null)}
-                className="w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-300 transition"
+                className="w-1/2 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-300 transition"
               >
                 Close Voucher
               </button>
