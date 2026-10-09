@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 
+// Types matching Challenge 01
 interface ProblemItem {
   id: string;
   sku: string;
@@ -29,6 +30,8 @@ interface ProblemItem {
     referenceId: string;
     details: string;
     estimatedCost: string;
+    savingsVsAlternative: string;
+    carrierOrVendor: string;
   };
   status: "PENDING" | "APPROVED" | "REJECTED";
 }
@@ -53,14 +56,14 @@ const INITIAL_PROBLEMS: ProblemItem[] = [
       {
         title: "Inter-Store Transfer from Belgaum",
         description: "Move 20 units from Belgaum depot where stock moves slowly (0.5 units/day). Arrives tomorrow.",
-        costImpact: "Rs. 350 transit cost",
+        costImpact: "₹350 transit cost",
         timeToFulfill: "1 Day",
         recommended: true,
       },
       {
         title: "Emergency Order from Apex FastSupplies",
         description: "Express supplier can dispatch in 3 days but charges an extra 18% urgent premium.",
-        costImpact: "Rs. 2,100 additional cost",
+        costImpact: "₹2,100 additional cost",
         timeToFulfill: "3 Days",
         recommended: false,
       },
@@ -68,8 +71,10 @@ const INITIAL_PROBLEMS: ProblemItem[] = [
     actionDraft: {
       type: "TRANSFER REQUEST",
       referenceId: "TR-2026-081",
-      details: "Transfer 20 units of HF-4201 from Belgaum Depot -> Gokak Store. Carrier: Hubli Regional Van.",
-      estimatedCost: "Rs. 350",
+      details: "Transfer 20 units of HF-4201 from Belgaum Depot -> Gokak Store.",
+      estimatedCost: "₹350",
+      savingsVsAlternative: "₹1,750 vs Emergency Supplier",
+      carrierOrVendor: "Hubli Regional Logistics Van #KA-22",
     },
     status: "PENDING",
   },
@@ -89,15 +94,15 @@ const INITIAL_PROBLEMS: ProblemItem[] = [
     options: [
       {
         title: "Air Expedite Existing PO #4412",
-        description: "Supplier has units packed. Authorize Rs. 600 express transit surcharge for delivery tomorrow.",
-        costImpact: "Rs. 600 surcharge",
+        description: "Supplier has units packed. Authorize ₹600 express transit surcharge for delivery tomorrow.",
+        costImpact: "₹600 surcharge",
         timeToFulfill: "24 Hours",
         recommended: true,
       },
       {
         title: "Cancel & Reorder Locally",
         description: "Purchase from secondary local supplier at non-contract retail rate.",
-        costImpact: "Rs. 3,400 extra cost",
+        costImpact: "₹3,400 extra cost",
         timeToFulfill: "2 Days",
         recommended: false,
       },
@@ -105,8 +110,10 @@ const INITIAL_PROBLEMS: ProblemItem[] = [
     actionDraft: {
       type: "EXPEDITE PO",
       referenceId: "PO-4412-EXP",
-      details: "Urgent air courier authorization for PO #4412. Supplier: Kirloskar Spares (50 sets).",
-      estimatedCost: "Rs. 600",
+      details: "Urgent air courier authorization for PO #4412 (50 sets).",
+      estimatedCost: "₹600",
+      savingsVsAlternative: "₹2,800 vs Spot Reorder",
+      carrierOrVendor: "Blue Dart Air Priority Cargo",
     },
     status: "PENDING",
   },
@@ -133,8 +140,8 @@ const INITIAL_PROBLEMS: ProblemItem[] = [
       },
       {
         title: "Hold at standard MRP",
-        description: "Leave stock on shelves. Inventory holding fee costs Rs. 800/month.",
-        costImpact: "Rs. 800/mo holding loss",
+        description: "Leave stock on shelves. Inventory holding fee costs ₹800/month.",
+        costImpact: "₹800/mo holding loss",
         timeToFulfill: "N/A",
         recommended: false,
       },
@@ -142,21 +149,62 @@ const INITIAL_PROBLEMS: ProblemItem[] = [
     actionDraft: {
       type: "CLEARANCE REBATE",
       referenceId: "DISC-OR-2026",
-      details: "Issue 15% promotional clearance code on OR-1108 for Belgaum & Dharwad garage accounts.",
-      estimatedCost: "Rs. 0 cash outlay",
+      details: "Issue 15% promotional clearance code on OR-1108 across Belgaum garages.",
+      estimatedCost: "₹0 cash outlay",
+      savingsVsAlternative: "₹2,400 unlocked capital",
+      carrierOrVendor: "Direct Workshop Portal Notification",
     },
     status: "PENDING",
   },
 ];
 
+// Mock data representing the 5 raw morning spreadsheets
+const RAW_SPREADSHEET_DATA = {
+  inventory: [
+    { sku: "HF-4201", store: "Gokak Store", onHand: 8, reserved: 2, reorderPoint: 20 },
+    { sku: "HF-4201", store: "Belgaum Depot", onHand: 48, reserved: 0, reorderPoint: 15 },
+    { sku: "SK-9940", store: "Hubli Depot", onHand: 3, reserved: 3, reorderPoint: 25 },
+    { sku: "OR-1108", store: "Belgaum Depot", onHand: 180, reserved: 0, reorderPoint: 30 },
+  ],
+  sales: [
+    { sku: "HF-4201", store: "Gokak Store", last7Days: 28, avgDaily: 4.0, trend: "+15%" },
+    { sku: "HF-4201", store: "Belgaum Depot", last7Days: 3, avgDaily: 0.4, trend: "-40%" },
+    { sku: "SK-9940", store: "Hubli Depot", last7Days: 18, avgDaily: 2.5, trend: "+20%" },
+    { sku: "OR-1108", store: "Belgaum Depot", last7Days: 0, avgDaily: 0.0, trend: "0%" },
+  ],
+  suppliers: [
+    { name: "Kirloskar Spares", sku: "SK-9940", unitCost: "₹180", standardLead: "10 Days", expressLead: "1 Day (Air)" },
+    { name: "Apex FastSupplies", sku: "HF-4201", unitCost: "₹420", standardLead: "7 Days", expressLead: "3 Days (+18%)" },
+    { name: "Deccan Hydraulics", sku: "HF-4201", unitCost: "₹350", standardLead: "7 Days", expressLead: "None" },
+  ],
+  openPOs: [
+    { poNumber: "PO-4412", vendor: "Kirloskar Spares", sku: "SK-9940", qty: 50, expectedDate: "3 Days Ago", status: "OVERDUE" },
+    { poNumber: "PO-4420", vendor: "Deccan Hydraulics", sku: "HF-4201", qty: 40, expectedDate: "Oct 15", status: "IN_TRANSIT" },
+  ],
+  storeMessages: [
+    { time: "06:45 AM", store: "Gokak Branch", message: "Urgent: Tractor harvest servicing starting Monday. Only 8 filters HF-4201 left!" },
+    { time: "07:10 AM", store: "Belgaum Depot", message: "Warehouse space tight in Bay 3 due to unsold nitrile O-ring boxes." },
+    { time: "07:30 AM", store: "Hubli Depot", message: "Workshop customer waiting on seal kits from PO #4412." },
+  ],
+};
+
 export default function RameshOpsDesk() {
   const [problems, setProblems] = useState<ProblemItem[]>(INITIAL_PROBLEMS);
   const [activeTab, setActiveTab] = useState<"ALL" | "PENDING" | "PROCESSED">("ALL");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [activeSpreadsheet, setActiveSpreadsheet] = useState<"inventory" | "sales" | "suppliers" | "openPOs" | "storeMessages">("inventory");
+  const [activeReceipt, setActiveReceipt] = useState<ProblemItem | null>(null);
 
   const handleDecision = (id: string, decision: "APPROVED" | "REJECTED") => {
     setProblems((prev) =>
       prev.map((item) => (item.id === id ? { ...item, status: decision } : item))
     );
+    if (decision === "APPROVED") {
+      const approvedItem = problems.find((p) => p.id === id);
+      if (approvedItem) {
+        setActiveReceipt({ ...approvedItem, status: "APPROVED" });
+      }
+    }
   };
 
   const filtered = problems.filter((item) => {
@@ -169,6 +217,7 @@ export default function RameshOpsDesk() {
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans">
+      {/* Top Header */}
       <header className="border-b border-slate-800 bg-slate-900/80 px-6 py-4 flex flex-wrap items-center justify-between gap-4 sticky top-0 z-20 backdrop-blur-md">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center font-black text-amber-400">
@@ -189,30 +238,32 @@ export default function RameshOpsDesk() {
           </div>
         </div>
 
-        <div className="flex items-center gap-4">
-          <div className="text-right">
-            <span className="text-xs text-slate-400 block">Pending Approvals</span>
-            <span className="text-sm font-bold text-amber-400">
-              {pendingCount} Actions Need Approval
-            </span>
-          </div>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="px-3.5 py-1.5 rounded-lg border border-blue-500/30 bg-blue-500/10 hover:bg-blue-500/20 text-xs font-semibold text-blue-300 transition flex items-center gap-1.5"
+          >
+            <span>📊</span> View 5 Source Feeds
+          </button>
           <button
             onClick={() => setProblems(INITIAL_PROBLEMS)}
             className="px-3.5 py-1.5 rounded-lg border border-slate-700 bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-200 transition"
           >
-            Reset Test Data
+            Reset
           </button>
         </div>
       </header>
 
+      {/* Main Body */}
       <main className="max-w-6xl w-full mx-auto px-4 sm:px-6 py-8 flex-1">
+        {/* Morning Ingestion Banner */}
         <section className="rounded-2xl border border-slate-800 bg-gradient-to-br from-slate-900 to-slate-950 p-6 mb-8 relative">
           <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
             <span className="text-xs font-bold text-amber-400 uppercase tracking-widest">
               Morning Ingestion Complete &bull; 8:30 AM
             </span>
             <span className="text-xs font-mono text-slate-400">
-              Processed: Products &bull; Inventory &bull; Sales &bull; Suppliers &bull; Open POs
+              Cross-checked 5 files &bull; Belgaum &bull; Hubli &bull; Gokak
             </span>
           </div>
 
@@ -220,8 +271,8 @@ export default function RameshOpsDesk() {
             3 High-Priority Issues Flagged for Today
           </h2>
           <p className="text-sm text-slate-300 max-w-3xl leading-relaxed">
-            The AI agent cross-referenced inventory rates against supplier lead times and store transfers.
-            Review the evidence, trade-offs, and draft action for each scenario below before approving execution.
+            The AI agent evaluated inventory burn-rates against supplier lead times and warehouse surpluses.
+            Decide on the quantified action drafts below to execute dispatch orders.
           </p>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6 pt-4 border-t border-slate-800">
@@ -230,20 +281,21 @@ export default function RameshOpsDesk() {
               <span className="text-base font-bold text-white">6 Locations</span>
             </div>
             <div>
-              <span className="text-xs text-slate-400 block">Urgent Stockouts</span>
+              <span className="text-xs text-slate-400 block">Imminent Stockout</span>
               <span className="text-base font-bold text-red-400">Gokak (2 Days Left)</span>
             </div>
             <div>
-              <span className="text-xs text-slate-400 block">Overdue Deliveries</span>
-              <span className="text-base font-bold text-amber-400">1 PO Delayed</span>
+              <span className="text-xs text-slate-400 block">Overdue POs</span>
+              <span className="text-base font-bold text-amber-400">PO #4412 (+4 Days)</span>
             </div>
             <div>
-              <span className="text-xs text-slate-400 block">Excess Stock Tying Cash</span>
+              <span className="text-xs text-slate-400 block">Idle Inventory</span>
               <span className="text-base font-bold text-slate-300">Belgaum Depot</span>
             </div>
           </div>
         </section>
 
+        {/* Action Decision Queue */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex gap-2">
             {(["ALL", "PENDING", "PROCESSED"] as const).map((tab) => (
@@ -261,7 +313,7 @@ export default function RameshOpsDesk() {
             ))}
           </div>
           <span className="text-xs text-slate-400 font-mono">
-            {filtered.length} decision cards
+            {pendingCount} Awaiting Ramesh&apos;s Signature
           </span>
         </div>
 
@@ -314,6 +366,7 @@ export default function RameshOpsDesk() {
               </h3>
               <p className="text-sm text-slate-300 mb-4">{item.summary}</p>
 
+              {/* Quantified Evidence */}
               <div className="p-4 rounded-xl bg-slate-950 border border-slate-800/80 mb-5">
                 <span className="text-[10px] font-bold text-amber-400 uppercase tracking-widest block mb-2">
                   Agent Evidence &amp; Numbers
@@ -343,6 +396,7 @@ export default function RameshOpsDesk() {
                 )}
               </div>
 
+              {/* Trade-Off Comparison */}
               <div className="mb-5">
                 <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider block mb-2">
                   Trade-off Comparison:
@@ -375,6 +429,7 @@ export default function RameshOpsDesk() {
                 </div>
               </div>
 
+              {/* Ready Action Draft */}
               <div className="p-4 rounded-xl border border-slate-800 bg-slate-950 flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
                   <div className="flex items-center gap-2 mb-1">
@@ -387,7 +442,8 @@ export default function RameshOpsDesk() {
                   </div>
                   <p className="text-sm font-medium text-white">{item.actionDraft.details}</p>
                   <span className="text-xs text-slate-400 mt-1 block">
-                    Estimated Cost Impact: <strong>{item.actionDraft.estimatedCost}</strong>
+                    Estimated Cost: <strong>{item.actionDraft.estimatedCost}</strong> &bull; Value Saved:{" "}
+                    <strong className="text-emerald-400">{item.actionDraft.savingsVsAlternative}</strong>
                   </span>
                 </div>
 
@@ -407,9 +463,12 @@ export default function RameshOpsDesk() {
                     </button>
                   </div>
                 ) : (
-                  <div className="text-xs text-slate-400 italic">
-                    Decision recorded by Ramesh Kulkarni.
-                  </div>
+                  <button
+                    onClick={() => setActiveReceipt(item)}
+                    className="px-4 py-2 rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-300 text-xs font-bold hover:bg-emerald-500/20 transition"
+                  >
+                    View Official Order Voucher 📄
+                  </button>
                 )}
               </div>
             </div>
@@ -417,6 +476,246 @@ export default function RameshOpsDesk() {
         </div>
       </main>
 
+      {/* Modal: The 5 Raw Morning Spreadsheets */}
+      {isModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
+          <div className="bg-slate-900 border border-slate-800 rounded-2xl max-w-4xl w-full max-h-[85vh] flex flex-col shadow-2xl">
+            <div className="p-5 border-b border-slate-800 flex items-center justify-between">
+              <div>
+                <h3 className="text-base font-bold text-white">
+                  Ramesh&apos;s Morning Ingestion Feeds (5 Spreadsheets)
+                </h3>
+                <p className="text-xs text-slate-400">
+                  Data cross-referenced by the agent at 08:30 AM before raising recommendations.
+                </p>
+              </div>
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className="text-slate-400 hover:text-white text-sm font-bold"
+              >
+                ✕ Close
+              </button>
+            </div>
+
+            {/* Spreadsheet Tabs */}
+            <div className="flex border-b border-slate-800 overflow-x-auto px-5 pt-3 gap-2 bg-slate-950/50">
+              {(
+                [
+                  { key: "inventory", label: "1. Stock / Inventory" },
+                  { key: "sales", label: "2. Sales Velocity" },
+                  { key: "suppliers", label: "3. Suppliers Directory" },
+                  { key: "openPOs", label: "4. Active Open POs" },
+                  { key: "storeMessages", label: "5. Store Overnight Notes" },
+                ] as const
+              ).map((tab) => (
+                <button
+                  key={tab.key}
+                  onClick={() => setActiveSpreadsheet(tab.key)}
+                  className={`px-3 py-2 text-xs font-bold whitespace-nowrap border-b-2 transition ${
+                    activeSpreadsheet === tab.key
+                      ? "border-amber-400 text-amber-300 bg-amber-500/10 rounded-t"
+                      : "border-transparent text-slate-400 hover:text-slate-200"
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Table Display */}
+            <div className="p-5 overflow-auto flex-1 font-mono text-xs">
+              {activeSpreadsheet === "inventory" && (
+                <table className="w-full text-left">
+                  <thead className="border-b border-slate-800 text-slate-400">
+                    <tr>
+                      <th className="pb-2">SKU</th>
+                      <th className="pb-2">Store / Depot</th>
+                      <th className="pb-2">On-Hand</th>
+                      <th className="pb-2">Reserved</th>
+                      <th className="pb-2">Reorder Threshold</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-800/50 text-slate-300">
+                    {RAW_SPREADSHEET_DATA.inventory.map((row, i) => (
+                      <tr key={i} className="hover:bg-slate-800/40">
+                        <td className="py-2.5 font-bold text-white">{row.sku}</td>
+                        <td className="py-2.5">{row.store}</td>
+                        <td className="py-2.5 text-amber-400 font-bold">{row.onHand}</td>
+                        <td className="py-2.5">{row.reserved}</td>
+                        <td className="py-2.5">{row.reorderPoint}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+
+              {activeSpreadsheet === "sales" && (
+                <table className="w-full text-left">
+                  <thead className="border-b border-slate-800 text-slate-400">
+                    <tr>
+                      <th className="pb-2">SKU</th>
+                      <th className="pb-2">Location</th>
+                      <th className="pb-2">Last 7 Days</th>
+                      <th className="pb-2">Daily Run-rate</th>
+                      <th className="pb-2">Trend</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-800/50 text-slate-300">
+                    {RAW_SPREADSHEET_DATA.sales.map((row, i) => (
+                      <tr key={i} className="hover:bg-slate-800/40">
+                        <td className="py-2.5 font-bold text-white">{row.sku}</td>
+                        <td className="py-2.5">{row.store}</td>
+                        <td className="py-2.5">{row.last7Days} units</td>
+                        <td className="py-2.5 text-blue-400 font-bold">{row.avgDaily} / day</td>
+                        <td className="py-2.5">{row.trend}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+
+              {activeSpreadsheet === "suppliers" && (
+                <table className="w-full text-left">
+                  <thead className="border-b border-slate-800 text-slate-400">
+                    <tr>
+                      <th className="pb-2">Vendor Name</th>
+                      <th className="pb-2">Supplied SKU</th>
+                      <th className="pb-2">Unit Price</th>
+                      <th className="pb-2">Standard Lead</th>
+                      <th className="pb-2">Express Option</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-800/50 text-slate-300">
+                    {RAW_SPREADSHEET_DATA.suppliers.map((row, i) => (
+                      <tr key={i} className="hover:bg-slate-800/40">
+                        <td className="py-2.5 font-bold text-white">{row.name}</td>
+                        <td className="py-2.5">{row.sku}</td>
+                        <td className="py-2.5">{row.unitCost}</td>
+                        <td className="py-2.5">{row.standardLead}</td>
+                        <td className="py-2.5 text-amber-300">{row.expressLead}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+
+              {activeSpreadsheet === "openPOs" && (
+                <table className="w-full text-left">
+                  <thead className="border-b border-slate-800 text-slate-400">
+                    <tr>
+                      <th className="pb-2">PO #</th>
+                      <th className="pb-2">Vendor</th>
+                      <th className="pb-2">Part</th>
+                      <th className="pb-2">Qty</th>
+                      <th className="pb-2">Expected Date</th>
+                      <th className="pb-2">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-800/50 text-slate-300">
+                    {RAW_SPREADSHEET_DATA.openPOs.map((row, i) => (
+                      <tr key={i} className="hover:bg-slate-800/40">
+                        <td className="py-2.5 font-bold text-white">{row.poNumber}</td>
+                        <td className="py-2.5">{row.vendor}</td>
+                        <td className="py-2.5">{row.sku}</td>
+                        <td className="py-2.5">{row.qty}</td>
+                        <td className="py-2.5 text-red-400">{row.expectedDate}</td>
+                        <td className="py-2.5">
+                          <span className="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-bold">
+                            {row.status}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+
+              {activeSpreadsheet === "storeMessages" && (
+                <div className="space-y-3 font-sans">
+                  {RAW_SPREADSHEET_DATA.storeMessages.map((msg, i) => (
+                    <div key={i} className="p-3 rounded-lg border border-slate-800 bg-slate-950/70">
+                      <div className="flex items-center justify-between text-xs mb-1">
+                        <strong className="text-amber-400">{msg.store}</strong>
+                        <span className="text-slate-500 font-mono">{msg.time}</span>
+                      </div>
+                      <p className="text-xs text-slate-300">{msg.message}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal: Official Order / Dispatch Voucher Receipt */}
+      {activeReceipt && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
+          <div className="bg-slate-900 border border-emerald-500/40 rounded-2xl max-w-lg w-full p-6 shadow-2xl relative">
+            <div className="text-center pb-4 border-b border-slate-800">
+              <span className="text-[10px] font-bold tracking-widest uppercase text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+                Official Execution Voucher
+              </span>
+              <h3 className="text-xl font-bold text-white mt-2">
+                Kaveri Spares &amp; Hydraulics
+              </h3>
+              <p className="text-xs text-slate-400">
+                Authorized by: Ramesh Kulkarni &bull; Head of Purchasing
+              </p>
+            </div>
+
+            <div className="py-4 space-y-3 text-xs">
+              <div className="flex justify-between border-b border-slate-800 pb-2">
+                <span className="text-slate-400">Action Reference:</span>
+                <span className="font-mono font-bold text-white">
+                  {activeReceipt.actionDraft.referenceId}
+                </span>
+              </div>
+              <div className="flex justify-between border-b border-slate-800 pb-2">
+                <span className="text-slate-400">Action Type:</span>
+                <span className="font-bold text-emerald-300">
+                  {activeReceipt.actionDraft.type}
+                </span>
+              </div>
+              <div className="flex justify-between border-b border-slate-800 pb-2">
+                <span className="text-slate-400">Target Item / SKU:</span>
+                <span className="text-white">
+                  {activeReceipt.itemName} ({activeReceipt.sku})
+                </span>
+              </div>
+              <div className="flex justify-between border-b border-slate-800 pb-2">
+                <span className="text-slate-400">Assigned Logistics / Carrier:</span>
+                <span className="text-white">
+                  {activeReceipt.actionDraft.carrierOrVendor}
+                </span>
+              </div>
+              <div className="flex justify-between border-b border-slate-800 pb-2">
+                <span className="text-slate-400">Total Cost Impact:</span>
+                <span className="font-bold text-white">
+                  {activeReceipt.actionDraft.estimatedCost}
+                </span>
+              </div>
+              <div className="flex justify-between border-b border-slate-800 pb-2">
+                <span className="text-slate-400">Value Unlocked / Saved:</span>
+                <span className="font-bold text-emerald-400">
+                  {activeReceipt.actionDraft.savingsVsAlternative}
+                </span>
+              </div>
+            </div>
+
+            <div className="pt-2 flex gap-3">
+              <button
+                onClick={() => setActiveReceipt(null)}
+                className="w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-300 transition"
+              >
+                Close Voucher
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Footer */}
       <footer className="border-t border-slate-800 py-4 px-6 text-center text-xs text-slate-500">
         Cypher 2026 &bull; KD&apos;s Garage Challenge 01: Kaveri Spares &amp; Hydraulics Agent
       </footer>
