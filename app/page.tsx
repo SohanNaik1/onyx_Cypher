@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 
-// Types matching Challenge 01
 interface ProblemItem {
   id: string;
   sku: string;
@@ -34,6 +33,12 @@ interface ProblemItem {
     carrierOrVendor: string;
   };
   status: "PENDING" | "APPROVED" | "REJECTED";
+}
+
+interface ChatMessage {
+  sender: "user" | "agent";
+  text: string;
+  timestamp: string;
 }
 
 const INITIAL_PROBLEMS: ProblemItem[] = [
@@ -158,7 +163,6 @@ const INITIAL_PROBLEMS: ProblemItem[] = [
   },
 ];
 
-// Mock data representing the 5 raw morning spreadsheets
 const RAW_SPREADSHEET_DATA = {
   inventory: [
     { sku: "HF-4201", store: "Gokak Store", onHand: 8, reserved: 2, reorderPoint: 20 },
@@ -195,6 +199,17 @@ export default function RameshOpsDesk() {
   const [activeSpreadsheet, setActiveSpreadsheet] = useState<"inventory" | "sales" | "suppliers" | "openPOs" | "storeMessages">("inventory");
   const [activeReceipt, setActiveReceipt] = useState<ProblemItem | null>(null);
 
+  // Chat / Reasoning Assistant state
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [chatInput, setChatInput] = useState("");
+  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
+    {
+      sender: "agent",
+      text: "Namaskara Ramesh! I've loaded today's 5 feeds across our 6 North Karnataka stores. Ask me anything about stockout timelines, vendor pricing, or transfer trade-offs.",
+      timestamp: "08:31 AM",
+    },
+  ]);
+
   const handleDecision = (id: string, decision: "APPROVED" | "REJECTED") => {
     setProblems((prev) =>
       prev.map((item) => (item.id === id ? { ...item, status: decision } : item))
@@ -207,6 +222,46 @@ export default function RameshOpsDesk() {
     }
   };
 
+  const handleSendMessage = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!chatInput.trim()) return;
+
+    const query = chatInput.trim();
+    const userMsg: ChatMessage = {
+      sender: "user",
+      text: query,
+      timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+    };
+
+    setChatMessages((prev) => [...prev, userMsg]);
+    setChatInput("");
+
+    // Simulate Agent Domain Reasoning based on the 5 spreadsheets
+    setTimeout(() => {
+      let reply = "I analyzed our 5 spreadsheets: ";
+      const lower = query.toLowerCase();
+
+      if (lower.includes("gokak") || lower.includes("filter") || lower.includes("hf-4201")) {
+        reply = "Gokak burns 4.0 filters/day with 8 remaining (run-out in 2 days). Belgaum has 48 units moving at only 0.4/day. Transferring 20 units leaves Belgaum with 28 units (70 days of cover) and saves ₹1,750 compared to Apex FastSupplies!";
+      } else if (lower.includes("hubli") || lower.includes("po") || lower.includes("kirloskar") || lower.includes("seal")) {
+        reply = "PO #4412 with Kirloskar Spares is 4 days overdue. Hubli Depot only has 3 units left with 3 reserved for harvest servicing. Paying ₹600 air freight ensures delivery tomorrow noon instead of waiting 10 days for a standard restock.";
+      } else if (lower.includes("belgaum") || lower.includes("o-ring") || lower.includes("clearance")) {
+        reply = "Belgaum has 180 boxes of OR-1108 tying up ₹2,400 with zero sales in 75 days. Holding costs cost us ₹800/month. Offering a 15% discount to local agricultural mechanics turns this idle stock into liquid capital immediately.";
+      } else {
+        reply = `Cross-referencing North Karnataka inventory: All 6 stores and 2 depots are indexed. For ${query}, inter-store transit via Hubli regional logistics is faster (24h) and 60% cheaper than emergency spot-market reorders.`;
+      }
+
+      setChatMessages((prev) => [
+        ...prev,
+        {
+          sender: "agent",
+          text: reply,
+          timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+        },
+      ]);
+    }, 600);
+  };
+
   const filtered = problems.filter((item) => {
     if (activeTab === "PENDING") return item.status === "PENDING";
     if (activeTab === "PROCESSED") return item.status !== "PENDING";
@@ -216,7 +271,7 @@ export default function RameshOpsDesk() {
   const pendingCount = problems.filter((p) => p.status === "PENDING").length;
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans">
+    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans relative pb-20">
       {/* Top Header */}
       <header className="border-b border-slate-800 bg-slate-900/80 px-6 py-4 flex flex-wrap items-center justify-between gap-4 sticky top-0 z-20 backdrop-blur-md">
         <div className="flex items-center gap-3">
@@ -476,6 +531,89 @@ export default function RameshOpsDesk() {
         </div>
       </main>
 
+      {/* Floating Agent Reasoning Chat Widget */}
+      <div className="fixed bottom-4 right-4 z-40">
+        {!isChatOpen ? (
+          <button
+            onClick={() => setIsChatOpen(true)}
+            className="flex items-center gap-2.5 px-4 py-3 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-xs shadow-2xl hover:scale-105 transition-all"
+          >
+            <span className="text-base">🤖</span>
+            <span>Ask Purchasing Copilot</span>
+          </button>
+        ) : (
+          <div className="w-96 rounded-2xl border border-slate-800 bg-slate-900 shadow-2xl flex flex-col h-[460px]">
+            {/* Chat Header */}
+            <div className="p-3.5 border-b border-slate-800 bg-slate-950/80 rounded-t-2xl flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></div>
+                <span className="text-xs font-bold text-white">Ramesh&apos;s AI Reasoner</span>
+              </div>
+              <button
+                onClick={() => setIsChatOpen(false)}
+                className="text-xs text-slate-400 hover:text-white font-bold px-2 py-1"
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Chat Body */}
+            <div className="p-3.5 overflow-y-auto flex-1 space-y-3 text-xs">
+              {chatMessages.map((msg, i) => (
+                <div
+                  key={i}
+                  className={`flex flex-col ${msg.sender === "user" ? "items-end" : "items-start"}`}
+                >
+                  <div
+                    className={`max-w-[85%] rounded-xl p-3 ${
+                      msg.sender === "user"
+                        ? "bg-blue-600 text-white"
+                        : "bg-slate-800 text-slate-200 border border-slate-700/60 leading-relaxed"
+                    }`}
+                  >
+                    {msg.text}
+                  </div>
+                  <span className="text-[9px] text-slate-500 mt-1 font-mono">{msg.timestamp}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* Quick Prompts */}
+            <div className="px-3 py-1.5 border-t border-slate-800/60 bg-slate-950/40 flex gap-1.5 overflow-x-auto no-scrollbar">
+              <button
+                onClick={() => setChatInput("Why transfer filters to Gokak instead of ordering?")}
+                className="text-[10px] bg-slate-800 hover:bg-slate-700 text-slate-300 px-2 py-1 rounded whitespace-nowrap"
+              >
+                Why Gokak transfer?
+              </button>
+              <button
+                onClick={() => setChatInput("What is our status on the overdue PO #4412?")}
+                className="text-[10px] bg-slate-800 hover:bg-slate-700 text-slate-300 px-2 py-1 rounded whitespace-nowrap"
+              >
+                Overdue PO #4412?
+              </button>
+            </div>
+
+            {/* Chat Input */}
+            <form onSubmit={handleSendMessage} className="p-2.5 border-t border-slate-800 bg-slate-950 rounded-b-2xl flex gap-2">
+              <input
+                type="text"
+                placeholder="Ask about inventory, suppliers, or lead times..."
+                value={chatInput}
+                onChange={(e) => setChatInput(e.target.value)}
+                className="flex-1 bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500"
+              />
+              <button
+                type="submit"
+                className="px-3.5 py-2 rounded-xl bg-blue-600 text-white font-bold text-xs hover:bg-blue-500 transition"
+              >
+                Ask
+              </button>
+            </form>
+          </div>
+        )}
+      </div>
+
       {/* Modal: The 5 Raw Morning Spreadsheets */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
@@ -648,7 +786,7 @@ export default function RameshOpsDesk() {
         </div>
       )}
 
-      {/* Modal: Official Order / Dispatch Voucher Receipt */}
+      {/* Modal: Official Order Voucher Receipt */}
       {activeReceipt && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
           <div className="bg-slate-900 border border-emerald-500/40 rounded-2xl max-w-lg w-full p-6 shadow-2xl relative">
