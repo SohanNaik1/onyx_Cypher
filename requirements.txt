@@ -2,3 +2,7 @@ pydantic
 pandas
 supabase
 python-dotenv
+fastapi
+uvicorn
+rich
+requests

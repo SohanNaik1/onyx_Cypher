@@ -32,33 +32,7 @@ def make_decisions(triage_df: pd.DataFrame, all_reconciled_df: pd.DataFrame, sup
         
         if not excess_locations.empty:
             # Pick the location with the most excess (highest runout_days)
-            best_excess = excess_locations.sort_values(by='runout_days', ascending=False).ililed_df['daily_velocity'] > 0,
-            (all_reconciled_df['true_stock'] + all_reconciled_df['incoming_po_qty']) / all_reconciled_df['daily_velocity'],
-            999.0
-        )
-    
-    # We only care about CRITICAL items for decisions
-    critical_items = triage_df[triage_df['status'] == 'CRITICAL']
-    
-    for _, item in critical_items.iterrows():
-        sku = item['sku']
-        loc = item['location']
-        runout_days = item['runout_days']
-        velocity = item['daily_velocity']
-        
-        # 1. Check Internal First (Transfer)
-        # Look in all_reconciled_df for the same SKU at a different location where runout_days > 30 (Excess)
-        excess_locations = all_reconciled_df[
-            (all_reconciled_df['sku'] == sku) & 
-            (all_reconciled_df['location'] != loc) & 
-            (all_reconciled_df['runout_days'] > 30)
-        ]
-        
-        if not excess_locations.empty:
-            # Pick the location with the most excess (highest runout_days)
             best_excess = excess_locations.sort_values(by='runout_days', ascending=False).iloc[0]
-            
-            # Enough to give the critical location a 14-day bufoc[0]
             
             # Enough to give the critical location a 14-day buffer
             transfer_qty = int(np.ceil(14 * velocity))
