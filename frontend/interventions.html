@@ -482,7 +482,7 @@
     
     async function loadInterventions() {
       try {
-        const res = await fetch('/api/triage');
+        const res = await fetch('http://127.0.0.1:8000/api/triage');
         const data = await res.json();
         currentInterventions = data.interventions || [];
         renderUI();
@@ -502,7 +502,7 @@
             currentInterventions.forEach((item, index) => {
               const isTransfer = item.action_type === 'TRANSFER';
               const typeLabel = isTransfer ? 'TRANSFER' : 'PURCHASE';
-              const routeText = isTransfer ? `<span class="font-medium">${item.from_loc}</span> &rarr; <span class="font-medium">${item.to_loc}</span>` : `<span class="font-medium">${item.from_loc}</span> &rarr; <span class="font-medium">${item.to_loc}</span>`;
+              const routeText = isTransfer ? `<span class="font-medium">${item.from}</span> &rarr; <span class="font-medium">${item.to}</span>` : `<span class="font-medium">${item.from}</span> &rarr; <span class="font-medium">${item.to}</span>`;
               const badgeClass = isTransfer ? 'bg-tertiary/15 text-tertiary' : 'bg-[#f59e0b]/15 text-[#f59e0b]';
               const iconName = isTransfer ? 'swap_horiz' : 'shopping_cart';
               
@@ -556,7 +556,7 @@
         btn.innerHTML = '<span class="material-symbols-outlined text-[14px] animate-spin">refresh</span> Processing';
         
         try {
-            const res = await fetch('/api/execute', {
+            const res = await fetch('http://127.0.0.1:8000/api/execute', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(item)

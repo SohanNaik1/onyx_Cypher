@@ -551,7 +551,7 @@
       }
 
       try {
-        const res = await fetch('/api/triage');
+        const res = await fetch('http://127.0.0.1:8000/api/triage');
         if (!res.ok) throw new Error("API not ok");
         const data = await res.json();
         
@@ -693,7 +693,7 @@
         try {
             // As requested, we loop through and hit the single /api/execute endpoint
             for (let item of itemsToApprove) {
-                const res = await fetch('/api/execute', {
+                const res = await fetch('http://127.0.0.1:8000/api/execute', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -1128,7 +1128,7 @@
             setTimeout(async () => {
                 addMessage('<span class="material-symbols-outlined text-[14px] animate-spin">refresh</span> Thinking...', false, 'loading-msg');
                 try {
-                    const res = await fetch('/api/chat', {
+                    const res = await fetch('http://127.0.0.1:8000/api/chat', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ message: text })
