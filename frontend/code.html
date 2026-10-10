@@ -299,72 +299,9 @@
 <div class="flex items-center justify-between pb-4">
 <span class="text-[15px] font-medium text-white">Watchlist</span>
 </div>
-<!-- Watchlist Rows (Spotify, Amazon, MSFT style) -->
+<!-- Watchlist Rows - Dynamically populated from API -->
 <div id="watchlist-container" class="flex flex-col gap-2.5 pt-1 max-h-[300px] overflow-y-auto">
-<!-- Item 1: SKU-101 -->
-<div class="flex items-center justify-between py-1.5 px-2 rounded-2xl hover:bg-white/[0.02] transition-colors cursor-pointer group">
-<div class="flex items-center gap-3">
-<div class="w-9 h-9 rounded-full bg-[#242231] border border-white/[0.06] flex items-center justify-center text-primary text-[15px] group-hover:scale-105 transition-transform">
-<span class="material-symbols-outlined text-[17px]">swap_horiz</span>
-</div>
-<div class="flex flex-col">
-<span class="text-[13px] font-medium text-white">SKU-101</span>
-<span class="text-[11px] text-text-muted">Belgaum ➔ Gokak</span>
-</div>
-</div>
-<div class="flex flex-col items-end">
-<span class="text-[13px] font-medium text-white">56 Units</span>
-<span class="text-[11px] text-accent-emerald font-medium">+₹50.00</span>
-</div>
-</div>
-<!-- Item 2: SKU-409 -->
-<div class="flex items-center justify-between py-1.5 px-2 rounded-2xl hover:bg-white/[0.02] transition-colors cursor-pointer group">
-<div class="flex items-center gap-3">
-<div class="w-9 h-9 rounded-full bg-[#242231] border border-white/[0.06] flex items-center justify-center text-[#cabeff] text-[15px] group-hover:scale-105 transition-transform">
-<span class="material-symbols-outlined text-[17px]">local_shipping</span>
-</div>
-<div class="flex flex-col">
-<span class="text-[13px] font-medium text-white">SKU-409</span>
-<span class="text-[11px] text-text-muted">Pune ➔ Belgaum</span>
-</div>
-</div>
-<div class="flex flex-col items-end">
-<span class="text-[13px] font-medium text-white">120 Units</span>
-<span class="text-[11px] text-accent-emerald font-medium">+₹14,200</span>
-</div>
-</div>
-<!-- Item 3: SKU-288 -->
-<div class="flex items-center justify-between py-1.5 px-2 rounded-2xl hover:bg-white/[0.02] transition-colors cursor-pointer group">
-<div class="flex items-center gap-3">
-<div class="w-9 h-9 rounded-full bg-[#242231] border border-white/[0.06] flex items-center justify-center text-accent-emerald text-[15px] group-hover:scale-105 transition-transform">
-<span class="material-symbols-outlined text-[17px]">hub</span>
-</div>
-<div class="flex flex-col">
-<span class="text-[13px] font-medium text-white">SKU-288</span>
-<span class="text-[11px] text-text-muted">Hubli ➔ Gokak</span>
-</div>
-</div>
-<div class="flex flex-col items-end">
-<span class="text-[13px] font-medium text-white">34 Units</span>
-<span class="text-[11px] text-accent-emerald font-medium">+₹85.00</span>
-</div>
-</div>
-<!-- Item 4: SKU-812 -->
-<div class="flex items-center justify-between py-1.5 px-2 rounded-2xl hover:bg-white/[0.02] transition-colors cursor-pointer group">
-<div class="flex items-center gap-3">
-<div class="w-9 h-9 rounded-full bg-[#242231] border border-white/[0.06] flex items-center justify-center text-text-muted text-[15px] group-hover:scale-105 transition-transform">
-<span class="material-symbols-outlined text-[17px]">factory</span>
-</div>
-<div class="flex flex-col">
-<span class="text-[13px] font-medium text-white">SKU-812</span>
-<span class="text-[11px] text-text-muted">OEM ➔ Hubli</span>
-</div>
-</div>
-<div class="flex flex-col items-end">
-<span class="text-[13px] font-medium text-white">45 Units</span>
-<span class="text-[11px] text-accent-emerald font-medium">+₹6,750</span>
-</div>
-</div>
+  <div class="text-[13px] text-text-muted text-center py-6">Loading watchlist...</div>
 </div>
 </div>
 <!-- Bottom micro status -->
@@ -459,122 +396,9 @@
 <p id="pending-count-text" class="text-[12.5px] text-text-muted mt-0.5">Automated rebalancing actions awaiting supervisor clearance</p>
 </div>
 </div>
-<!-- Interactive Intervention Cards Queue -->
+<!-- Interactive Intervention Cards Queue - Dynamically populated from API -->
 <div class="grid grid-cols-1 gap-3" id="interventionContainer">
-<!-- Card 1: SKU-101 Transfer -->
-<div class="intervention-item relative p-4 md:p-5 rounded-2xl bg-[#14131b] border border-white/[0.06] hover:border-white/[0.12] transition-all flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-<div class="flex items-start gap-3.5">
-<div class="w-9 h-9 rounded-full bg-[#251f2b] border border-primary/20 text-primary flex items-center justify-center flex-shrink-0 mt-0.5">
-<span class="material-symbols-outlined text-[17px]">swap_horiz</span>
-</div>
-<div class="flex flex-col">
-<div class="flex flex-wrap items-center gap-2">
-<span class="text-[14px] font-semibold text-white">SKU-101</span>
-<span class="px-2 py-0.5 rounded-full bg-[#39202f] text-primary text-[10px] font-medium border border-primary/20">TRANSFER</span>
-<span class="text-text-muted text-[12px]">Belgaum ➔ Gokak</span>
-</div>
-<p class="text-[12px] text-text-muted mt-1 leading-relaxed max-w-xl">
-                  Internal transfer utilizes dead capital at flat ₹50.00 fee, avoiding minimum order quantity (MOQ) supplier lockup.
-                </p>
-</div>
-</div>
-<div class="flex flex-wrap items-center lg:flex-col lg:items-end justify-between gap-3">
-<div class="flex items-center gap-5 text-left lg:text-right">
-<div>
-<span class="text-[10.5px] text-text-muted block">Quantity &amp; Transit</span>
-<span class="text-[12.5px] font-semibold text-white">56 Units (1 Day)</span>
-</div>
-<div>
-<span class="text-[10.5px] text-text-muted block">Surcharge</span>
-<span class="text-[12.5px] font-semibold text-accent-emerald">₹50.00</span>
-</div>
-</div>
-<div class="flex items-center gap-2">
-<button class="reject-btn px-3.5 py-1 rounded-full bg-[#201f2b] hover:bg-error/20 hover:text-red-300 text-text-muted text-[12px] font-medium transition-all">
-                  Reject
-                </button>
-<button class="approve-btn px-4 py-1 rounded-full bg-[#52233e] hover:bg-[#682c4f] border border-white/10 text-white text-[12px] font-medium transition-all shadow-sm">
-                  Approve
-                </button>
-</div>
-</div>
-</div>
-<!-- Card 2: SKU-409 Purchase Order -->
-<div class="intervention-item relative p-4 md:p-5 rounded-2xl bg-[#14131b] border border-white/[0.06] hover:border-white/[0.12] transition-all flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-<div class="flex items-start gap-3.5">
-<div class="w-9 h-9 rounded-full bg-[#1e202f] border border-[#cabeff]/20 text-[#cabeff] flex items-center justify-center flex-shrink-0 mt-0.5">
-<span class="material-symbols-outlined text-[17px]">shopping_cart_checkout</span>
-</div>
-<div class="flex flex-col">
-<div class="flex flex-wrap items-center gap-2">
-<span class="text-[14px] font-semibold text-white">SKU-409</span>
-<span class="px-2 py-0.5 rounded-full bg-[#262442] text-[#cabeff] text-[10px] font-medium border border-[#cabeff]/20">PURCHASE ORDER</span>
-<span class="text-text-muted text-[12px]">Pune Central ➔ Belgaum</span>
-</div>
-<p class="text-[12px] text-text-muted mt-1 leading-relaxed max-w-xl">
-                  Regional stock exhausted across secondary garages; procurement executed directly with Tier-1 vendor to prevent stall.
-                </p>
-</div>
-</div>
-<div class="flex flex-wrap items-center lg:flex-col lg:items-end justify-between gap-3">
-<div class="flex items-center gap-5 text-left lg:text-right">
-<div>
-<span class="text-[10.5px] text-text-muted block">Quantity &amp; Transit</span>
-<span class="text-[12.5px] font-semibold text-white">120 Units (3 Days)</span>
-</div>
-<div>
-<span class="text-[10.5px] text-text-muted block">Estimated Cost</span>
-<span class="text-[12.5px] font-semibold text-white">₹14,200.00</span>
-</div>
-</div>
-<div class="flex items-center gap-2">
-<button class="reject-btn px-3.5 py-1 rounded-full bg-[#201f2b] hover:bg-error/20 hover:text-red-300 text-text-muted text-[12px] font-medium transition-all">
-                  Reject
-                </button>
-<button class="approve-btn px-4 py-1 rounded-full bg-[#52233e] hover:bg-[#682c4f] border border-white/10 text-white text-[12px] font-medium transition-all shadow-sm">
-                  Approve
-                </button>
-</div>
-</div>
-</div>
-<!-- Card 3: SKU-288 Transfer -->
-<div class="intervention-item relative p-4 md:p-5 rounded-2xl bg-[#14131b] border border-white/[0.06] hover:border-white/[0.12] transition-all flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-<div class="flex items-start gap-3.5">
-<div class="w-9 h-9 rounded-full bg-[#1b2622] border border-accent-emerald/20 text-accent-emerald flex items-center justify-center flex-shrink-0 mt-0.5">
-<span class="material-symbols-outlined text-[17px]">sync_alt</span>
-</div>
-<div class="flex flex-col">
-<div class="flex flex-wrap items-center gap-2">
-<span class="text-[14px] font-semibold text-white">SKU-288</span>
-<span class="px-2 py-0.5 rounded-full bg-[#193326] text-accent-emerald text-[10px] font-medium border border-accent-emerald/20">TRANSFER</span>
-<span class="text-text-muted text-[12px]">Hubli ➔ Gokak</span>
-</div>
-<p class="text-[12px] text-text-muted mt-1 leading-relaxed max-w-xl">
-                  Cross-dock expedited transfer fulfills sudden fleet brake-pad spike without warehouse buffer penalty.
-                </p>
-</div>
-</div>
-<div class="flex flex-wrap items-center lg:flex-col lg:items-end justify-between gap-3">
-<div class="flex items-center gap-5 text-left lg:text-right">
-<div>
-<span class="text-[10.5px] text-text-muted block">Quantity &amp; Transit</span>
-<span class="text-[12.5px] font-semibold text-white">34 Units (1 Day)</span>
-</div>
-<div>
-<span class="text-[10.5px] text-text-muted block">Expedite Surcharge</span>
-<span class="text-[12.5px] font-semibold text-accent-emerald">₹85.00</span>
-</div>
-</div>
-<div class="flex items-center gap-2">
-<button class="reject-btn px-3.5 py-1 rounded-full bg-[#201f2b] hover:bg-error/20 hover:text-red-300 text-text-muted text-[12px] font-medium transition-all">
-                  Reject
-                </button>
-<button class="approve-btn px-4 py-1 rounded-full bg-[#52233e] hover:bg-[#682c4f] border border-white/10 text-white text-[12px] font-medium transition-all shadow-sm">
-                  Approve
-                </button>
-</div>
-</div>
-</div>
+  <div class="text-[13px] text-text-muted text-center py-10 bg-[#14131b] rounded-2xl border border-white/[0.06]">Click "Run Auto-Triage" to load pending interventions from the database.</div>
 </div>
 <!-- Waveform Chart Section (Exact replica of Helios curve + Pinpoint Badge) -->
 <div class="relative w-full pt-6 border-t border-white/[0.06] mt-4">
@@ -757,75 +581,108 @@
     }
     
     function renderUI() {
-        if (currentInterventions.length > 0) {
+        const capitalEl = document.getElementById('total-capital');
+        const container = document.getElementById('interventionContainer');
+        const watchlistContainer = document.getElementById('watchlist-container');
+        const pendingCountEl = document.getElementById('pending-count-text');
+
+        if (currentInterventions.length === 0) {
+            if (capitalEl) capitalEl.innerText = `₹ 0.00`;
+            if (pendingCountEl) pendingCountEl.textContent = `0 automated rebalancing actions awaiting supervisor clearance`;
+            if (container) container.innerHTML = `<div class="text-[13px] text-text-muted text-center py-10 bg-[#14131b] rounded-2xl border border-white/[0.06]">No pending interventions. You are all caught up!</div>`;
+            if (watchlistContainer) watchlistContainer.innerHTML = `<div class="text-[13px] text-text-muted text-center py-6">Watchlist is empty.</div>`;
+        } else {
             currentCapital = currentInterventions.reduce((sum, item) => sum + (item.estimated_cost || 0), 0);
-            const capitalEl = document.getElementById('total-capital');
             if (capitalEl) {
                 capitalEl.innerText = `₹ ${currentCapital.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
             }
-        }
 
-        // Watchlist is left static for the demo so it doesn't appear empty when there are no interventions.
-        // We only dynamically update the Pending Interventions queue below.
-        
-        const container = document.getElementById('interventionContainer');
-        const pendingCountEl = document.getElementById('pending-count-text');
-        
-        if (currentInterventions.length > 0) {
             if (pendingCountEl) {
                 pendingCountEl.textContent = `${currentInterventions.length} automated rebalancing actions awaiting supervisor clearance`;
             }
 
             if (container) {
                 container.innerHTML = '';
-                currentInterventions.forEach(item => {
-                  const actionColor = item.action_type === 'TRANSFER' ? 'text-primary border-primary/20 bg-[#39202f]' : 'text-[#cabeff] border-[#cabeff]/20 bg-[#262442]';
-                  const iconColor = item.action_type === 'TRANSFER' ? 'text-primary border-primary/20 bg-[#251f2b]' : 'text-[#cabeff] border-[#cabeff]/20 bg-[#1e202f]';
-                  const icon = item.action_type === 'TRANSFER' ? 'swap_horiz' : 'shopping_cart_checkout';
-                  const actionText = item.action_type.replace('_', ' ');
-                  
-                  const html = `
+            }
+            if (watchlistContainer) {
+                watchlistContainer.innerHTML = '';
+            }
+
+            currentInterventions.forEach(item => {
+                const isTransfer = item.action_type === 'TRANSFER';
+                const actionColor = isTransfer ? 'text-primary border-primary/20 bg-[#39202f]' : 'text-[#cabeff] border-[#cabeff]/20 bg-[#262442]';
+                const iconColor = isTransfer ? 'text-primary border-primary/20 bg-[#251f2b]' : 'text-[#cabeff] border-[#cabeff]/20 bg-[#1e202f]';
+                const iconColorWatchlist = isTransfer ? 'text-primary' : 'text-[#cabeff]';
+                const icon = isTransfer ? 'swap_horiz' : 'shopping_cart_checkout';
+                const actionText = item.action_type.replace('_', ' ');
+                
+                if (container) {
+                    const html = `
                     <div class="intervention-item relative p-4 md:p-5 rounded-2xl bg-[#14131b] border border-white/[0.06] hover:border-white/[0.12] transition-all flex flex-col lg:flex-row lg:items-center justify-between gap-4" data-sku="${item.sku}">
-                      <div class="flex items-start gap-3.5">
+                        <div class="flex items-start gap-3.5">
                         <div class="w-9 h-9 rounded-full ${iconColor} border flex items-center justify-center flex-shrink-0 mt-0.5">
-                          <span class="material-symbols-outlined text-[17px]">${icon}</span>
+                            <span class="material-symbols-outlined text-[17px]">${icon}</span>
                         </div>
                         <div class="flex flex-col">
-                          <div class="flex flex-wrap items-center gap-2">
+                            <div class="flex flex-wrap items-center gap-2">
                             <span class="text-[14px] font-semibold text-white">${item.sku}</span>
                             <span class="px-2 py-0.5 rounded-full ${actionColor} text-[10px] font-medium border">${actionText}</span>
                             <span class="text-text-muted text-[12px]">${item.from} ➔ ${item.to}</span>
-                          </div>
-                          <p class="text-[12px] text-text-muted mt-1 leading-relaxed max-w-xl">
+                            </div>
+                            <p class="text-[12px] text-text-muted mt-1 leading-relaxed max-w-xl">
                             ${item.trade_off_rationale}
-                          </p>
+                            </p>
                         </div>
-                      </div>
-                      <div class="flex flex-wrap items-center lg:flex-col lg:items-end justify-between gap-3">
+                        </div>
+                        <div class="flex flex-wrap items-center lg:flex-col lg:items-end justify-between gap-3">
                         <div class="flex items-center gap-5 text-left lg:text-right">
-                          <div>
+                            <div>
                             <span class="text-[10.5px] text-text-muted block">Quantity & Transit</span>
                             <span class="text-[12.5px] font-semibold text-white">${item.quantity} Units (${item.estimated_arrival_days} Days)</span>
-                          </div>
-                          <div>
+                            </div>
+                            <div>
                             <span class="text-[10.5px] text-text-muted block">Cost (INR)</span>
                             <span class="text-[12.5px] font-semibold text-accent-emerald">₹${item.estimated_cost.toFixed(2)}</span>
-                          </div>
+                            </div>
                         </div>
                         <div class="flex items-center gap-2">
-                          <button class="reject-btn px-3.5 py-1 rounded-full bg-[#201f2b] hover:bg-error/20 hover:text-red-300 text-text-muted text-[12px] font-medium transition-all">
+                            <button class="reject-btn px-3.5 py-1 rounded-full bg-[#201f2b] hover:bg-error/20 hover:text-red-300 text-text-muted text-[12px] font-medium transition-all">
                             Reject
-                          </button>
-                          <button class="approve-btn px-4 py-1 rounded-full bg-[#52233e] hover:bg-[#682c4f] border border-white/10 text-white text-[12px] font-medium transition-all shadow-sm">
+                            </button>
+                            <button class="approve-btn px-4 py-1 rounded-full bg-[#52233e] hover:bg-[#682c4f] border border-white/10 text-white text-[12px] font-medium transition-all shadow-sm">
                             Approve
-                          </button>
+                            </button>
                         </div>
-                      </div>
+                        </div>
                     </div>
-                  `;
-                  container.insertAdjacentHTML('beforeend', html);
-                });
-            }
+                    `;
+                    container.insertAdjacentHTML('beforeend', html);
+                }
+
+                if (watchlistContainer) {
+                    const wlHtml = `
+                    <div class="watchlist-item flex items-center justify-between py-1.5 px-2 rounded-2xl hover:bg-white/[0.02] transition-colors cursor-pointer group" data-sku="${item.sku}">
+                        <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-full bg-[#242231] border border-white/[0.06] flex items-center justify-center ${iconColorWatchlist} text-[15px] group-hover:scale-105 transition-transform">
+                            <span class="material-symbols-outlined text-[17px]">${icon}</span>
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="text-[13px] font-medium text-white">${item.sku}</span>
+                            <span class="text-[11px] text-text-muted">${item.from} ➔ ${item.to}</span>
+                        </div>
+                        </div>
+                        <div class="flex flex-col items-end gap-1">
+                            <span class="text-[13px] font-medium text-white">${item.quantity} Units</span>
+                            <div class="flex gap-1">
+                                <button class="wl-reject-btn px-2 py-0.5 rounded text-text-muted hover:text-red-300 text-[10px] font-medium transition-colors bg-[#201f2b]">Reject</button>
+                                <button class="wl-approve-btn px-2 py-0.5 rounded text-white bg-[#52233e] hover:bg-[#682c4f] text-[10px] font-medium transition-colors">Approve</button>
+                            </div>
+                        </div>
+                    </div>
+                    `;
+                    watchlistContainer.insertAdjacentHTML('beforeend', wlHtml);
+                }
+            });
         }
         
         attachEventListeners();
@@ -851,21 +708,13 @@
                         quantity: item.quantity
                     })
                 });
-                
-                if (!res.ok) {
-                    throw new Error("HTTP " + res.status + " - Backend not found. Are you testing on Vercel or running the Python server locally?");
-                }
-                
-                const data = await res.json();
-                if (data.error) {
-                    throw new Error(data.error);
-                }
+                if (!res.ok) throw new Error("Approval failed");
             }
             showToast('Execution successful');
             successCallback();
         } catch(e) {
             console.error(e);
-            showToast('Failed: ' + e.message);
+            showToast('Failed to execute action.');
         }
     }
 
@@ -913,9 +762,10 @@
       });
       
       // Reject Buttons
-      document.querySelectorAll('.reject-btn').forEach(btn => {
+      document.querySelectorAll('.reject-btn, .wl-reject-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
-          const card = e.target.closest('.intervention-item');
+          const card = e.target.closest('.intervention-item') || e.target.closest('.watchlist-item');
+          if (!card) return;
           const sku = card.getAttribute('data-sku');
           card.style.opacity = '0';
           setTimeout(() => removeIntervention(sku), 300);

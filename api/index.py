@@ -55,13 +55,91 @@ def get_triage_decisions():
     messages_df = db_state.get('messages', pd.DataFrame())
     unlogged_alerts_parsed = not messages_df.empty
     
+    # Build inventory summary for dashboard
+    inventory_df = db_state.get('inventory', pd.DataFrame())
+    products_df = db_state.get('products', pd.DataFrame())
+    
+    inventory_list = []
+    if not inventory_df.empty:
+        inv_merged = inventory_df.copy()
+        if not products_df.empty:
+            inv_merged = pd.merge(inv_merged, products_df, on='sku', how='left')
+        inventory_list = inv_merged.to_dict(orient='records')
+        # Clean NaN values
+        for item in inventory_list:
+            for k, v in item.items():
+                if pd.isna(v):
+                    item[k] = None
+
+    # Reconciled state for dashboard stats
+    merged_df = reconciled_df.merge(triage_df[['sku', 'depot', 'status']], on=['sku', 'depot'], how='left')
+    reconciled_list = merged_df.to_dict(orient='records')
+    for item in reconciled_list:
+        for k, v in item.items():
+            if pd.isna(v):
+                item[k] = None
+    
     return {
         "triage_summary": {
             "critical_items_count": critical_count,
             "excess_items_count": excess_count,
             "unlogged_alerts_parsed": unlogged_alerts_parsed
         },
-        "interventions": decisions
+        "interventions": decisions,
+        "inventory": inventory_list,
+        "reconciled": reconciled_list
+    }
+
+@app.get("/api/inventory")
+def get_inventory():
+    db_state = fetch_state_from_supabase()
+    if not db_state:
+        return {"error": "Failed to fetch state from Supabase."}
+    
+    inventory_df = db_state.get('inventory', pd.DataFrame())
+    products_df = db_state.get('products', pd.DataFrame())
+    suppliers_df = db_state.get('suppliers', pd.DataFrame())
+    po_df = db_state.get('purchase_orders', pd.DataFrame())
+    sales_df = db_state.get('sales', pd.DataFrame())
+    
+    # Merge inventory with products
+    if not inventory_df.empty and not products_df.empty:
+        inv_merged = pd.merge(inventory_df, products_df, on='sku', how='left')
+    else:
+        inv_merged = inventory_df.copy()
+    
+    inventory_list = inv_merged.to_dict(orient='records') if not inv_merged.empty else []
+    products_list = products_df.to_dict(orient='records') if not products_df.empty else []
+    suppliers_list = suppliers_df.to_dict(orient='records') if not suppliers_df.empty else []
+    
+    po_list = []
+    if not po_df.empty:
+        po_copy = po_df.copy()
+        for col in po_copy.columns:
+            po_copy[col] = po_copy[col].astype(str)
+        po_list = po_copy.to_dict(orient='records')
+    
+    # Daily sales velocity per SKU
+    velocity = {}
+    if not sales_df.empty:
+        vel_df = sales_df.groupby('sku')['qty_sold'].sum().reset_index()
+        vel_df['daily_avg'] = vel_df['qty_sold'] / 30.0
+        for _, row in vel_df.iterrows():
+            velocity[row['sku']] = round(float(row['daily_avg']), 2)
+    
+    # Clean NaN
+    for lst in [inventory_list, products_list, suppliers_list]:
+        for item in lst:
+            for k, v in item.items():
+                if pd.isna(v):
+                    item[k] = None
+    
+    return {
+        "inventory": inventory_list,
+        "products": products_list,
+        "suppliers": suppliers_list,
+        "purchase_orders": po_list,
+        "velocity": velocity
     }
 
 class ActionPayload(BaseModel):
