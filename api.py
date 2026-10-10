@@ -123,7 +123,7 @@ app.mount("/static", StaticFiles(directory="frontend"), name="frontend")
 
 @app.get("/")
 def serve_frontend():
-    return FileResponse("frontend/login.html")
+    return FileResponse("frontend/index.html")
 
 @app.get("/code.html")
 def serve_code_html():
