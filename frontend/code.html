@@ -395,25 +395,21 @@
 <h2 class="text-[18px] font-semibold text-white tracking-tight">Pending Interventions &amp; Replenishment Velocity</h2>
 <p id="pending-count-text" class="text-[12.5px] text-text-muted mt-0.5">Automated rebalancing actions awaiting supervisor clearance</p>
 </div>
+<!-- Time Pills -->
+<div class="flex items-center bg-[#13121b] p-1 rounded-full border border-white/[0.05] self-start sm:self-auto" id="duration-pills">
+<button class="duration-pill px-3.5 py-1 rounded-full text-text-muted hover:text-white text-[12px] font-medium transition-colors">1D</button>
+<button class="duration-pill px-3.5 py-1 rounded-full text-text-muted hover:text-white text-[12px] font-medium transition-colors">1W</button>
+<button class="duration-pill px-3.5 py-1 rounded-full text-text-muted hover:text-white text-[12px] font-medium transition-colors">1M</button>
+<button class="duration-pill px-3.5 py-1 rounded-full text-text-muted hover:text-white text-[12px] font-medium transition-colors">6M</button>
+<button class="duration-pill px-3.5 py-1 rounded-full bg-gradient-to-r from-[#5a2744] to-[#773359] text-white text-[12px] font-medium shadow-sm active-pill">1Y</button>
+</div>
 </div>
 <!-- Interactive Intervention Cards Queue - Dynamically populated from API -->
 <div class="grid grid-cols-1 gap-3" id="interventionContainer">
   <div class="text-[13px] text-text-muted text-center py-10 bg-[#14131b] rounded-2xl border border-white/[0.06]">Click "Run Auto-Triage" to load pending interventions from the database.</div>
 </div>
 <!-- Waveform Chart Section (Exact replica of Helios curve + Pinpoint Badge) -->
-<div class="relative w-full pt-6 border-t border-white/[0.06] mt-4">
-<!-- Chart Header & Time Pills -->
-<div class="flex justify-between items-center mb-6">
-  <h3 class="text-[14px] font-medium text-white/90">Velocity Trajectory</h3>
-  <!-- Time Pills -->
-  <div class="flex items-center bg-[#13121b] p-1 rounded-full border border-white/[0.05]" id="duration-pills">
-  <button class="duration-pill px-3.5 py-1 rounded-full text-text-muted hover:text-white text-[12px] font-medium transition-colors">1D</button>
-  <button class="duration-pill px-3.5 py-1 rounded-full text-text-muted hover:text-white text-[12px] font-medium transition-colors">1W</button>
-  <button class="duration-pill px-3.5 py-1 rounded-full text-text-muted hover:text-white text-[12px] font-medium transition-colors">1M</button>
-  <button class="duration-pill px-3.5 py-1 rounded-full text-text-muted hover:text-white text-[12px] font-medium transition-colors">6M</button>
-  <button class="duration-pill px-3.5 py-1 rounded-full bg-gradient-to-r from-[#5a2744] to-[#773359] text-white text-[12px] font-medium shadow-sm active-pill">1Y</button>
-  </div>
-</div>
+<div class="relative w-full pt-4">
 <!-- Pinpoint Tooltip Card positioned exactly above the curve drop line -->
 <div class="relative flex justify-center mb-1">
 <div class="px-4 py-2 rounded-2xl bg-[#23212d] border border-white/[0.09] shadow-xl flex items-center gap-3 transition-all duration-300">
