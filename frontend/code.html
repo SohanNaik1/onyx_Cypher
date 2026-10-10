@@ -849,6 +849,10 @@
         
         attachEventListeners();
         updateApproveAllCount();
+        
+        if (typeof applyDashboardSearch === 'function') {
+            applyDashboardSearch();
+        }
     }
     
     async function executeApproval(itemsToApprove, successCallback) {
@@ -1034,13 +1038,42 @@
       });
     });
 
-    // --- SEARCH BAR -> ONYX CHAT ---
+    let currentSearchQuery = '';
+
+    function applyDashboardSearch() {
+      const query = currentSearchQuery.toLowerCase().trim();
+      const searchTerms = query.split(/\s+/);
+      
+      const filterItems = (selector) => {
+        document.querySelectorAll(selector).forEach(item => {
+          const itemText = item.textContent.toLowerCase();
+          const cleanItemText = itemText.replace(/[-_]/g, '');
+          
+          let matches = true;
+          if (query) {
+            matches = searchTerms.every(term => {
+              const cleanTerm = term.replace(/[-_]/g, '');
+              return itemText.includes(term) || cleanItemText.includes(cleanTerm);
+            });
+          }
+          item.style.display = matches ? '' : 'none';
+        });
+      };
+
+      filterItems('.watchlist-item');
+      filterItems('.intervention-item');
+    }
+
+    // --- SEARCH BAR LOGIC ---
     const searchBar = document.getElementById('search-bar');
     if (searchBar) {
+      searchBar.addEventListener('input', (e) => {
+        currentSearchQuery = e.target.value;
+        applyDashboardSearch();
+      });
       searchBar.addEventListener('keypress', (e) => {
         if (e.key === 'Enter' && searchBar.value.trim()) {
-          showToast('Global search is under construction.');
-          searchBar.value = '';
+           searchBar.blur();
         }
       });
     }
