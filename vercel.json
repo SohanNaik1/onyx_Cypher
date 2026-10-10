@@ -2,6 +2,10 @@
   "framework": null,
   "rewrites": [
     {
+      "source": "/",
+      "destination": "/frontend/code.html"
+    },
+    {
       "source": "/(.*)",
       "destination": "/frontend/$1"
     }
