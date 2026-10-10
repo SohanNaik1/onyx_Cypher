@@ -753,62 +753,27 @@
     }
     
     function renderUI() {
-        currentCapital = currentInterventions.reduce((sum, item) => sum + (item.estimated_cost || 0), 0);
-        const capitalEl = document.getElementById('total-capital');
-        if (capitalEl) {
-            capitalEl.innerText = `₹ ${currentCapital.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-        }
-
-        const watchlist = document.getElementById('watchlist-container');
-        if (watchlist) {
-            watchlist.innerHTML = '';
-            if (currentInterventions.length === 0) {
-                watchlist.innerHTML = '<div class="text-[12px] text-text-muted text-center py-4">Watchlist is currently empty.</div>';
-            } else {
-                currentInterventions.forEach(item => {
-                    const icon = item.action_type === 'TRANSFER' ? 'swap_horiz' : 'shopping_cart_checkout';
-                    const colorClass = item.action_type === 'TRANSFER' ? 'text-primary' : 'text-[#cabeff]';
-                    
-                    const html = `
-                    <div class="watchlist-item flex items-center justify-between py-1.5 px-2 rounded-2xl hover:bg-white/[0.02] transition-colors cursor-pointer group" data-sku="${item.sku}">
-                        <div class="flex items-center gap-3">
-                            <div class="w-9 h-9 rounded-full bg-[#242231] border border-white/[0.06] flex items-center justify-center ${colorClass} text-[15px] group-hover:scale-105 transition-transform">
-                                <span class="material-symbols-outlined text-[17px]">${icon}</span>
-                            </div>
-                            <div class="flex flex-col">
-                                <span class="text-[13px] font-medium text-white" title="${item.trade_off_rationale}">${item.sku}</span>
-                                <span class="text-[11px] text-text-muted">${item.from} ➔ ${item.to}</span>
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-3">
-                            <div class="flex flex-col items-end">
-                                <span class="text-[13px] font-medium text-white">${item.quantity} Units</span>
-                                <span class="text-[11px] text-accent-emerald font-medium">₹${item.estimated_cost.toFixed(2)}</span>
-                            </div>
-                            <button class="wl-approve-btn w-7 h-7 rounded-full bg-[#52233e] hover:bg-[#682c4f] flex items-center justify-center text-white border border-white/10 transition-all opacity-0 group-hover:opacity-100" title="Approve">
-                                <span class="material-symbols-outlined text-[14px]">check</span>
-                            </button>
-                        </div>
-                    </div>
-                    `;
-                    watchlist.insertAdjacentHTML('beforeend', html);
-                });
+        if (currentInterventions.length > 0) {
+            currentCapital = currentInterventions.reduce((sum, item) => sum + (item.estimated_cost || 0), 0);
+            const capitalEl = document.getElementById('total-capital');
+            if (capitalEl) {
+                capitalEl.innerText = `₹ ${currentCapital.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
             }
         }
+
+        // Watchlist is left static for the demo so it doesn't appear empty when there are no interventions.
+        // We only dynamically update the Pending Interventions queue below.
         
         const container = document.getElementById('interventionContainer');
         const pendingCountEl = document.getElementById('pending-count-text');
-        if (pendingCountEl) {
-            pendingCountEl.textContent = currentInterventions.length === 0 ? 
-                'No pending automated rebalancing actions.' : 
-                `${currentInterventions.length} automated rebalancing actions awaiting supervisor clearance`;
-        }
+        
+        if (currentInterventions.length > 0) {
+            if (pendingCountEl) {
+                pendingCountEl.textContent = `${currentInterventions.length} automated rebalancing actions awaiting supervisor clearance`;
+            }
 
-        if (container) {
-            container.innerHTML = '';
-            if (currentInterventions.length === 0) {
-                container.innerHTML = '<div class="text-[13px] text-text-muted text-center py-10 bg-[#14131b] rounded-2xl border border-white/[0.06]">Queue is clear. Supply chain is balanced.</div>';
-            } else {
+            if (container) {
+                container.innerHTML = '';
                 currentInterventions.forEach(item => {
                   const actionColor = item.action_type === 'TRANSFER' ? 'text-primary border-primary/20 bg-[#39202f]' : 'text-[#cabeff] border-[#cabeff]/20 bg-[#262442]';
                   const iconColor = item.action_type === 'TRANSFER' ? 'text-primary border-primary/20 bg-[#251f2b]' : 'text-[#cabeff] border-[#cabeff]/20 bg-[#1e202f]';
