@@ -109,7 +109,7 @@
       </div>
 
       <!-- Authentication Form -->
-      <form class="space-y-5" onsubmit="event.preventDefault(); window.location.href='/code.html';">
+      <form class="space-y-5" onsubmit="event.preventDefault(); const e = document.getElementById('email').value; const p = document.getElementById('password').value; if(e==='ramesh@kdgarage.in' && p==='admin123') { window.location.href='/code.html'; } else { alert('Invalid credentials'); }">
         
         <!-- Email Input -->
         <div class="space-y-1.5">
@@ -122,7 +122,7 @@
             </div>
             <input 
               type="email" 
-              value="ramesh@kdgarage.in" 
+              id="email"
               class="input-field w-full pl-10 pr-4 py-2.5 rounded-xl bg-[#121217] border border-white/10 text-sm text-zinc-200 placeholder-zinc-600 font-mono transition-all duration-200"
               placeholder="operator@kdgarage.in"
               required
@@ -146,7 +146,7 @@
             </div>
             <input 
               type="password" 
-              value="••••••••••••••••" 
+              id="password"
               class="input-field w-full pl-10 pr-10 py-2.5 rounded-xl bg-[#121217] border border-white/10 text-sm text-zinc-200 placeholder-zinc-600 font-mono tracking-widest transition-all duration-200"
               placeholder="Password"
               required
