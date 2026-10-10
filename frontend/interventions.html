@@ -547,6 +547,20 @@
         
         const countEl = document.getElementById('statPendingCount');
         if(countEl) countEl.innerText = currentInterventions.length + ' Actions';
+        
+        const allTab = document.querySelector('.filter-tab[data-filter="all"]');
+        if (allTab) allTab.innerText = `All Pending (${currentInterventions.length})`;
+        
+        const transfers = currentInterventions.filter(i => i.action_type === 'TRANSFER').length;
+        const transferTab = document.querySelector('.filter-tab[data-filter="TRANSFER"]');
+        if (transferTab) transferTab.innerText = `Transfers (${transfers})`;
+        
+        const pos = currentInterventions.filter(i => i.action_type === 'PURCHASE_ORDER').length;
+        const poTab = document.querySelector('.filter-tab[data-filter="PURCHASE_ORDER"]');
+        if (poTab) poTab.innerText = `Purchase Orders (${pos})`;
+        
+        const bulkBtnText = document.querySelector('#bulkApproveMasterBtn span:last-child');
+        if (bulkBtnText) bulkBtnText.innerText = `Bulk Approve All (${currentInterventions.length} Items)`;
     }
     
     window.approveAction = async function(btn, index) {
