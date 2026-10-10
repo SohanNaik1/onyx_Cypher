@@ -1159,4 +1159,18 @@
         loadData();
     });
 </script>
+<script>
+    document.getElementById('btn-reset-db')?.addEventListener('click', async (e) => {
+        const btn = e.currentTarget;
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '<span class="material-symbols-outlined text-[18px] animate-spin">refresh</span> Resetting...';
+        try {
+            await fetch('/api/reset', { method: 'POST' });
+            window.location.reload();
+        } catch (err) {
+            btn.innerHTML = originalText;
+            alert('Failed to reset DB');
+        }
+    });
+</script>
 </body></html>

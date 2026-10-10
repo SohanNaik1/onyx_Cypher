@@ -117,6 +117,12 @@ def execute_intervention(payload: ActionPayload):
         supabase.table("purchase_orders").insert(new_po).execute()
         
     return {"status": "success"}
+    
+@app.post("/api/reset")
+def reset_database():
+    import reset
+    reset.main()
+    return {"status": "success"}
 
 # Mount frontend directory
 app.mount("/static", StaticFiles(directory="frontend"), name="frontend")
