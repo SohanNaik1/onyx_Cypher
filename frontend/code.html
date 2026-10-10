@@ -851,13 +851,21 @@
                         quantity: item.quantity
                     })
                 });
-                if (!res.ok) throw new Error("Approval failed");
+                
+                if (!res.ok) {
+                    throw new Error("HTTP " + res.status + " - Backend not found. Are you testing on Vercel or running the Python server locally?");
+                }
+                
+                const data = await res.json();
+                if (data.error) {
+                    throw new Error(data.error);
+                }
             }
             showToast('Execution successful');
             successCallback();
         } catch(e) {
             console.error(e);
-            showToast('Failed to execute action.');
+            showToast('Failed: ' + e.message);
         }
     }
 
