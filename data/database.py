@@ -77,12 +77,45 @@ def load_kdgarage_local() -> dict:
     ])
     return data
 
-def fetch_state_from_supabase() -> dict:
+_cache = {}
+_cache_time = 0.0
+CACHE_TTL = 60.0  # seconds
+
+def invalidate_cache():
+    global _cache_time, _cache
+    _cache_time = 0.0
+    _cache = {}
+
+def fetch_table_paginated(table_name: str) -> pd.DataFrame:
+    if not supabase:
+        return pd.DataFrame()
+    rows = []
+    page = 0
+    limit = 1000
+    while True:
+        res = supabase.table(table_name).select("*").range(page * limit, (page + 1) * limit - 1).execute()
+        if not res.data:
+            break
+        rows.extend(res.data)
+        if len(res.data) < limit:
+            break
+        page += 1
+    return pd.DataFrame(rows)
+
+def fetch_state_from_supabase(force_refresh: bool = False) -> dict:
+    global _cache, _cache_time
+    import time
+    now = time.time()
+    
+    if not force_refresh and _cache and (now - _cache_time < CACHE_TTL):
+        return _cache
+
     if os.environ.get("DATA_SOURCE", "").upper() == "LOCAL":
         local_data = load_kdgarage_local()
         if local_data:
-            print("Loaded KD Garage dataset directly from local files.")
-            return local_data
+            _cache = local_data
+            _cache_time = now
+            return _cache
 
     if not supabase:
         print("Supabase client not initialized. Falling back to local dataset.")
@@ -92,9 +125,12 @@ def fetch_state_from_supabase() -> dict:
     tables = ['products', 'inventory', 'sales', 'suppliers', 'purchase_orders', 'messages']
     
     for table_name in tables:
-        # Fetch all records
-        response = supabase.table(table_name).select("*").execute()
-        df = pd.DataFrame(response.data)
+        # Fetch paginated for sales and inventory to avoid Supabase 1000-row limit truncation
+        if table_name in ['sales', 'inventory']:
+            df = fetch_table_paginated(table_name)
+        else:
+            response = supabase.table(table_name).select("*").execute()
+            df = pd.DataFrame(response.data)
         
         if not df.empty:
             # Convert date/time columns back to appropriate formats expected by the engine
@@ -110,5 +146,7 @@ def fetch_state_from_supabase() -> dict:
                 
         mock_data[table_name] = df
         
-    print("Successfully fetched state from Supabase.")
-    return mock_data
+    _cache = mock_data
+    _cache_time = now
+    print(f"Successfully fetched state from Supabase (cached for {CACHE_TTL}s).")
+    return _cache

@@ -4,7 +4,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field
 from typing import List
-from data.database import fetch_state_from_supabase
+from data.database import fetch_state_from_supabase, invalidate_cache
 from engine.reconciler import reconcile_state
 from engine.triage import run_triage
 from engine.decisions import make_decisions
@@ -146,12 +146,14 @@ def execute_intervention(payload: ActionPayload):
         }
         supabase.table("purchase_orders").insert(new_po).execute()
         
+    invalidate_cache()
     return {"status": "success"}
     
 @app.post("/api/reset")
 def reset_database():
     import reset
     reset.main()
+    invalidate_cache()
     return {"status": "success"}
 
 # Mount frontend directory
@@ -233,7 +235,7 @@ def chat_with_agent(req: ChatRequest):
         
         prompt = f"{context}\n\nUser query: {req.message}"
         llm_response = client.models.generate_content(
-            model="gemini-3.8-flash",
+            model="gemini-2.5-flash",
             contents=prompt,
             config={"system_instruction": system_instruction}
         )
