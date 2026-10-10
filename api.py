@@ -185,7 +185,7 @@ def chat_with_agent(req: ChatRequest):
         if not po_df.empty:
             context += f"Purchase Orders Data:\n{po_df.to_markdown()}\n\n"
             
-        system_instruction = "You are Onyx, a highly capable supply chain assistant for KD's Garage. Use the provided database context to answer the user's questions briefly and accurately. Keep responses concise and tactical."
+        system_instruction = "You are Onyx, a highly capable supply chain assistant for KD's Garage. Use the provided database context to answer the user's questions. Keep responses EXTREMELY concise and tactical (maximum 3-4 sentences). Use markdown bullet points if necessary, but keep it brief."
         
         prompt = f"{context}\n\nUser query: {req.message}"
         llm_response = client.models.generate_content(

@@ -5,8 +5,9 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <meta content="web_dashboard" name="shell-type"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&amp;display=swap" rel="stylesheet"/>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries,typography"></script>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <script id="tailwind-config">
     tailwind.config = {
       darkMode: "class",
@@ -294,13 +295,9 @@
 <div class="lg:col-span-4 p-6 rounded-[28px] bg-[#1a1923] border border-white/[0.08] flex flex-col justify-between shadow-sm">
 <div>
 <!-- Watchlist Header with Segment Filter Pills -->
+<!-- Watchlist Header -->
 <div class="flex items-center justify-between pb-4">
 <span class="text-[15px] font-medium text-white">Watchlist</span>
-<div class="flex items-center gap-1 bg-[#13121b] p-0.5 rounded-full border border-white/[0.05]">
-<button class="px-2.5 py-0.5 rounded-full bg-[#272634] text-white text-[11px] font-medium shadow-sm">Critical</button>
-<button class="px-2 py-0.5 rounded-full text-text-muted hover:text-white text-[11px]">Excess</button>
-<button class="px-2 py-0.5 rounded-full text-text-muted hover:text-white text-[11px]">Resolved</button>
-</div>
 </div>
 <!-- Watchlist Rows (Spotify, Amazon, MSFT style) -->
 <div id="watchlist-container" class="flex flex-col gap-2.5 pt-1 max-h-[300px] overflow-y-auto">
@@ -459,15 +456,15 @@
 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
 <div>
 <h2 class="text-[18px] font-semibold text-white tracking-tight">Pending Interventions &amp; Replenishment Velocity</h2>
-<p class="text-[12.5px] text-text-muted mt-0.5">3 automated rebalancing actions awaiting supervisor clearance</p>
+<p id="pending-count-text" class="text-[12.5px] text-text-muted mt-0.5">Automated rebalancing actions awaiting supervisor clearance</p>
 </div>
-<!-- Time Pills exactly matching Helios ('1D', '1W', '1M', '6M', '1Y' active) -->
-<div class="flex items-center bg-[#13121b] p-1 rounded-full border border-white/[0.05] self-start sm:self-auto">
-<button class="px-3.5 py-1 rounded-full text-text-muted hover:text-white text-[12px] font-medium transition-colors">1D</button>
-<button class="px-3.5 py-1 rounded-full text-text-muted hover:text-white text-[12px] font-medium transition-colors">1W</button>
-<button class="px-3.5 py-1 rounded-full text-text-muted hover:text-white text-[12px] font-medium transition-colors">1M</button>
-<button class="px-3.5 py-1 rounded-full text-text-muted hover:text-white text-[12px] font-medium transition-colors">6M</button>
-<button class="px-3.5 py-1 rounded-full bg-gradient-to-r from-[#5a2744] to-[#773359] text-white text-[12px] font-medium shadow-sm">1Y</button>
+<!-- Time Pills -->
+<div class="flex items-center bg-[#13121b] p-1 rounded-full border border-white/[0.05] self-start sm:self-auto" id="duration-pills">
+<button class="duration-pill px-3.5 py-1 rounded-full text-text-muted hover:text-white text-[12px] font-medium transition-colors">1D</button>
+<button class="duration-pill px-3.5 py-1 rounded-full text-text-muted hover:text-white text-[12px] font-medium transition-colors">1W</button>
+<button class="duration-pill px-3.5 py-1 rounded-full text-text-muted hover:text-white text-[12px] font-medium transition-colors">1M</button>
+<button class="duration-pill px-3.5 py-1 rounded-full text-text-muted hover:text-white text-[12px] font-medium transition-colors">6M</button>
+<button class="duration-pill px-3.5 py-1 rounded-full bg-gradient-to-r from-[#5a2744] to-[#773359] text-white text-[12px] font-medium shadow-sm active-pill">1Y</button>
 </div>
 </div>
 <!-- Interactive Intervention Cards Queue -->
@@ -765,86 +762,101 @@
         const watchlist = document.getElementById('watchlist-container');
         if (watchlist) {
             watchlist.innerHTML = '';
-            currentInterventions.forEach(item => {
-                const icon = item.action_type === 'TRANSFER' ? 'swap_horiz' : 'shopping_cart_checkout';
-                const colorClass = item.action_type === 'TRANSFER' ? 'text-primary' : 'text-[#cabeff]';
-                
-                const html = `
-                <div class="watchlist-item flex items-center justify-between py-1.5 px-2 rounded-2xl hover:bg-white/[0.02] transition-colors cursor-pointer group" data-sku="${item.sku}">
-                    <div class="flex items-center gap-3">
-                        <div class="w-9 h-9 rounded-full bg-[#242231] border border-white/[0.06] flex items-center justify-center ${colorClass} text-[15px] group-hover:scale-105 transition-transform">
-                            <span class="material-symbols-outlined text-[17px]">${icon}</span>
+            if (currentInterventions.length === 0) {
+                watchlist.innerHTML = '<div class="text-[12px] text-text-muted text-center py-4">Watchlist is currently empty.</div>';
+            } else {
+                currentInterventions.forEach(item => {
+                    const icon = item.action_type === 'TRANSFER' ? 'swap_horiz' : 'shopping_cart_checkout';
+                    const colorClass = item.action_type === 'TRANSFER' ? 'text-primary' : 'text-[#cabeff]';
+                    
+                    const html = `
+                    <div class="watchlist-item flex items-center justify-between py-1.5 px-2 rounded-2xl hover:bg-white/[0.02] transition-colors cursor-pointer group" data-sku="${item.sku}">
+                        <div class="flex items-center gap-3">
+                            <div class="w-9 h-9 rounded-full bg-[#242231] border border-white/[0.06] flex items-center justify-center ${colorClass} text-[15px] group-hover:scale-105 transition-transform">
+                                <span class="material-symbols-outlined text-[17px]">${icon}</span>
+                            </div>
+                            <div class="flex flex-col">
+                                <span class="text-[13px] font-medium text-white" title="${item.trade_off_rationale}">${item.sku}</span>
+                                <span class="text-[11px] text-text-muted">${item.from} ➔ ${item.to}</span>
+                            </div>
                         </div>
-                        <div class="flex flex-col">
-                            <span class="text-[13px] font-medium text-white" title="${item.trade_off_rationale}">${item.sku}</span>
-                            <span class="text-[11px] text-text-muted">${item.from} ➔ ${item.to}</span>
+                        <div class="flex items-center gap-3">
+                            <div class="flex flex-col items-end">
+                                <span class="text-[13px] font-medium text-white">${item.quantity} Units</span>
+                                <span class="text-[11px] text-accent-emerald font-medium">₹${item.estimated_cost.toFixed(2)}</span>
+                            </div>
+                            <button class="wl-approve-btn w-7 h-7 rounded-full bg-[#52233e] hover:bg-[#682c4f] flex items-center justify-center text-white border border-white/10 transition-all opacity-0 group-hover:opacity-100" title="Approve">
+                                <span class="material-symbols-outlined text-[14px]">check</span>
+                            </button>
                         </div>
                     </div>
-                    <div class="flex items-center gap-3">
-                        <div class="flex flex-col items-end">
-                            <span class="text-[13px] font-medium text-white">${item.quantity} Units</span>
-                            <span class="text-[11px] text-accent-emerald font-medium">₹${item.estimated_cost.toFixed(2)}</span>
-                        </div>
-                        <button class="wl-approve-btn w-7 h-7 rounded-full bg-[#52233e] hover:bg-[#682c4f] flex items-center justify-center text-white border border-white/10 transition-all opacity-0 group-hover:opacity-100" title="Approve">
-                            <span class="material-symbols-outlined text-[14px]">check</span>
-                        </button>
-                    </div>
-                </div>
-                `;
-                watchlist.insertAdjacentHTML('beforeend', html);
-            });
+                    `;
+                    watchlist.insertAdjacentHTML('beforeend', html);
+                });
+            }
         }
         
         const container = document.getElementById('interventionContainer');
+        const pendingCountEl = document.getElementById('pending-count-text');
+        if (pendingCountEl) {
+            pendingCountEl.textContent = currentInterventions.length === 0 ? 
+                'No pending automated rebalancing actions.' : 
+                `${currentInterventions.length} automated rebalancing actions awaiting supervisor clearance`;
+        }
+
         if (container) {
             container.innerHTML = '';
-            currentInterventions.forEach(item => {
-              const actionColor = item.action_type === 'TRANSFER' ? 'text-primary border-primary/20 bg-[#39202f]' : 'text-[#cabeff] border-[#cabeff]/20 bg-[#262442]';
-              const iconColor = item.action_type === 'TRANSFER' ? 'text-primary border-primary/20 bg-[#251f2b]' : 'text-[#cabeff] border-[#cabeff]/20 bg-[#1e202f]';
-              const icon = item.action_type === 'TRANSFER' ? 'swap_horiz' : 'shopping_cart_checkout';
-              const actionText = item.action_type.replace('_', ' ');
-              
-              const html = `
-                <div class="intervention-item relative p-4 md:p-5 rounded-2xl bg-[#14131b] border border-white/[0.06] hover:border-white/[0.12] transition-all flex flex-col lg:flex-row lg:items-center justify-between gap-4" data-sku="${item.sku}">
-                  <div class="flex items-start gap-3.5">
-                    <div class="w-9 h-9 rounded-full ${iconColor} border flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <span class="material-symbols-outlined text-[17px]">${icon}</span>
-                    </div>
-                    <div class="flex flex-col">
-                      <div class="flex flex-wrap items-center gap-2">
-                        <span class="text-[14px] font-semibold text-white">${item.sku}</span>
-                        <span class="px-2 py-0.5 rounded-full ${actionColor} text-[10px] font-medium border">${actionText}</span>
-                        <span class="text-text-muted text-[12px]">${item.from} ➔ ${item.to}</span>
+            if (currentInterventions.length === 0) {
+                container.innerHTML = '<div class="text-[13px] text-text-muted text-center py-10 bg-[#14131b] rounded-2xl border border-white/[0.06]">Queue is clear. Supply chain is balanced.</div>';
+            } else {
+                currentInterventions.forEach(item => {
+                  const actionColor = item.action_type === 'TRANSFER' ? 'text-primary border-primary/20 bg-[#39202f]' : 'text-[#cabeff] border-[#cabeff]/20 bg-[#262442]';
+                  const iconColor = item.action_type === 'TRANSFER' ? 'text-primary border-primary/20 bg-[#251f2b]' : 'text-[#cabeff] border-[#cabeff]/20 bg-[#1e202f]';
+                  const icon = item.action_type === 'TRANSFER' ? 'swap_horiz' : 'shopping_cart_checkout';
+                  const actionText = item.action_type.replace('_', ' ');
+                  
+                  const html = `
+                    <div class="intervention-item relative p-4 md:p-5 rounded-2xl bg-[#14131b] border border-white/[0.06] hover:border-white/[0.12] transition-all flex flex-col lg:flex-row lg:items-center justify-between gap-4" data-sku="${item.sku}">
+                      <div class="flex items-start gap-3.5">
+                        <div class="w-9 h-9 rounded-full ${iconColor} border flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <span class="material-symbols-outlined text-[17px]">${icon}</span>
+                        </div>
+                        <div class="flex flex-col">
+                          <div class="flex flex-wrap items-center gap-2">
+                            <span class="text-[14px] font-semibold text-white">${item.sku}</span>
+                            <span class="px-2 py-0.5 rounded-full ${actionColor} text-[10px] font-medium border">${actionText}</span>
+                            <span class="text-text-muted text-[12px]">${item.from} ➔ ${item.to}</span>
+                          </div>
+                          <p class="text-[12px] text-text-muted mt-1 leading-relaxed max-w-xl">
+                            ${item.trade_off_rationale}
+                          </p>
+                        </div>
                       </div>
-                      <p class="text-[12px] text-text-muted mt-1 leading-relaxed max-w-xl">
-                        ${item.trade_off_rationale}
-                      </p>
-                    </div>
-                  </div>
-                  <div class="flex flex-wrap items-center lg:flex-col lg:items-end justify-between gap-3">
-                    <div class="flex items-center gap-5 text-left lg:text-right">
-                      <div>
-                        <span class="text-[10.5px] text-text-muted block">Quantity & Transit</span>
-                        <span class="text-[12.5px] font-semibold text-white">${item.quantity} Units (${item.estimated_arrival_days} Days)</span>
+                      <div class="flex flex-wrap items-center lg:flex-col lg:items-end justify-between gap-3">
+                        <div class="flex items-center gap-5 text-left lg:text-right">
+                          <div>
+                            <span class="text-[10.5px] text-text-muted block">Quantity & Transit</span>
+                            <span class="text-[12.5px] font-semibold text-white">${item.quantity} Units (${item.estimated_arrival_days} Days)</span>
+                          </div>
+                          <div>
+                            <span class="text-[10.5px] text-text-muted block">Cost (INR)</span>
+                            <span class="text-[12.5px] font-semibold text-accent-emerald">₹${item.estimated_cost.toFixed(2)}</span>
+                          </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                          <button class="reject-btn px-3.5 py-1 rounded-full bg-[#201f2b] hover:bg-error/20 hover:text-red-300 text-text-muted text-[12px] font-medium transition-all">
+                            Reject
+                          </button>
+                          <button class="approve-btn px-4 py-1 rounded-full bg-[#52233e] hover:bg-[#682c4f] border border-white/10 text-white text-[12px] font-medium transition-all shadow-sm">
+                            Approve
+                          </button>
+                        </div>
                       </div>
-                      <div>
-                        <span class="text-[10.5px] text-text-muted block">Cost (INR)</span>
-                        <span class="text-[12.5px] font-semibold text-accent-emerald">₹${item.estimated_cost.toFixed(2)}</span>
-                      </div>
                     </div>
-                    <div class="flex items-center gap-2">
-                      <button class="reject-btn px-3.5 py-1 rounded-full bg-[#201f2b] hover:bg-error/20 hover:text-red-300 text-text-muted text-[12px] font-medium transition-all">
-                        Reject
-                      </button>
-                      <button class="approve-btn px-4 py-1 rounded-full bg-[#52233e] hover:bg-[#682c4f] border border-white/10 text-white text-[12px] font-medium transition-all shadow-sm">
-                        Approve
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              `;
-              container.insertAdjacentHTML('beforeend', html);
-            });
+                  `;
+                  container.insertAdjacentHTML('beforeend', html);
+                });
+            }
         }
         
         attachEventListeners();
@@ -1091,9 +1103,16 @@
 
     // --- WATCHLIST FILTER PILLS ---
     const watchlistPills = document.querySelectorAll('#watchlist-container');
-    // The filter pills in the watchlist header (Critical/Excess/Resolved)
-    document.querySelectorAll('.watchlist-filter-pill').forEach(pill => {
-        pill.addEventListener('click', () => showToast('Filter: ' + pill.textContent.trim()));
+
+    // --- DURATION PILLS ---
+    document.querySelectorAll('.duration-pill').forEach(pill => {
+      pill.addEventListener('click', (e) => {
+        document.querySelectorAll('.duration-pill').forEach(p => {
+          p.className = 'duration-pill px-3.5 py-1 rounded-full text-text-muted hover:text-white text-[12px] font-medium transition-colors';
+        });
+        e.target.className = 'duration-pill px-3.5 py-1 rounded-full bg-gradient-to-r from-[#5a2744] to-[#773359] text-white text-[12px] font-medium shadow-sm active-pill';
+        showToast('Timeframe updated: ' + e.target.textContent);
+      });
     });
 
     function showToast(msg) {
@@ -1182,12 +1201,13 @@
             `;
         } else {
             msgDiv.className = 'flex items-start gap-2 max-w-[85%] mt-1';
+            let parsedText = typeof marked !== 'undefined' ? marked.parse(text) : text;
             msgDiv.innerHTML = `
                 <div class="w-6 h-6 rounded-full bg-[#1b1a24] border border-white/[0.08] flex-shrink-0 flex items-center justify-center text-primary mt-0.5">
                   <span class="material-symbols-outlined text-[13px]">smart_toy</span>
                 </div>
-                <div class="bg-[#242330] border border-white/[0.05] rounded-2xl rounded-tl-none p-2.5 text-white shadow-sm leading-relaxed">
-                    ${text}
+                <div class="bg-[#242330] border border-white/[0.05] rounded-2xl rounded-tl-none p-2.5 text-white shadow-sm leading-relaxed prose prose-invert prose-sm">
+                    ${parsedText}
                 </div>
             `;
         }
