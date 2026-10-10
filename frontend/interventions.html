@@ -169,7 +169,7 @@
 <span class="absolute right-3 text-[10px] font-mono text-text-subtle bg-surface-container-high px-1.5 py-0.5 rounded">⌘K</span>
 </div>
 <!-- Quick Action: Sync Gateway Badge -->
-<button class="flex items-center gap-1.5 px-3 py-2 text-xs font-medium rounded-full bg-surface-container hover:bg-surface-container-high text-on-surface transition-colors shadow-sm" id="syncGatewayBtn" title="Active endpoint: http://localhost:8000/api/triage">
+<button class="flex items-center gap-1.5 px-3 py-2 text-xs font-medium rounded-full bg-surface-container hover:bg-surface-container-high text-on-surface transition-colors shadow-sm" id="syncGatewayBtn" title="Active endpoint: /api/triage">
 <span class="material-symbols-outlined text-[16px] text-primary">sync_saved_locally</span>
 <span class="hidden sm:inline">Sync Gateway</span>
 <span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
@@ -369,398 +369,11 @@
 <div class="col-span-2">Operational Impact</div>
 <div class="col-span-3 text-right">Autonomous Rationale &amp; Clearance</div>
 </div>
-<!-- Intervention Row 1: SKU-101 (TRANSFER) -->
-<div class="intervention-row group flex flex-col lg:grid lg:grid-cols-12 gap-3.5 items-start lg:items-center p-3.5 rounded-2xl bg-surface-container hover:bg-surface-container-high transition-all" data-depot="Belgaum Gokak North Hub" data-sku="SKU-101" data-type="TRANSFER">
-<!-- Col 1: SKU & Item -->
-<div class="col-span-3 flex items-center gap-3 w-full">
-<div class="w-10 h-10 rounded-xl bg-surface-container-highest flex items-center justify-center text-primary shrink-0 shadow-inner">
-<span class="material-symbols-outlined text-[20px]">inventory_2</span>
-</div>
-<div class="flex flex-col min-w-0">
-<div class="flex items-center gap-1.5">
-<span class="font-mono text-xs font-semibold text-primary">SKU-101</span>
-<span class="text-[10px] text-text-subtle px-1.5 py-0.2 rounded bg-surface-container-lowest">North Hub</span>
-</div>
-<span class="text-xs font-medium text-on-surface truncate">Heavy Duty Brake Drum Assembly</span>
-</div>
-</div>
-<!-- Col 2: Action Type Badge -->
-<div class="col-span-2 flex items-center gap-2">
-<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-medium bg-tertiary/15 text-tertiary">
-<span class="material-symbols-outlined text-[13px]">swap_horiz</span>
-          TRANSFER
-        </span>
-<span class="text-[10px] text-text-muted">Inter-depot</span>
-</div>
-<!-- Col 3: Logistics Route -->
-<div class="col-span-2 flex flex-col text-xs">
-<div class="flex items-center gap-1.5 font-medium text-on-surface">
-<span>Belgaum</span>
-<span class="material-symbols-outlined text-xs text-primary">arrow_forward</span>
-<span>Gokak</span>
-</div>
-<div class="flex items-center gap-1 text-[11px] text-text-muted mt-0.5">
-<span class="material-symbols-outlined text-[12px]">schedule</span>
-<span>1 Day Transit (Express Shuttle)</span>
-</div>
-</div>
-<!-- Col 4: Operational Impact -->
-<div class="col-span-2 flex flex-col text-xs">
-<div class="flex items-center gap-1.5 text-on-surface font-semibold">
-<span>56 Units</span>
-<span class="text-text-subtle font-normal">|</span>
-<span class="text-tertiary">₹50.00 Fee</span>
-</div>
-<span class="text-[11px] text-text-muted mt-0.5">Avoids supplier MOQ lockup</span>
-</div>
-<!-- Col 5: Proof of Work Rationale & Actions -->
-<div class="col-span-3 flex flex-col lg:items-end justify-between w-full gap-2.5">
-<div class="p-2 rounded-xl bg-surface-container-lowest text-[11px] text-text-muted leading-relaxed w-full">
-<span class="text-primary font-medium">AI Rationale:</span> Internal transfer utilizes dead capital at flat ₹50.00 fee, avoiding minimum order quantity (MOQ) supplier lockup.
-        </div>
-<div class="flex items-center gap-2 self-end">
-<button class="reject-btn px-3 py-1.5 rounded-full text-xs font-medium text-text-muted hover:text-error hover:bg-error-container/20 transition-all">
-            Reject
-          </button>
-<button class="approve-btn flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-primary-container text-white hover:bg-primary hover:text-surface-container-lowest transition-all shadow-sm">
-<span class="material-symbols-outlined text-[14px]">check</span>
-            Approve
-          </button>
-</div>
-</div>
-</div>
-<!-- Intervention Row 2: SKU-409 (PURCHASE_ORDER) -->
-<div class="intervention-row group flex flex-col lg:grid lg:grid-cols-12 gap-3.5 items-start lg:items-center p-3.5 rounded-2xl bg-surface-container hover:bg-surface-container-high transition-all" data-depot="Western Corridor Pune Belgaum" data-sku="SKU-409" data-type="PURCHASE_ORDER">
-<!-- Col 1: SKU & Item -->
-<div class="col-span-3 flex items-center gap-3 w-full">
-<div class="w-10 h-10 rounded-xl bg-surface-container-highest flex items-center justify-center text-primary-fixed shrink-0 shadow-inner">
-<span class="material-symbols-outlined text-[20px]">electric_bolt</span>
-</div>
-<div class="flex flex-col min-w-0">
-<div class="flex items-center gap-1.5">
-<span class="font-mono text-xs font-semibold text-primary">SKU-409</span>
-<span class="text-[10px] text-text-subtle px-1.5 py-0.2 rounded bg-surface-container-lowest">Western Corr.</span>
-</div>
-<span class="text-xs font-medium text-on-surface truncate">Commercial Alternator 24V</span>
-</div>
-</div>
-<!-- Col 2: Action Type Badge -->
-<div class="col-span-2 flex items-center gap-2">
-<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-medium bg-[#f59e0b]/15 text-[#f59e0b]">
-<span class="material-symbols-outlined text-[13px]">shopping_cart</span>
-          PURCHASE ORDER
-        </span>
-<span class="text-[10px] text-text-muted">Procure</span>
-</div>
-<!-- Col 3: Logistics Route -->
-<div class="col-span-2 flex flex-col text-xs">
-<div class="flex items-center gap-1.5 font-medium text-on-surface">
-<span>Pune Central</span>
-<span class="material-symbols-outlined text-xs text-primary">arrow_forward</span>
-<span>Belgaum</span>
-</div>
-<div class="flex items-center gap-1 text-[11px] text-text-muted mt-0.5">
-<span class="material-symbols-outlined text-[12px]">local_shipping</span>
-<span>Tier-1 Direct (3 Days Transit)</span>
-</div>
-</div>
-<!-- Col 4: Operational Impact -->
-<div class="col-span-2 flex flex-col text-xs">
-<div class="flex items-center gap-1.5 text-on-surface font-semibold">
-<span>120 Units</span>
-<span class="text-text-subtle font-normal">|</span>
-<span class="text-on-surface">₹14,200.00 Est.</span>
-</div>
-<span class="text-[11px] text-text-muted mt-0.5">Establishes critical buffer</span>
-</div>
-<!-- Col 5: Proof of Work Rationale & Actions -->
-<div class="col-span-3 flex flex-col lg:items-end justify-between w-full gap-2.5">
-<div class="p-2 rounded-xl bg-surface-container-lowest text-[11px] text-text-muted leading-relaxed w-full">
-<span class="text-primary font-medium">AI Rationale:</span> Regional stock exhausted across secondary garages; procurement executed directly with Tier-1 vendor to prevent vehicle stall.
-        </div>
-<div class="flex items-center gap-2 self-end">
-<button class="reject-btn px-3 py-1.5 rounded-full text-xs font-medium text-text-muted hover:text-error hover:bg-error-container/20 transition-all">
-            Reject
-          </button>
-<button class="approve-btn flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-primary-container text-white hover:bg-primary hover:text-surface-container-lowest transition-all shadow-sm">
-<span class="material-symbols-outlined text-[14px]">check</span>
-            Approve
-          </button>
-</div>
-</div>
-</div>
-<!-- Intervention Row 3: SKU-288 (TRANSFER) -->
-<div class="intervention-row group flex flex-col lg:grid lg:grid-cols-12 gap-3.5 items-start lg:items-center p-3.5 rounded-2xl bg-surface-container hover:bg-surface-container-high transition-all" data-depot="Hubli Gokak Hubli Central" data-sku="SKU-288" data-type="TRANSFER">
-<!-- Col 1: SKU & Item -->
-<div class="col-span-3 flex items-center gap-3 w-full">
-<div class="w-10 h-10 rounded-xl bg-surface-container-highest flex items-center justify-center text-primary shrink-0 shadow-inner">
-<span class="material-symbols-outlined text-[20px]">tune</span>
-</div>
-<div class="flex flex-col min-w-0">
-<div class="flex items-center gap-1.5">
-<span class="font-mono text-xs font-semibold text-primary">SKU-288</span>
-<span class="text-[10px] text-text-subtle px-1.5 py-0.2 rounded bg-surface-container-lowest">Hubli Central</span>
-</div>
-<span class="text-xs font-medium text-on-surface truncate">Synthetic Fleet Brake Pads (Ceramic)</span>
-</div>
-</div>
-<!-- Col 2: Action Type Badge -->
-<div class="col-span-2 flex items-center gap-2">
-<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-medium bg-tertiary/15 text-tertiary">
-<span class="material-symbols-outlined text-[13px]">swap_horiz</span>
-          TRANSFER
-        </span>
-<span class="text-[10px] text-text-muted">Expedited</span>
-</div>
-<!-- Col 3: Logistics Route -->
-<div class="col-span-2 flex flex-col text-xs">
-<div class="flex items-center gap-1.5 font-medium text-on-surface">
-<span>Hubli</span>
-<span class="material-symbols-outlined text-xs text-primary">arrow_forward</span>
-<span>Gokak</span>
-</div>
-<div class="flex items-center gap-1 text-[11px] text-text-muted mt-0.5">
-<span class="material-symbols-outlined text-[12px]">speed</span>
-<span>Cross-dock (1 Day Transit)</span>
-</div>
-</div>
-<!-- Col 4: Operational Impact -->
-<div class="col-span-2 flex flex-col text-xs">
-<div class="flex items-center gap-1.5 text-on-surface font-semibold">
-<span>34 Units</span>
-<span class="text-text-subtle font-normal">|</span>
-<span class="text-tertiary">₹85.00 Fee</span>
-</div>
-<span class="text-[11px] text-text-muted mt-0.5">Urgent cross-dock release</span>
-</div>
-<!-- Col 5: Proof of Work Rationale & Actions -->
-<div class="col-span-3 flex flex-col lg:items-end justify-between w-full gap-2.5">
-<div class="p-2 rounded-xl bg-surface-container-lowest text-[11px] text-text-muted leading-relaxed w-full">
-<span class="text-primary font-medium">AI Rationale:</span> Cross-dock expedited transfer fulfills sudden fleet brake-pad spike without warehouse buffer penalty.
-        </div>
-<div class="flex items-center gap-2 self-end">
-<button class="reject-btn px-3 py-1.5 rounded-full text-xs font-medium text-text-muted hover:text-error hover:bg-error-container/20 transition-all">
-            Reject
-          </button>
-<button class="approve-btn flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-primary-container text-white hover:bg-primary hover:text-surface-container-lowest transition-all shadow-sm">
-<span class="material-symbols-outlined text-[14px]">check</span>
-            Approve
-          </button>
-</div>
-</div>
-</div>
-<!-- Intervention Row 4: SKU-812 (PURCHASE_ORDER) -->
-<div class="intervention-row group flex flex-col lg:grid lg:grid-cols-12 gap-3.5 items-start lg:items-center p-3.5 rounded-2xl bg-surface-container hover:bg-surface-container-high transition-all" data-depot="South Bay OEM Hubli" data-sku="SKU-812" data-type="PURCHASE_ORDER">
-<!-- Col 1: SKU & Item -->
-<div class="col-span-3 flex items-center gap-3 w-full">
-<div class="w-10 h-10 rounded-xl bg-surface-container-highest flex items-center justify-center text-primary-fixed shrink-0 shadow-inner">
-<span class="material-symbols-outlined text-[20px]">oil_barrel</span>
-</div>
-<div class="flex flex-col min-w-0">
-<div class="flex items-center gap-1.5">
-<span class="font-mono text-xs font-semibold text-primary">SKU-812</span>
-<span class="text-[10px] text-text-subtle px-1.5 py-0.2 rounded bg-surface-container-lowest">South Bay</span>
-</div>
-<span class="text-xs font-medium text-on-surface truncate">Heavy Duty Fuel &amp; Oil Separation Filter</span>
-</div>
-</div>
-<!-- Col 2: Action Type Badge -->
-<div class="col-span-2 flex items-center gap-2">
-<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-medium bg-[#f59e0b]/15 text-[#f59e0b]">
-<span class="material-symbols-outlined text-[13px]">shopping_cart</span>
-          PURCHASE ORDER
-        </span>
-<span class="text-[10px] text-text-muted">Procure</span>
-</div>
-<!-- Col 3: Logistics Route -->
-<div class="col-span-2 flex flex-col text-xs">
-<div class="flex items-center gap-1.5 font-medium text-on-surface">
-<span>OEM Supplier</span>
-<span class="material-symbols-outlined text-xs text-primary">arrow_forward</span>
-<span>Hubli Depot</span>
-</div>
-<div class="flex items-center gap-1 text-[11px] text-text-muted mt-0.5">
-<span class="material-symbols-outlined text-[12px]">flight_takeoff</span>
-<span>Direct OEM Freight (2 Days Transit)</span>
-</div>
-</div>
-<!-- Col 4: Operational Impact -->
-<div class="col-span-2 flex flex-col text-xs">
-<div class="flex items-center gap-1.5 text-on-surface font-semibold">
-<span>45 Units</span>
-<span class="text-text-subtle font-normal">|</span>
-<span class="text-on-surface">₹6,750.00 Est.</span>
-</div>
-<span class="text-[11px] text-text-muted mt-0.5">Stockout prevention protocol</span>
-</div>
-<!-- Col 5: Proof of Work Rationale & Actions -->
-<div class="col-span-3 flex flex-col lg:items-end justify-between w-full gap-2.5">
-<div class="p-2 rounded-xl bg-surface-container-lowest text-[11px] text-text-muted leading-relaxed w-full">
-<span class="text-primary font-medium">AI Rationale:</span> Critical oil filter threshold breached (inventory &lt; 10%); immediate PO release initiated to prevent garage bay stoppage.
-        </div>
-<div class="flex items-center gap-2 self-end">
-<button class="reject-btn px-3 py-1.5 rounded-full text-xs font-medium text-text-muted hover:text-error hover:bg-error-container/20 transition-all">
-            Reject
-          </button>
-<button class="approve-btn flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-primary-container text-white hover:bg-primary hover:text-surface-container-lowest transition-all shadow-sm">
-<span class="material-symbols-outlined text-[14px]">check</span>
-            Approve
-          </button>
-</div>
-</div>
-</div>
-</div>
-<!-- Real-Time Audit / Engine Synchronization Footer -->
-<footer class="mt-5 pt-4 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-text-muted border-t border-white/[0.04]">
-<div class="flex items-center gap-2">
-<span class="relative flex h-2 w-2">
-<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-tertiary opacity-75"></span>
-<span class="relative inline-flex rounded-full h-2 w-2 bg-tertiary"></span>
-</span>
-<span class="font-mono text-[11px] text-on-surface/80">
-        Connected to <span class="text-primary">http://localhost:8000/api/triage</span>
-</span>
-</div>
-<div class="flex items-center gap-4">
-<span class="flex items-center gap-1.5 text-[11px]">
-<span class="material-symbols-outlined text-[14px] text-text-subtle">sync</span>
-        Algorithmic decision tree synchronized: <strong class="text-on-surface font-medium" id="syncTimer">12s ago</strong>
-</span>
-<span class="hidden sm:inline-flex items-center gap-1 text-[11px] font-mono bg-surface-container px-2 py-0.5 rounded text-text-subtle">
-        ⌘ + Enter to Approve Selected
-      </span>
-</div>
-</footer>
-<!-- Workspace Interactive Logic -->
-<script>
-    (function initWorkspaceInteractions() {
-      // Row Approve handler
-      document.querySelectorAll('.approve-btn').forEach((btn) => {
-        btn.addEventListener('click', (e) => {
-          const row = e.target.closest('.intervention-row');
-          if (!row) return;
-          row.style.transition = 'all 0.3s ease';
-          row.classList.add('opacity-40', 'bg-tertiary/10');
-          btn.innerHTML = '<span class="material-symbols-outlined text-[14px]">verified</span> Approved';
-          btn.classList.replace('bg-primary-container', 'bg-tertiary/30');
-          btn.classList.add('text-tertiary');
-          btn.disabled = true;
-          updatePendingCount();
-        });
-      });
-
-      // Row Reject handler
-      document.querySelectorAll('.reject-btn').forEach((btn) => {
-        btn.addEventListener('click', (e) => {
-          const row = e.target.closest('.intervention-row');
-          if (!row) return;
-          row.style.transition = 'all 0.3s ease';
-          row.style.transform = 'translateX(20px)';
-          row.style.opacity = '0';
-          setTimeout(() => {
-            row.remove();
-            updatePendingCount();
-          }, 300);
-        });
-      });
-
-      // Master Bulk Approve
-      const bulkBtn = document.getElementById('bulkApproveMasterBtn');
-      if (bulkBtn) {
-        bulkBtn.addEventListener('click', () => {
-          document.querySelectorAll('.approve-btn').forEach((btn) => {
-            if (!btn.disabled) btn.click();
-          });
-          bulkBtn.innerHTML = '<span class="material-symbols-outlined text-[16px]">task_alt</span><span>Manifest Approved</span>';
-          bulkBtn.classList.replace('from-primary-container', 'from-tertiary-container');
-        });
-      }
-
-      // Sync Gateway feedback
-      const syncBtn = document.getElementById('syncGatewayBtn');
-      if (syncBtn) {
-        syncBtn.addEventListener('click', () => {
-          const icon = syncBtn.querySelector('.material-symbols-outlined');
-          icon.classList.add('animate-spin');
-          setTimeout(() => {
-            icon.classList.remove('animate-spin');
-            document.getElementById('syncTimer').textContent = 'Just now';
-          }, 800);
-        });
-      }
-
-      // Filter Tabs & Search Combination Logic
-      let currentFilter = 'all';
-      let searchQuery = '';
-      const allRows = document.querySelectorAll('.intervention-row');
-
-      function applyInterventionFilters() {
-        allRows.forEach(row => {
-          const rowType = row.getAttribute('data-type');
-          const rowText = (row.getAttribute('data-sku') + ' ' + row.getAttribute('data-depot') + ' ' + row.textContent).toLowerCase();
-          const cleanRowText = rowText.replace(/[-_]/g, '');
-          
-          const matchesFilter = (currentFilter === 'all' || currentFilter === 'AUDIT') ? true : (rowType === currentFilter);
-          
-          let matchesSearch = true;
-          if (searchQuery) {
-            const searchTerms = searchQuery.split(/\s+/);
-            matchesSearch = searchTerms.every(term => {
-              const cleanTerm = term.replace(/[-_]/g, '');
-              return rowText.includes(term) || cleanRowText.includes(cleanTerm);
-            });
-          }
-
-          row.style.display = (matchesFilter && matchesSearch) ? '' : 'none';
-        });
-      }
-
-      // Tab Filtering
-      const tabs = document.querySelectorAll('.filter-tab');
-      tabs.forEach((tab) => {
-        tab.addEventListener('click', () => {
-          tabs.forEach((t) => {
-            t.className = 'filter-tab px-4 py-1.5 text-xs font-medium rounded-full text-text-muted hover:text-on-surface transition-all';
-          });
-          tab.className = 'filter-tab px-4 py-1.5 text-xs font-semibold rounded-full bg-white text-surface-container-lowest transition-all shadow-sm';
-
-          currentFilter = tab.getAttribute('data-filter');
-          applyInterventionFilters();
-        });
-      });
-
-      // Search Filter Inputs (Global and Table)
-      const searchInputs = [document.getElementById('tableSearchInput'), document.getElementById('globalSearchInput')];
-      searchInputs.forEach(input => {
-        if (input) {
-          input.addEventListener('input', (e) => {
-            searchQuery = e.target.value.toLowerCase().trim();
-            // Sync the other input so they stay in lockstep
-            searchInputs.forEach(other => {
-              if (other && other !== input) other.value = e.target.value;
-            });
-            applyInterventionFilters();
-          });
-        }
-      });
-
-      // Keyboard Shortcut ⌘ + Enter
-      window.addEventListener('keydown', (e) => {
-        if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
-          if (bulkBtn) bulkBtn.click();
-        }
-      });
-
-      function updatePendingCount() {
-        const remaining = document.querySelectorAll('.intervention-row:not(.opacity-40)').length;
-        const countDisplay = document.getElementById('statPendingCount');
-        if (countDisplay) {
-          countDisplay.textContent = remaining + ' Actions';
-        }
-      }
-    })();
-  </script>
-</div></main>
+<div id="interventionContainer" class="flex flex-col gap-3"></div>
+      </div>
+    </div>
+  </div>
+</main>
 </div>
 <!-- Interactive JavaScript Handling -->
 <script>
@@ -862,5 +475,103 @@
       });
     });
   })();
+</script>
+
+    // FETCH LOGIC
+    let currentInterventions = [];
+    
+    async function loadInterventions() {
+      try {
+        const res = await fetch('/api/triage');
+        const data = await res.json();
+        currentInterventions = data.interventions || [];
+        renderUI();
+      } catch(err) {
+        console.error("Error loading interventions:", err);
+      }
+    }
+    
+    function renderUI() {
+        const container = document.getElementById('interventionContainer');
+        if(!container) return;
+        
+        container.innerHTML = '';
+        if (currentInterventions.length === 0) {
+            container.innerHTML = '<div class="text-[13px] text-text-muted py-10 text-center">No pending interventions.</div>';
+        } else {
+            currentInterventions.forEach((item, index) => {
+              const isTransfer = item.action_type === 'TRANSFER';
+              const typeLabel = isTransfer ? 'TRANSFER' : 'PURCHASE';
+              const routeText = isTransfer ? `<span class="font-medium">${item.from_loc}</span> &rarr; <span class="font-medium">${item.to_loc}</span>` : `<span class="font-medium">${item.from_loc}</span> &rarr; <span class="font-medium">${item.to_loc}</span>`;
+              const badgeClass = isTransfer ? 'bg-tertiary/15 text-tertiary' : 'bg-[#f59e0b]/15 text-[#f59e0b]';
+              const iconName = isTransfer ? 'swap_horiz' : 'shopping_cart';
+              
+              const html = `
+                <div class="intervention-row group flex flex-col lg:grid lg:grid-cols-12 gap-3.5 items-start lg:items-center p-3.5 rounded-2xl bg-surface-container hover:bg-surface-container-high transition-all" data-sku="${item.sku}">
+                  <div class="col-span-3 flex items-center gap-3 w-full">
+                    <div class="flex flex-col min-w-0">
+                      <div class="flex items-center gap-1.5">
+                        <span class="font-mono text-xs font-semibold text-primary">${item.sku}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-span-2 flex items-center gap-2">
+                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-medium ${badgeClass}">
+                      <span class="material-symbols-outlined text-[13px]">${iconName}</span>
+                      ${typeLabel}
+                    </span>
+                  </div>
+                  <div class="col-span-2 flex flex-col text-xs">
+                    <div class="flex items-center gap-1.5 text-on-surface">
+                      ${routeText}
+                    </div>
+                  </div>
+                  <div class="col-span-2 flex flex-col text-xs">
+                    <div class="flex items-center gap-1.5 text-on-surface font-semibold">
+                      <span>${item.quantity} Units</span>
+                    </div>
+                  </div>
+                  <div class="col-span-3 flex flex-col lg:items-end justify-between w-full gap-2.5">
+                    <div class="flex items-center gap-2 self-end">
+                      <button class="reject-btn px-3 py-1.5 rounded-full text-xs font-medium text-text-muted hover:text-error hover:bg-error-container/20 transition-all">Reject</button>
+                      <button onclick="approveAction(this, ${index})" class="approve-btn flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-primary-container text-white hover:bg-primary hover:text-surface-container-lowest transition-all shadow-sm">
+                        <span class="material-symbols-outlined text-[14px]">check</span> Approve
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              `;
+              container.insertAdjacentHTML('beforeend', html);
+            });
+        }
+        
+        const countEl = document.getElementById('statPendingCount');
+        if(countEl) countEl.innerText = currentInterventions.length + ' Actions';
+    }
+    
+    window.approveAction = async function(btn, index) {
+        const item = currentInterventions[index];
+        const row = btn.closest('.intervention-row');
+        row.classList.add('opacity-40', 'pointer-events-none');
+        btn.innerHTML = '<span class="material-symbols-outlined text-[14px] animate-spin">refresh</span> Processing';
+        
+        try {
+            const res = await fetch('/api/execute', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(item)
+            });
+            if(res.ok) {
+                row.innerHTML = '<div class="p-3 text-accent-emerald text-sm flex items-center gap-2 w-full"><span class="material-symbols-outlined">check_circle</span> Approved and executed</div>';
+                setTimeout(() => row.remove(), 2000);
+            }
+        } catch(e) {
+            alert('Failed to execute');
+        }
+    }
+    
+    document.addEventListener('DOMContentLoaded', () => {
+        loadInterventions();
+    });
 </script>
 </body></html>

@@ -664,7 +664,7 @@
 <div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#14131b] border border-white/[0.05]">
 <span class="w-2 h-2 rounded-full bg-accent-emerald animate-ping"></span>
 <span class="text-[11.5px] text-text-muted">Connected to</span>
-<span class="text-[11.5px] text-white font-mono">http://localhost:8000/api/triage</span>
+<span class="text-[11.5px] text-white font-mono">/api/triage</span>
 </div>
 <div class="flex items-center gap-3">
 <button class="w-9 h-9 rounded-full bg-[#201f2b] hover:bg-[#282736] text-text-muted hover:text-white transition-all flex items-center justify-center border border-white/[0.06]" id="refreshBtn" title="Sync Queue">
@@ -731,7 +731,7 @@
       }
 
       try {
-        const res = await fetch('http://localhost:8000/api/triage');
+        const res = await fetch('/api/triage');
         if (!res.ok) throw new Error("API not ok");
         const data = await res.json();
         
@@ -840,7 +840,7 @@
         try {
             // As requested, we loop through and hit the single /api/execute endpoint
             for (let item of itemsToApprove) {
-                const res = await fetch('http://localhost:8000/api/execute', {
+                const res = await fetch('/api/execute', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -1274,7 +1274,7 @@
             setTimeout(async () => {
                 addMessage('<span class="material-symbols-outlined text-[14px] animate-spin">refresh</span> Thinking...', false, 'loading-msg');
                 try {
-                    const res = await fetch('http://localhost:8000/api/chat', {
+                    const res = await fetch('/api/chat', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ message: text })

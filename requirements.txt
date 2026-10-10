@@ -6,3 +6,4 @@ fastapi
 uvicorn
 rich
 requests
+google-genai
