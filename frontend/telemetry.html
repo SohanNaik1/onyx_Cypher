@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="web_dashboard" name="shell-type"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "on-secondary-fixed": "#1d0061",
+          "primary-fixed": "#ffd8e9",
+          "error-container": "#93000a",
+          "outline": "#9e8c93",
+          "primary": "#ffafd7",
+          "on-secondary-fixed-variant": "#491ac6",
+          "on-surface": "#e4e1e9",
+          "tertiary-container": "#00ac65",
+          "surface": "#131318",
+          "on-primary": "#58153f",
+          "on-surface-variant": "#d6c1c9",
+          "inverse-primary": "#90446f",
+          "secondary-container": "#4b1ec9",
+          "on-primary-container": "#56143e",
+          "surface-container": "#1f1f24",
+          "surface-container-high": "#2a292f",
+          "tertiary-fixed-dim": "#42e18d",
+          "error": "#ffb4ab",
+          "tertiary": "#42e18d",
+          "surface-container-highest": "#35343a",
+          "inverse-surface": "#e4e1e9",
+          "surface-dim": "#131318",
+          "surface-bright": "#39383e",
+          "secondary": "#cabeff",
+          "on-error": "#690005",
+          "on-secondary": "#320099",
+          "on-primary-fixed": "#3c0029",
+          "on-tertiary": "#00391e",
+          "on-secondary-container": "#bcaeff",
+          "surface-container-lowest": "#0e0e13",
+          "on-tertiary-container": "#00371c",
+          "secondary-fixed-dim": "#cabeff",
+          "primary-container": "#d17ba9",
+          "on-error-container": "#ffdad6",
+          "tertiary-fixed": "#65fea7",
+          "surface-variant": "#35343a",
+          "outline-variant": "#524349",
+          "primary-fixed-dim": "#ffafd7",
+          "secondary-fixed": "#e6deff",
+          "surface-tint": "#ffafd7",
+          "surface-container-low": "#1b1b20",
+          "background": "#131318",
+          "inverse-on-surface": "#303035",
+          "on-background": "#e4e1e9",
+          "text-primary": "#f2eff7",
+          "text-muted": "#8d8b99",
+          "text-subtle": "#656372"
+        },
+        fontFamily: {
+          sans: ["Geist", "sans-serif"]
+        }
+      }
+    }
+  }
+</script>
+<style>
+  @layer base {
+    html, body {
+      margin: 0;
+      padding: 0;
+      background-color: #0b0a10;
+      color: #f2eff7;
+      font-family: 'Geist', sans-serif;
+    }
+    ::-webkit-scrollbar {
+      display: none;
+    }
+  }
+  .pill-active-glow {
+    box-shadow: 0 4px 20px -2px rgba(209, 123, 169, 0.4);
+  }
+  .btn-pink-glow {
+    box-shadow: 0 4px 24px -2px rgba(255, 175, 215, 0.45);
+  }
+</style>
+</head>
+<body class="min-h-screen p-3 md:p-6 lg:p-8 flex items-center justify-center bg-[#0b0a10] relative overflow-x-hidden selection:bg-primary-container selection:text-white">
+<!-- Ambient Plum/Rose Lighting Bleed -->
+<div class="fixed top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[550px] bg-[radial-gradient(ellipse_at_center,rgba(180,95,142,0.16)_0%,rgba(110,48,90,0.05)_50%,transparent_80%)] pointer-events-none blur-3xl z-0"></div>
+<div class="fixed bottom-10 left-10 w-[500px] h-[400px] bg-[radial-gradient(circle,rgba(150,75,120,0.1)_0%,transparent_70%)] pointer-events-none blur-3xl z-0"></div>
+<div class="fixed top-20 right-10 w-[500px] h-[400px] bg-[radial-gradient(circle,rgba(165,85,130,0.08)_0%,transparent_70%)] pointer-events-none blur-3xl z-0"></div>
+<!-- Outer Floating Frame -->
+<div class="relative z-10 w-full max-w-[1400px] bg-[#14131b]/95 border border-white/[0.08] rounded-[36px] shadow-[0_30px_90px_rgba(0,0,0,0.85)] p-5 md:p-7 lg:p-8 backdrop-blur-2xl flex flex-col lg:flex-row gap-7">
+<!-- 1. PERSISTENT LEFT SIDEBAR -->
+<aside class="w-full lg:w-60 flex-shrink-0 flex flex-col justify-between py-2">
+<div class="flex flex-col gap-8">
+<!-- Logo Header -->
+<div class="flex items-center gap-3 px-2">
+<div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-[#3a1b2d] to-[#682a4d] border border-white/10 flex items-center justify-center text-primary shadow-inner">
+<span class="material-symbols-outlined text-[19px]">precision_manufacturing</span>
+</div>
+<div class="flex flex-col">
+<span class="font-semibold text-[17px] tracking-tight text-white leading-tight">KD's Garage</span>
+<span class="text-[11px] text-text-muted tracking-wide font-medium">Fleet Intelligence</span>
+</div>
+</div>
+<!-- Main Nav Links -->
+<nav class="flex flex-col gap-1.5">
+<a class="flex items-center gap-3.5 px-4 py-2.5 rounded-full text-text-muted hover:text-white hover:bg-white/[0.04] transition-all text-[14px] font-normal" href="code.html">
+<span class="material-symbols-outlined text-[19px] opacity-90">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center gap-3.5 px-4 py-2.5 rounded-full text-text-muted hover:text-white hover:bg-white/[0.04] transition-all text-[14px] font-normal" href="interventions.html">
+<span class="material-symbols-outlined text-[19px]">assignment</span>
+<span>Interventions</span>
+</a>
+<a class="flex items-center gap-3.5 px-4 py-2.5 rounded-full bg-gradient-to-r from-[#4d223a] via-[#5e2747] to-[#712d54] text-white font-medium text-[14px] pill-active-glow transition-all" href="telemetry.html">
+<span class="material-symbols-outlined text-[19px]">analytics</span>
+<span>Telemetry</span>
+</a>
+<a class="flex items-center gap-3.5 px-4 py-2.5 rounded-full text-text-muted hover:text-white hover:bg-white/[0.04] transition-all text-[14px] font-normal" href="inventory.html">
+<span class="material-symbols-outlined text-[19px]">storefront</span>
+<span>Inventory</span>
+</a>
+<a class="flex items-center gap-3.5 px-4 py-2.5 rounded-full text-text-muted hover:text-white hover:bg-white/[0.04] transition-all text-[14px] font-normal" href="network.html">
+<span class="material-symbols-outlined text-[19px]">diversity_3</span>
+<span>Network</span>
+</a>
+</nav>
+</div>
+<!-- Bottom Pinned Settings & Fleet Status -->
+<div class="flex flex-col gap-2 pt-8 lg:pt-0">
+<a class="flex items-center gap-3.5 px-4 py-2.5 rounded-full text-text-muted hover:text-white hover:bg-white/[0.04] transition-all text-[14px]" href="#">
+<span class="material-symbols-outlined text-[19px]">settings</span>
+<span>Settings</span>
+</a>
+<a class="flex items-center gap-3.5 px-4 py-2.5 rounded-full text-text-muted hover:text-white hover:bg-white/[0.04] transition-all text-[14px]" href="#">
+<span class="material-symbols-outlined text-[19px]">support_agent</span>
+<span>Support</span>
+</a>
+<div class="mt-4 px-3.5 py-2 rounded-2xl bg-white/[0.03] border border-white/[0.06] flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span>
+<span class="text-[11px] text-text-muted">Fleet Mesh</span>
+</div>
+<span class="text-[11px] text-tertiary font-semibold">99.98%</span>
+</div>
+</div>
+</aside>
+<!-- 2. MAIN WORKSPACE CONTENT -->
+<main class="flex-1 flex flex-col gap-6 min-w-0"><div class="flex flex-col w-full gap-5">
+<!-- Command Header & Global Telemetry Actions -->
+<header class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div class="flex flex-col">
+<div class="flex items-center gap-2 mb-1">
+<span class="w-2 h-2 rounded-full bg-tertiary animate-ping"></span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-tertiary">Live CDC Stream Active</span>
+<span class="text-on-surface-variant/40 font-body-sm text-body-sm">/</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Cluster node-ap-south-1a</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-text-primary tracking-tight">System Telemetry &amp; Agent Health</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Realtime observability across edge event brokers, NLP parsers, and inventory runout matrices.</p>
+</div>
+<!-- Top Controls & Operator Pill -->
+<div class="flex items-center flex-wrap gap-2.5">
+<!-- Search Input -->
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-3 text-on-surface-variant/70 text-[18px]">terminal</span>
+<input class="bg-surface-container-lowest text-text-primary font-body-sm text-body-sm pl-9 pr-4 py-2 rounded-full focus:outline-none focus:ring-1 focus:ring-primary-container/60 placeholder:text-on-surface-variant/50 w-56 transition-all" id="streamQuickFilter" placeholder="Filter stream (e.g. SKU, depot, triage)..." type="text"/>
+</div>
+<!-- Agent Status Pill -->
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-container-high shadow-inner">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-tertiary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-tertiary"></span>
+</span>
+<span class="font-label-md text-label-md text-text-primary">Agent Online: <span class="text-tertiary font-semibold">v2.4</span></span>
+</div>
+<!-- Stream Control Buttons -->
+<button class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-container-high hover:bg-surface-variant text-text-primary font-label-md text-label-md transition-all shadow-sm" id="toggleStreamBtn">
+<span class="material-symbols-outlined text-[16px] text-primary">pause_circle</span>
+<span>Pause Stream</span>
+</button>
+<button class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-container-high hover:bg-surface-variant text-on-surface-variant hover:text-text-primary font-label-md text-label-md transition-all shadow-sm" id="clearLogsBtn">
+<span class="material-symbols-outlined text-[16px]">clear_all</span>
+<span>Clear</span>
+</button>
+<!-- Unified Top Right Controls -->
+  <!-- Notification Bell -->
+  <div class="relative" id="notification-container">
+    <button id="btn-notifications" class="w-9 h-9 rounded-full bg-surface-container-high hover:bg-white/[0.05] border border-white/[0.05] flex items-center justify-center text-text-muted hover:text-white transition-all shadow-sm relative">
+      <span class="material-symbols-outlined text-[17px]">notifications</span>
+      <span class="absolute top-1 right-1 w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse border-2 border-surface-container"></span>
+    </button>
+    <!-- Notification Dropdown -->
+    <div id="notif-dropdown" class="hidden absolute right-0 mt-3 w-80 bg-[#131318] border border-white/[0.08] rounded-xl shadow-2xl z-50 overflow-hidden backdrop-blur-md">
+      <div class="flex items-center justify-between px-4 py-3 border-b border-white/[0.06] bg-[#1a1a22]">
+        <h3 class="text-sm font-semibold text-white tracking-tight">System Alerts</h3>
+        <button class="text-xs font-medium text-text-muted hover:text-white transition-colors">Mark all as read</button>
+      </div>
+      <div class="flex flex-col divide-y divide-white/[0.04]">
+        <div class="flex gap-3.5 px-4 py-3.5 hover:bg-white/[0.02] transition-colors cursor-pointer">
+          <div class="flex-shrink-0 w-8 h-8 rounded-full bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400">
+            <span class="material-symbols-outlined text-[16px]">forum</span>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-sm font-medium text-white leading-tight">Unstructured Log Parsed</span>
+            <span class="text-[12.5px] text-text-muted leading-snug mt-1">WhatsApp: '4 units of SKU-303 damaged on delivery at Gokak.' True stock adjusted automatically.</span>
+            <span class="text-[10px] font-mono text-text-subtle mt-2 uppercase tracking-wider">2 mins ago</span>
+          </div>
+        </div>
+        <div class="flex gap-3.5 px-4 py-3.5 hover:bg-white/[0.02] transition-colors cursor-pointer">
+          <div class="flex-shrink-0 w-8 h-8 rounded-full bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-orange-400">
+            <span class="material-symbols-outlined text-[16px]">warning</span>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-sm font-medium text-white leading-tight">Runout Warning</span>
+            <span class="text-[12.5px] text-text-muted leading-snug mt-1">SKU-101 velocity spiked. Runout updated to 1.5 days.</span>
+            <span class="text-[10px] font-mono text-text-subtle mt-2 uppercase tracking-wider">15 mins ago</span>
+          </div>
+        </div>
+        <div class="flex gap-3.5 px-4 py-3.5 hover:bg-white/[0.02] transition-colors cursor-pointer">
+          <div class="flex-shrink-0 w-8 h-8 rounded-full bg-green-500/10 border border-green-500/20 flex items-center justify-center text-green-400">
+            <span class="material-symbols-outlined text-[16px]">check_circle</span>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-sm font-medium text-white leading-tight">Supabase Sync</span>
+            <span class="text-[12.5px] text-text-muted leading-snug mt-1">Database successfully seeded and reconciled.</span>
+            <span class="text-[10px] font-mono text-text-subtle mt-2 uppercase tracking-wider">1 hour ago</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- User Profile Dropdown -->
+  <div class="relative" id="profile-container">
+    <div id="btn-profile" class="flex items-center gap-2.5 pl-1.5 pr-4 py-1.5 rounded-full bg-surface-container-high border border-white/[0.05] hover:border-white/[0.15] transition-all cursor-pointer">
+      <div class="w-7 h-7 rounded-full bg-gradient-to-tr from-[#9c4b77] to-[#e49bbd] p-[1px] flex items-center justify-center">
+        <div class="w-full h-full rounded-full bg-[#1c1421] flex items-center justify-center text-[11px] font-bold text-primary">
+          RK
+        </div>
+      </div>
+      <div class="flex flex-col text-left">
+        <span class="text-[12px] font-medium text-white leading-tight">Ramesh K.</span>
+        <span class="text-[10px] text-text-muted leading-tight">Head of Purchasing</span>
+      </div>
+      <span class="material-symbols-outlined text-[15px] text-text-subtle ml-1">expand_more</span>
+    </div>
+
+    <!-- Profile Dropdown Panel -->
+    <div id="profile-dropdown" class="hidden absolute right-0 mt-3 w-64 bg-[#131318] border border-white/[0.08] rounded-xl shadow-2xl z-50 overflow-hidden backdrop-blur-md">
+      <!-- Header Area -->
+      <div class="flex flex-col px-4 py-3.5 bg-[#1a1a22]">
+        <span class="text-[14px] font-semibold text-white leading-tight">Ramesh Kulkarni</span>
+        <span class="text-[12px] text-primary font-medium mt-0.5">Head of Purchasing</span>
+        <span class="text-[11px] text-text-muted mt-1 font-mono">ramesh@kdgarage.in</span>
+      </div>
+      <!-- Action Buttons -->
+      <div class="flex flex-col py-1.5 border-t border-white/[0.06]">
+        <button class="profile-action-btn flex items-center gap-3 px-4 py-2 hover:bg-white/[0.03] transition-colors w-full text-left text-[13px] text-text-muted hover:text-white" data-action="Navigating to User Settings...">
+          <span class="material-symbols-outlined text-[18px]">person</span>
+          User Settings
+        </button>
+        <button class="profile-action-btn flex items-center gap-3 px-4 py-2 hover:bg-white/[0.03] transition-colors w-full text-left text-[13px] text-text-muted hover:text-white" data-action="Opening Warehouse Preferences...">
+          <span class="material-symbols-outlined text-[18px]">settings</span>
+          Warehouse Preferences
+        </button>
+        <button class="profile-action-btn flex items-center gap-3 px-4 py-2 hover:bg-white/[0.03] transition-colors w-full text-left text-[13px] text-text-muted hover:text-white" data-action="Accessing API Keys & Integrations...">
+          <span class="material-symbols-outlined text-[18px]">key</span>
+          API Keys & Integrations
+        </button>
+      </div>
+      <!-- Sign Out -->
+      <div class="py-1.5 border-t border-white/[0.06]">
+        <button class="profile-action-btn flex items-center gap-3 px-4 py-2 hover:bg-red-500/10 transition-colors w-full text-left text-[13px] text-red-400 hover:text-red-300" data-action="Session Terminated. Logging out...">
+          <span class="material-symbols-outlined text-[18px]">logout</span>
+          Secure Logout
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+</header>
+<!-- 4 High-Density Core Vitals Metric Cards -->
+<section class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3.5">
+<!-- Vital 1: Database Sync -->
+<div class="p-4 rounded-3xl bg-surface-container/70 backdrop-blur-xl flex flex-col justify-between relative overflow-hidden group hover:bg-surface-container transition-all">
+<div class="absolute -right-8 -top-8 w-24 h-24 bg-tertiary/10 rounded-full blur-xl pointer-events-none group-hover:bg-tertiary/20 transition-all"></div>
+<div class="flex items-start justify-between">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant">Database Replication</span>
+<h2 class="font-headline-sm text-headline-sm text-text-primary mt-0.5">Supabase Pipeline</h2>
+</div>
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-tertiary/15 text-tertiary font-label-sm text-label-sm font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary animate-pulse"></span>
+          Connected
+        </span>
+</div>
+<div class="flex items-baseline justify-between mt-3">
+<div class="flex items-baseline gap-1.5">
+<span class="font-numeric-hero text-numeric-hero text-text-primary">24</span>
+<span class="font-body-md text-body-md text-tertiary font-semibold">ms</span>
+</div>
+<div class="flex items-center gap-1 text-on-surface-variant">
+<svg class="w-16 h-6 text-tertiary" fill="none" viewbox="0 0 64 24">
+<path d="M2 18 L14 14 L24 16 L34 8 L46 11 L62 4" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+</div>
+<div class="flex items-center justify-between pt-3 mt-2 font-label-sm text-label-sm text-on-surface-variant/80">
+<span>Protocol: Realtime CDC</span>
+<span class="text-text-primary font-medium">99.99% sync rate</span>
+</div>
+</div>
+<!-- Vital 2: NLP Parser -->
+<div class="p-4 rounded-3xl bg-surface-container/70 backdrop-blur-xl flex flex-col justify-between relative overflow-hidden group hover:bg-surface-container transition-all">
+<div class="absolute -right-8 -top-8 w-24 h-24 bg-secondary/10 rounded-full blur-xl pointer-events-none group-hover:bg-secondary/20 transition-all"></div>
+<div class="flex items-start justify-between">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant">Field Dispatch NLP</span>
+<h2 class="font-headline-sm text-headline-sm text-text-primary mt-0.5">Alert Parser Core</h2>
+</div>
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-secondary/15 text-secondary font-label-sm text-label-sm font-semibold">
+          Active
+        </span>
+</div>
+<div class="flex items-baseline justify-between mt-3">
+<div class="flex items-baseline gap-1.5">
+<span class="font-numeric-hero text-numeric-hero text-text-primary">42</span>
+<span class="font-body-md text-body-md text-secondary font-semibold">msgs/min</span>
+</div>
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface-variant">
+          0 unread queue
+        </span>
+</div>
+<div class="flex items-center justify-between pt-3 mt-2 font-label-sm text-label-sm text-on-surface-variant/80">
+<span>Inbound: WhatsApp + Telegram</span>
+<span class="text-text-primary font-medium">100% intent mapped</span>
+</div>
+</div>
+<!-- Vital 3: Math Engine -->
+<div class="p-4 rounded-3xl bg-surface-container/70 backdrop-blur-xl flex flex-col justify-between relative overflow-hidden group hover:bg-surface-container transition-all">
+<div class="absolute -right-8 -top-8 w-24 h-24 bg-primary/10 rounded-full blur-xl pointer-events-none group-hover:bg-primary/20 transition-all"></div>
+<div class="flex items-start justify-between">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant">Forecasting Math</span>
+<h2 class="font-headline-sm text-headline-sm text-text-primary mt-0.5">Runout Matrix Engine</h2>
+</div>
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary/15 text-primary font-label-sm text-label-sm font-semibold">
+          Simplex Solver
+        </span>
+</div>
+<div class="flex items-baseline justify-between mt-3">
+<div class="flex items-baseline gap-1.5">
+<span class="font-numeric-hero text-numeric-hero text-text-primary">1,420</span>
+<span class="font-body-md text-body-md text-primary font-semibold">SKUs/min</span>
+</div>
+<div class="flex items-center gap-1 text-on-surface-variant">
+<svg class="w-16 h-6 text-primary" fill="none" viewbox="0 0 64 24">
+<path d="M2 14 L14 16 L26 8 L38 12 L50 6 L62 9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+</div>
+<div class="flex items-center justify-between pt-3 mt-2 font-label-sm text-label-sm text-on-surface-variant/80">
+<span>Variance Drift: <span class="text-tertiary">±0.02%</span></span>
+<span class="text-text-primary font-medium">Dynamic safety cap</span>
+</div>
+</div>
+<!-- Vital 4: Execution Queue -->
+<div class="p-4 rounded-3xl bg-surface-container/70 backdrop-blur-xl flex flex-col justify-between relative overflow-hidden group hover:bg-surface-container transition-all">
+<div class="absolute -right-8 -top-8 w-24 h-24 bg-primary-container/15 rounded-full blur-xl pointer-events-none group-hover:bg-primary-container/25 transition-all"></div>
+<div class="flex items-start justify-between">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant">Execution Pipeline</span>
+<h2 class="font-headline-sm text-headline-sm text-text-primary mt-0.5">Pending Mutations</h2>
+</div>
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-secondary-container/40 text-secondary font-label-sm text-label-sm font-semibold">
+          Syncing in 18s
+        </span>
+</div>
+<div class="flex items-baseline justify-between mt-3">
+<div class="flex items-baseline gap-1.5">
+<span class="font-numeric-hero text-numeric-hero text-text-primary">3</span>
+<span class="font-body-md text-body-md text-on-surface-variant font-medium">pending actions</span>
+</div>
+<div class="w-7 h-7 rounded-full bg-surface-container-high flex items-center justify-center text-primary text-[14px]">
+<span class="material-symbols-outlined text-[16px] animate-spin">refresh</span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-3 mt-2 font-label-sm text-label-sm text-on-surface-variant/80">
+<span class="truncate max-w-[150px]">POST /api/triage</span>
+<span class="text-tertiary font-medium">Status: Ready</span>
+</div>
+</div>
+</section>
+<!-- Main Observability Workspace: Split Layout -->
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-5 min-w-0">
+<!-- LEFT 7 COLS: High-Tech Mission Control Stream -->
+<div class="lg:col-span-7 flex flex-col rounded-3xl bg-surface-container-lowest/90 backdrop-blur-2xl shadow-2xl p-5 min-w-0">
+<!-- Terminal Window Bar -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3">
+<div class="flex items-center gap-3">
+<div class="flex items-center gap-1.5">
+<span class="w-3 h-3 rounded-full bg-error/80"></span>
+<span class="w-3 h-3 rounded-full bg-primary-container/80"></span>
+<span class="w-3 h-3 rounded-full bg-tertiary/80"></span>
+</div>
+<div class="flex items-center gap-2">
+<span class="font-label-md text-label-md font-semibold text-text-primary tracking-wide">Live Agent Activity Log</span>
+<span class="px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm font-mono">STREAMING</span>
+</div>
+</div>
+<!-- Filter Segment Controls -->
+<div class="flex items-center gap-1 bg-surface-container-low p-1 rounded-full overflow-x-auto">
+<button class="log-filter-btn px-2.5 py-1 rounded-full bg-white text-surface-container-lowest font-label-sm text-label-sm font-semibold transition-all" data-log-filter="all">ALL</button>
+<button class="log-filter-btn px-2.5 py-1 rounded-full text-on-surface-variant hover:text-white font-label-sm text-label-sm font-medium transition-all" data-log-filter="INGEST">INGEST</button>
+<button class="log-filter-btn px-2.5 py-1 rounded-full text-on-surface-variant hover:text-white font-label-sm text-label-sm font-medium transition-all" data-log-filter="NLP">NLP</button>
+<button class="log-filter-btn px-2.5 py-1 rounded-full text-on-surface-variant hover:text-white font-label-sm text-label-sm font-medium transition-all" data-log-filter="CALC">CALC</button>
+<button class="log-filter-btn px-2.5 py-1 rounded-full text-on-surface-variant hover:text-white font-label-sm text-label-sm font-medium transition-all" data-log-filter="TRIAGE">TRIAGE</button>
+</div>
+</div>
+<!-- Feed Container (Terminal Log Rows) -->
+<div class="flex flex-col gap-2 py-2 overflow-y-auto max-h-[510px] font-mono text-body-sm text-body-sm pr-1" id="telemetryTerminalStream">
+<!-- Event 1 -->
+<div class="log-item p-2.5 rounded-2xl bg-surface-container-low/40 hover:bg-surface-container-high/60 transition-colors flex items-start gap-3" data-category="INGEST">
+<span class="text-on-surface-variant/70 shrink-0 font-label-sm text-label-sm mt-0.5">[10:42:04]</span>
+<span class="px-2 py-0.5 rounded-full bg-secondary-container/30 text-secondary text-[11px] font-semibold shrink-0">INGEST</span>
+<p class="text-on-surface font-body-sm text-body-sm leading-snug">
+            Synced <span class="text-primary font-semibold">94 sales records</span> from Supabase database endpoint. Batch delta ingested in 12ms.
+          </p>
+</div>
+<!-- Event 2 -->
+<div class="log-item p-2.5 rounded-2xl bg-surface-container-low/40 hover:bg-surface-container-high/60 transition-colors flex items-start gap-3" data-category="CALC">
+<span class="text-on-surface-variant/70 shrink-0 font-label-sm text-label-sm mt-0.5">[10:42:38]</span>
+<span class="px-2 py-0.5 rounded-full bg-tertiary-container/30 text-tertiary text-[11px] font-semibold shrink-0">CALC</span>
+<p class="text-on-surface font-body-sm text-body-sm leading-snug">
+            Depletion rate anomaly on <span class="text-text-primary font-semibold">SKU-812 (Mobil 1 Super)</span>: Elevated <span class="text-primary">+14%</span> vs 7-day rolling median.
+          </p>
+</div>
+<!-- Event 3 -->
+<div class="log-item p-2.5 rounded-2xl bg-surface-container-low/40 hover:bg-surface-container-high/60 transition-colors flex items-start gap-3" data-category="NLP">
+<span class="text-on-surface-variant/70 shrink-0 font-label-sm text-label-sm mt-0.5">[10:43:12]</span>
+<span class="px-2 py-0.5 rounded-full bg-on-secondary-fixed-variant/40 text-secondary-fixed text-[11px] font-semibold shrink-0">NLP</span>
+<p class="text-on-surface font-body-sm text-body-sm leading-snug">
+            Extracted intent from WhatsApp voice note (Gokak Depot): <span class="text-on-surface-variant italic font-sans">"4 units damaged during unboxing in bay 3"</span> → Extracted: <span class="text-error font-medium">DAMAGE_WRITE_DOWN</span>.
+          </p>
+</div>
+<!-- Event 4 -->
+<div class="log-item p-2.5 rounded-2xl bg-surface-container-low/40 hover:bg-surface-container-high/60 transition-colors flex items-start gap-3" data-category="CALC">
+<span class="text-on-surface-variant/70 shrink-0 font-label-sm text-label-sm mt-0.5">[10:43:45]</span>
+<span class="px-2 py-0.5 rounded-full bg-tertiary-container/30 text-tertiary text-[11px] font-semibold shrink-0">CALC</span>
+<p class="text-on-surface font-body-sm text-body-sm leading-snug">
+            Adjusted <span class="text-text-primary font-semibold">SKU-303</span> true_stock to 6. Estimated Runout adjusted to <span class="text-error font-medium">3.0 days</span>. Threshold breached.
+          </p>
+</div>
+<!-- Event 5 -->
+<div class="log-item p-2.5 rounded-2xl bg-surface-container-low/40 hover:bg-surface-container-high/60 transition-colors flex items-start gap-3" data-category="TRIAGE">
+<span class="text-on-surface-variant/70 shrink-0 font-label-sm text-label-sm mt-0.5">[10:44:18]</span>
+<span class="px-2 py-0.5 rounded-full bg-primary-container/30 text-primary text-[11px] font-semibold shrink-0">TRIAGE</span>
+<p class="text-on-surface font-body-sm text-body-sm leading-snug">
+            Automated flag triggered on <span class="text-text-primary font-semibold">SKU-101 (Brembo Ceramic Pads)</span> → Severity: <span class="text-primary font-bold">CRITICAL</span>. Transfer proposal dispatched to review queue.
+          </p>
+</div>
+<!-- Event 6 -->
+<div class="log-item p-2.5 rounded-2xl bg-surface-container-low/40 hover:bg-surface-container-high/60 transition-colors flex items-start gap-3" data-category="INGEST">
+<span class="text-on-surface-variant/70 shrink-0 font-label-sm text-label-sm mt-0.5">[10:44:50]</span>
+<span class="px-2 py-0.5 rounded-full bg-secondary-container/30 text-secondary text-[11px] font-semibold shrink-0">INGEST</span>
+<p class="text-on-surface font-body-sm text-body-sm leading-snug">
+            Batch telemetry heartbeat acknowledged from <span class="text-text-primary font-semibold">Hubli Central Gateway</span>: 21ms RTT. Network packet loss: 0.00%.
+          </p>
+</div>
+<!-- Event 7 -->
+<div class="log-item p-2.5 rounded-2xl bg-surface-container-low/40 hover:bg-surface-container-high/60 transition-colors flex items-start gap-3" data-category="TRIAGE">
+<span class="text-on-surface-variant/70 shrink-0 font-label-sm text-label-sm mt-0.5">[10:45:22]</span>
+<span class="px-2 py-0.5 rounded-full bg-primary-container/30 text-primary text-[11px] font-semibold shrink-0">TRIAGE</span>
+<p class="text-on-surface font-body-sm text-body-sm leading-snug">
+            Generated automated Purchase Order PO-9904 for <span class="text-text-primary font-semibold">SKU-409 (Filters)</span> routing from <span class="text-on-surface-variant">Pune Central → Belgaum Depot</span>.
+          </p>
+</div>
+<!-- Event 8 -->
+<div class="log-item p-2.5 rounded-2xl bg-surface-container-low/40 hover:bg-surface-container-high/60 transition-colors flex items-start gap-3" data-category="NLP">
+<span class="text-on-surface-variant/70 shrink-0 font-label-sm text-label-sm mt-0.5">[10:45:55]</span>
+<span class="px-2 py-0.5 rounded-full bg-on-secondary-fixed-variant/40 text-secondary-fixed text-[11px] font-semibold shrink-0">NLP</span>
+<p class="text-on-surface font-body-sm text-body-sm leading-snug">
+            Parsed field voice dispatch transcript: <span class="text-on-surface-variant italic font-sans">"Brake pads running low in Gokak bay 2"</span> → Matched <span class="text-text-primary font-semibold">SKU-101 / Depot: GOKAK</span>.
+          </p>
+</div>
+<!-- Event 9 -->
+<div class="log-item p-2.5 rounded-2xl bg-surface-container-low/40 hover:bg-surface-container-high/60 transition-colors flex items-start gap-3" data-category="CALC">
+<span class="text-on-surface-variant/70 shrink-0 font-label-sm text-label-sm mt-0.5">[10:46:19]</span>
+<span class="px-2 py-0.5 rounded-full bg-tertiary-container/30 text-tertiary text-[11px] font-semibold shrink-0">CALC</span>
+<p class="text-on-surface font-body-sm text-body-sm leading-snug">
+            Triangulated <span class="text-text-primary font-semibold">Hubli → Gokak</span> internal transfer route. Est. savings: <span class="text-tertiary font-bold">₹85.00/unit</span> vs regional spot vendor.
+          </p>
+</div>
+</div>
+<!-- Terminal Command Line Prompt Footer -->
+<div class="mt-4 pt-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-on-surface-variant font-mono font-label-sm text-label-sm">
+<div class="flex items-center gap-2">
+<span class="text-primary font-bold">agent@kd-garage-v2.4:~$</span>
+<span class="text-tertiary flex items-center gap-1.5">
+            [STREAMING REALTIME EVENTS]
+            <span class="w-2 h-4 bg-tertiary animate-pulse inline-block"></span>
+</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="text-on-surface-variant">Packets: <span class="text-text-primary font-semibold" id="packetCount">89,214</span></span>
+<span class="text-on-surface-variant">Buffer: <span class="text-tertiary font-semibold">Healthy</span></span>
+</div>
+</div>
+</div>
+<!-- RIGHT 5 COLS: Depot Topology Map & Agent Inference Intelligence -->
+<div class="lg:col-span-5 flex flex-col gap-5">
+<!-- Depot Network Topology Card -->
+<div class="p-5 rounded-3xl bg-surface-container/80 backdrop-blur-xl flex flex-col shadow-xl relative overflow-hidden">
+<div class="flex items-start justify-between">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-primary">Mesh Network Topology</span>
+<h2 class="font-headline-sm text-headline-sm text-text-primary mt-0.5">Depot Physical Telemetry</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Active synchronization mesh between KD's regional hubs</p>
+</div>
+<span class="px-2.5 py-1 rounded-full bg-surface-container-high text-tertiary font-label-sm text-label-sm font-semibold flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary animate-ping"></span>
+            4 Nodes
+          </span>
+</div>
+<!-- Node Mesh Diagram (SVG Interactive Schematic) -->
+<div class="relative w-full h-56 mt-4 rounded-2xl bg-surface-container-lowest/70 p-3 overflow-hidden flex items-center justify-center">
+<svg class="absolute inset-0 w-full h-full" fill="none" viewbox="0 0 420 220">
+<!-- Connection Lines -->
+<path d="M75 140 L210 60" stroke="#524349" stroke-dasharray="3 3" stroke-width="1.5"></path>
+<path d="M210 60 L345 130" stroke="#524349" stroke-dasharray="3 3" stroke-width="1.5"></path>
+<path d="M75 140 L345 130" stroke="#524349" stroke-width="1.5"></path>
+<path d="M210 60 L210 180" stroke="#d17ba9" stroke-opacity="0.4" stroke-width="1.5"></path>
+<!-- Animated Signal Pulses along paths -->
+<circle class="animate-pulse" cx="142" cy="100" fill="#ffafd7" r="3"></circle>
+<circle class="animate-pulse" cx="277" cy="95" fill="#42e18d" r="3"></circle>
+<circle class="animate-ping" cx="210" cy="135" fill="#ffd8e9" r="3.5"></circle>
+</svg>
+<!-- Node 1: Belgaum -->
+<div class="absolute left-4 bottom-8 flex flex-col items-center">
+<div class="w-10 h-10 rounded-2xl bg-surface-container-high flex items-center justify-center text-primary shadow-lg group hover:scale-110 transition-transform cursor-pointer">
+<span class="material-symbols-outlined text-[20px]">warehouse</span>
+</div>
+<span class="mt-1 font-label-sm text-label-sm text-text-primary font-semibold">Belgaum Depot</span>
+<span class="text-[10px] text-tertiary">12ms • 48 SKUs</span>
+</div>
+<!-- Node 2: Hubli Central Hub (Top Core) -->
+<div class="absolute top-3 left-1/2 -translate-x-1/2 flex flex-col items-center">
+<div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-on-primary-fixed to-primary-container flex items-center justify-center text-white shadow-xl ring-4 ring-primary/20 cursor-pointer">
+<span class="material-symbols-outlined text-[24px]">hub</span>
+</div>
+<span class="mt-1 font-label-sm text-label-sm text-text-primary font-semibold">Hubli Central</span>
+<span class="text-[10px] text-tertiary">15ms • 110 SKUs</span>
+</div>
+<!-- Node 3: Gokak Garage -->
+<div class="absolute right-4 bottom-10 flex flex-col items-center">
+<div class="w-10 h-10 rounded-2xl bg-surface-container-high flex items-center justify-center text-secondary shadow-lg group hover:scale-110 transition-transform cursor-pointer">
+<span class="material-symbols-outlined text-[20px]">build</span>
+</div>
+<span class="mt-1 font-label-sm text-label-sm text-text-primary font-semibold">Gokak Garage</span>
+<span class="text-[10px] text-tertiary">19ms • 32 SKUs</span>
+</div>
+<!-- Node 4: Pune Gateway (Bottom Center) -->
+<div class="absolute bottom-2 left-1/2 -translate-x-1/2 flex flex-col items-center">
+<div class="px-2.5 py-1 rounded-full bg-surface-container-high/90 text-on-surface-variant flex items-center gap-1.5 font-label-sm text-label-sm">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span>Pune Central Gateway • 38ms</span>
+</div>
+</div>
+</div>
+<!-- Node status telemetry strip -->
+<div class="grid grid-cols-3 gap-2 mt-3 pt-3">
+<div class="p-2 rounded-xl bg-surface-container-lowest/60 flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Belgaum ↔ Gokak</span>
+<span class="font-label-md text-label-md text-tertiary font-semibold mt-0.5">8.4 MB/s</span>
+</div>
+<div class="p-2 rounded-xl bg-surface-container-lowest/60 flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Hubli CDC</span>
+<span class="font-label-md text-label-md text-primary font-semibold mt-0.5">Zero Lag</span>
+</div>
+<div class="p-2 rounded-xl bg-surface-container-lowest/60 flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Network Sync</span>
+<span class="font-label-md text-label-md text-text-primary font-semibold mt-0.5">99.98%</span>
+</div>
+</div>
+</div>
+<!-- Memory, Token Load & API Vitals -->
+<div class="p-5 rounded-3xl bg-surface-container/80 backdrop-blur-xl flex flex-col shadow-xl">
+<div class="flex items-start justify-between">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant">Inference &amp; Compute Vitals</span>
+<h2 class="font-headline-sm text-headline-sm text-text-primary mt-0.5">Agent Brain Status</h2>
+</div>
+<span class="px-2 py-0.5 rounded-full bg-tertiary/15 text-tertiary font-label-sm text-label-sm font-semibold">200 OK</span>
+</div>
+<div class="flex flex-col gap-3.5 mt-4">
+<!-- Token Load Progress -->
+<div class="flex flex-col gap-1.5">
+<div class="flex justify-between font-label-md text-label-md">
+<span class="text-on-surface-variant">Context Window Utilization</span>
+<span class="text-text-primary font-medium">4,280 / 128,000 tokens (3.3%)</span>
+</div>
+<div class="w-full h-2 rounded-full bg-surface-container-lowest overflow-hidden">
+<div class="h-full bg-gradient-to-r from-primary to-primary-container rounded-full w-[3.3%]"></div>
+</div>
+</div>
+<!-- Decision Confidence Index -->
+<div class="flex flex-col gap-1.5">
+<div class="flex justify-between font-label-md text-label-md">
+<span class="text-on-surface-variant">Decision Confidence Index</span>
+<span class="text-tertiary font-semibold">99.4% high precision</span>
+</div>
+<div class="w-full h-2 rounded-full bg-surface-container-lowest overflow-hidden">
+<div class="h-full bg-tertiary rounded-full w-[99.4%]"></div>
+</div>
+</div>
+<!-- FastApi Triage Endpoint Specs -->
+<div class="p-3 rounded-2xl bg-surface-container-lowest/80 flex flex-col gap-1.5 mt-1">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-on-surface-variant font-mono">FastAPI Triage Dispatcher</span>
+<span class="font-label-sm text-label-sm text-tertiary flex items-center gap-1 font-mono">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span> Healthy
+              </span>
+</div>
+<div class="flex items-center gap-2">
+<span class="px-1.5 py-0.5 rounded bg-surface-container-high text-primary font-mono text-[11px] font-bold">POST</span>
+<span class="font-mono text-body-sm text-body-sm text-text-primary truncate">http://localhost:8000/api/triage</span>
+</div>
+<div class="flex items-center justify-between text-[11px] text-on-surface-variant pt-1">
+<span>Avg Latency: 48ms</span>
+<span>Uptime: 41d 18h</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+<script>
+  (function initTelemetryPage() {
+    // 1. Highlight 'Telemetry' as the active navigation item in the persistent sidebar
+    try {
+      const navLinks = document.querySelectorAll('aside nav a');
+      navLinks.forEach(link => {
+        const text = link.innerText.trim();
+        if (text.includes('Telemetry')) {
+          link.className = 'flex items-center gap-3.5 px-4 py-2.5 rounded-full bg-gradient-to-r from-[#4d223a] via-[#5e2747] to-[#712d54] text-white font-medium text-[14px] pill-active-glow transition-all';
+        } else if (text.includes('Interventions') || text.includes('Dashboard')) {
+          link.className = 'flex items-center gap-3.5 px-4 py-2.5 rounded-full text-text-muted hover:text-white hover:bg-white/[0.04] transition-all text-[14px] font-normal';
+        }
+      });
+    } catch(e) {}
+
+    // 2. Terminal stream filter pill buttons
+    const filterBtns = document.querySelectorAll('.log-filter-btn');
+    const logItems = document.querySelectorAll('.log-item');
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => {
+          b.className = 'log-filter-btn px-2.5 py-1 rounded-full text-on-surface-variant hover:text-white font-label-sm text-label-sm font-medium transition-all';
+        });
+        btn.className = 'log-filter-btn px-2.5 py-1 rounded-full bg-white text-surface-container-lowest font-label-sm text-label-sm font-semibold transition-all';
+
+        const filter = btn.getAttribute('data-log-filter');
+        logItems.forEach(item => {
+          if (filter === 'all' || item.getAttribute('data-category') === filter) {
+            item.style.display = 'flex';
+          } else {
+            item.style.display = 'none';
+          }
+        });
+      });
+    });
+
+    // 3. Quick stream text filter
+    const quickInput = document.getElementById('streamQuickFilter');
+    if (quickInput) {
+      quickInput.addEventListener('input', (e) => {
+        const term = e.target.value.toLowerCase();
+        logItems.forEach(item => {
+          const content = item.innerText.toLowerCase();
+          item.style.display = content.includes(term) ? 'flex' : 'none';
+        });
+      });
+    }
+
+    // 4. Toggle Stream Pause / Resume
+    let streaming = true;
+    const toggleBtn = document.getElementById('toggleStreamBtn');
+    if (toggleBtn) {
+      toggleBtn.addEventListener('click', () => {
+        streaming = !streaming;
+        const icon = toggleBtn.querySelector('.material-symbols-outlined');
+        const label = toggleBtn.querySelector('span:last-child');
+        if (!streaming) {
+          icon.textContent = 'play_arrow';
+          label.textContent = 'Resume Stream';
+          toggleBtn.classList.add('bg-primary/20');
+        } else {
+          icon.textContent = 'pause_circle';
+          label.textContent = 'Pause Stream';
+          toggleBtn.classList.remove('bg-primary/20');
+        }
+      });
+    }
+
+    // 5. Clear Logs Handler
+    const clearBtn = document.getElementById('clearLogsBtn');
+    const terminalStream = document.getElementById('telemetryTerminalStream');
+    if (clearBtn && terminalStream) {
+      clearBtn.addEventListener('click', () => {
+        terminalStream.innerHTML = `
+          <div class="p-3 text-center text-on-surface-variant font-mono text-body-sm">
+            --- Telemetry buffer cleared by operator ---
+          </div>
+        `;
+      });
+    }
+
+    // 6. Packet counter simulator
+    const packetDisplay = document.getElementById('packetCount');
+    if (packetDisplay) {
+      setInterval(() => {
+        if (streaming) {
+          let count = parseInt(packetDisplay.textContent.replace(/,/g, ''), 10);
+          count += Math.floor(Math.random() * 4) + 1;
+          packetDisplay.textContent = count.toLocaleString();
+        }
+      }, 1500);
+    }
+  })();
+</script></main>
+</div>
+<script>
+  (function initUnifiedHeader() {
+    const notifBtn = document.getElementById('btn-notifications');
+    const notifDropdown = document.getElementById('notif-dropdown');
+    const notifContainer = document.getElementById('notification-container');
+    
+    const profileBtn = document.getElementById('btn-profile');
+    const profileDropdown = document.getElementById('profile-dropdown');
+    const profileContainer = document.getElementById('profile-container');
+    
+    if (notifBtn && notifDropdown && notifContainer) {
+      notifBtn.addEventListener('click', (e) => {
+        notifDropdown.classList.toggle('hidden');
+        if (profileDropdown && !profileDropdown.classList.contains('hidden')) {
+          profileDropdown.classList.add('hidden');
+        }
+        e.stopPropagation(); 
+        const dot = notifBtn.querySelector('span.bg-red-500');
+        if (dot) {
+          dot.classList.remove('bg-red-500', 'animate-pulse');
+          dot.classList.add('bg-text-subtle');
+        }
+      });
+    }
+
+    if (profileBtn && profileDropdown && profileContainer) {
+      profileBtn.addEventListener('click', (e) => {
+        profileDropdown.classList.toggle('hidden');
+        if (notifDropdown && !notifDropdown.classList.contains('hidden')) {
+          notifDropdown.classList.add('hidden');
+        }
+        e.stopPropagation();
+      });
+    }
+
+    document.addEventListener('click', (e) => {
+      if (notifContainer && notifDropdown && !notifContainer.contains(e.target)) {
+        notifDropdown.classList.add('hidden');
+      }
+      if (profileContainer && profileDropdown && !profileContainer.contains(e.target)) {
+        profileDropdown.classList.add('hidden');
+      }
+    });
+
+    document.querySelectorAll('.profile-action-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation(); 
+        const actionText = btn.getAttribute('data-action');
+        alert(actionText);
+        if (profileDropdown) profileDropdown.classList.add('hidden');
+      });
+    });
+  })();
+</script>
+</body></html>

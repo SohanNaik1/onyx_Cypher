@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KD's Garage - Action Feed</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #111827; /* Tailwind Gray-900 */
+            color: #f3f4f6; /* Tailwind Gray-100 */
+        }
+        /* distinct readable font for rationale */
+        .rationale-font {
+            font-family: 'Georgia', serif;
+            letter-spacing: 0.02em;
+        }
+        /* Toast animation */
+        @keyframes fade-in-up {
+            0% { opacity: 0; transform: translate(-50%, 20px); }
+            100% { opacity: 1; transform: translate(-50%, 0); }
+        }
+        .toast-animate {
+            animation: fade-in-up 0.3s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center py-10 px-4">
+
+    <!-- Header -->
+    <header class="w-full max-w-3xl mb-8 border-b border-gray-700 pb-4">
+        <h1 class="text-3xl font-bold tracking-tight text-white">KD's Garage - Morning Briefing</h1>
+    </header>
+
+    <!-- Summary Section -->
+    <section class="w-full max-w-3xl mb-10">
+        <div class="bg-gray-800 p-6 rounded-xl border border-gray-700 shadow-lg">
+            <p id="summary-text" class="text-lg text-gray-300">
+                <span class="animate-pulse">Loading morning briefing...</span>
+            </p>
+        </div>
+    </section>
+
+    <!-- Action Feed -->
+    <section class="w-full max-w-3xl">
+        <h2 class="text-xl font-semibold mb-6 text-gray-200">Pending Actions</h2>
+        <div id="action-feed" class="flex flex-col gap-6">
+            <!-- Action Cards will be dynamically inserted here -->
+        </div>
+    </section>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchData();
+        });
+
+        async function fetchData() {
+            try {
+                // Ensure this connects to the FastAPI backend correctly even if opened locally
+                const response = await fetch('http://localhost:8000/api/triage');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                
+                renderSummary(data.triage_summary);
+                renderActionFeed(data.interventions);
+                
+            } catch (error) {
+                console.error("Failed to fetch data:", error);
+                document.getElementById('summary-text').innerHTML = 
+                    `<span class="text-red-400">Error loading data. Is the backend running?</span>`;
+            }
+        }
+
+        function renderSummary(summary) {
+            const summaryEl = document.getElementById('summary-text');
+            if (!summary) {
+                summaryEl.innerText = "Good morning. Dashboard data is currently unavailable.";
+                return;
+            }
+            const crit = summary.critical_items_count || 0;
+            const excess = summary.excess_items_count || 0;
+            
+            summaryEl.innerHTML = `Good morning. You have <span class="font-bold text-red-400">${crit} critical parts</span> about to run out, and <span class="font-bold text-yellow-400">${excess} excess bottlenecks</span>.`;
+        }
+
+        function renderActionFeed(interventions) {
+            const feedEl = document.getElementById('action-feed');
+            feedEl.innerHTML = ''; // Clear loading state
+
+            if (!interventions || interventions.length === 0) {
+                feedEl.innerHTML = `<p class="text-gray-400 italic">No pending actions required.</p>`;
+                return;
+            }
+
+            interventions.forEach((item, index) => {
+                // Determine action specific styling
+                const actionColor = item.action_type === 'TRANSFER' ? 'text-blue-400' : 'text-purple-400';
+                
+                const card = document.createElement('div');
+                card.className = 'bg-gray-800 rounded-xl border border-gray-700 p-6 shadow-md transition-all duration-300';
+                card.id = `card-${index}`;
+                
+                card.innerHTML = `
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="text-xl font-bold text-white">${item.sku} <span class="text-gray-400 font-medium text-lg ml-2">— Action Required</span></h3>
+                    </div>
+                    
+                    <div class="mb-4 bg-gray-900 rounded-lg p-4 border border-gray-700">
+                        <p class="text-md text-gray-300 font-mono flex items-center gap-2">
+                            <span class="font-bold ${actionColor}">${item.action_type.replace('_', ' ')}</span>
+                            <span class="text-gray-500">|</span>
+                            <span class="text-white">${item.quantity} units</span>
+                            <span class="text-gray-500">|</span>
+                            <span>${item.from} <span class="text-gray-500">➔</span> ${item.to}</span>
+                        </p>
+                    </div>
+                    
+                    <div class="mb-6 pl-4 border-l-4 border-gray-600">
+                        <p class="text-gray-300 text-lg rationale-font leading-relaxed">
+                            "${item.trade_off_rationale}"
+                        </p>
+                    </div>
+                    
+                    <div class="flex gap-4 mt-6 pt-4 border-t border-gray-700">
+                        <button onclick="handleApprove(${index})" id="approve-btn-${index}" class="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 px-4 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-2 focus:ring-offset-gray-800">
+                            APPROVE
+                        </button>
+                        <button onclick="handleReject(${index})" id="reject-btn-${index}" class="flex-1 bg-gray-700 hover:bg-red-600 hover:text-white text-gray-300 font-bold py-3 px-4 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-gray-800">
+                            REJECT
+                        </button>
+                    </div>
+                `;
+                
+                feedEl.appendChild(card);
+            });
+        }
+
+        function handleApprove(index) {
+            const btn = document.getElementById(`approve-btn-${index}`);
+            const card = document.getElementById(`card-${index}`);
+            
+            // 1. Change button text
+            btn.innerHTML = `
+                <svg class="animate-spin -ml-1 mr-2 h-5 w-5 text-white inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Executing...
+            `;
+            btn.disabled = true;
+            btn.classList.remove('hover:bg-emerald-500');
+            btn.classList.add('opacity-75', 'cursor-not-allowed');
+            
+            // Disable reject button too
+            const rejectBtn = document.getElementById(`reject-btn-${index}`);
+            rejectBtn.disabled = true;
+
+            // 2. Wait 500ms (simulate network)
+            setTimeout(() => {
+                // 3. Remove card with animation
+                card.style.opacity = '0';
+                card.style.transform = 'scale(0.95)';
+                
+                setTimeout(() => {
+                    card.remove();
+                    
+                    // Check if feed is empty
+                    const feedEl = document.getElementById('action-feed');
+                    if (feedEl.children.length === 0) {
+                        feedEl.innerHTML = `<p class="text-emerald-400 font-medium text-lg mt-8 text-center bg-emerald-900/20 p-6 rounded-xl border border-emerald-800/30">All morning actions completed. Great job.</p>`;
+                    }
+                }, 300);
+
+                // 4. Show success toast
+                showToast("Action Executed & Database Updated");
+                
+                // Note: In a real app we would POST to /api/approve here.
+                // For this precise hackathon pivot requirement, simulating it.
+            }, 500);
+        }
+
+        function handleReject(index) {
+            const card = document.getElementById(`card-${index}`);
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(10px)';
+            
+            setTimeout(() => {
+                card.remove();
+                
+                // Check if feed is empty
+                const feedEl = document.getElementById('action-feed');
+                if (feedEl.children.length === 0) {
+                    feedEl.innerHTML = `<p class="text-emerald-400 font-medium text-lg mt-8 text-center bg-emerald-900/20 p-6 rounded-xl border border-emerald-800/30">All morning actions completed. Great job.</p>`;
+                }
+            }, 300);
+        }
+
+        function showToast(message) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            
+            toast.className = 'bg-emerald-500 text-white px-6 py-3 rounded-full shadow-xl font-medium flex items-center gap-2 toast-animate mb-3';
+            toast.innerHTML = `
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                ${message}
+            `;
+            
+            container.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translate(-50%, 20px)';
+                toast.style.transition = 'all 0.3s ease-in';
+                
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

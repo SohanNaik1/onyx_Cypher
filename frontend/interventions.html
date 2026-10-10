@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="web_dashboard" name="shell-type"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "canvas-dark": "#0e0d13",
+            "frame-bg": "#14131b",
+            "card-bg": "#191822",
+            "card-inner": "#201f2b",
+            "subtle-border": "rgba(255, 255, 255, 0.08)",
+            "primary": "#ffafd7",
+            "primary-container": "#d17ba9",
+            "primary-glow": "rgba(209, 123, 169, 0.35)",
+            "accent-rose": "#c76d9e",
+            "accent-emerald": "#42e18d",
+            "text-primary": "#f2eff7",
+            "text-muted": "#8d8b99",
+            "text-subtle": "#656372"
+          },
+          fontFamily: {
+            sans: ["Geist", "sans-serif"]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    @layer base {
+      html, body {
+        margin: 0;
+        padding: 0;
+        background-color: #0b0a10;
+        color: #f2eff7;
+        font-family: 'Geist', sans-serif;
+      }
+      ::-webkit-scrollbar {
+        display: none;
+      }
+    }
+    .custom-gradient-card {
+      background: linear-gradient(180deg, #1d1b27 0%, #15141f 100%);
+    }
+    .flare-bg {
+      background: radial-gradient(circle at 50% 120%, rgba(209, 123, 169, 0.35) 0%, rgba(132, 60, 102, 0.15) 45%, transparent 75%);
+    }
+    .pill-active-glow {
+      box-shadow: 0 4px 20px -2px rgba(209, 123, 169, 0.35);
+    }
+  </style>
+</head>
+<body class="min-h-screen p-3 md:p-6 lg:p-8 flex items-center justify-center bg-[#0b0a10] relative overflow-x-hidden selection:bg-primary-container selection:text-white">
+<!-- Ambient Plum Lighting Bleed Behind Main Frame (Exact Helios aesthetic) -->
+<div class="fixed top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[550px] bg-[radial-gradient(ellipse_at_center,rgba(180,95,142,0.18)_0%,rgba(110,48,90,0.06)_50%,transparent_80%)] pointer-events-none blur-3xl z-0"></div>
+<div class="fixed bottom-10 left-10 w-[500px] h-[400px] bg-[radial-gradient(circle,rgba(150,75,120,0.12)_0%,transparent_70%)] pointer-events-none blur-3xl z-0"></div>
+<div class="fixed top-20 right-10 w-[500px] h-[400px] bg-[radial-gradient(circle,rgba(165,85,130,0.1)_0%,transparent_70%)] pointer-events-none blur-3xl z-0"></div>
+<!-- Outer Rounded Floating Master Canvas -->
+<div class="relative z-10 w-full max-w-[1360px] bg-[#14131b]/95 border border-white/[0.08] rounded-[36px] shadow-[0_30px_90px_rgba(0,0,0,0.85)] p-5 md:p-7 lg:p-8 backdrop-blur-2xl flex flex-col lg:flex-row gap-7">
+<!-- 1. LEFT SIDEBAR (Matching Helios Navigation) -->
+<aside class="w-full lg:w-60 flex-shrink-0 flex flex-col justify-between py-2">
+<div class="flex flex-col gap-8">
+<!-- Logo Header -->
+<div class="flex items-center gap-3 px-2">
+<div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-[#3a1b2d] to-[#682a4d] border border-white/10 flex items-center justify-center text-primary shadow-inner">
+<span class="material-symbols-outlined text-[19px]">precision_manufacturing</span>
+</div>
+<div class="flex flex-col">
+<span class="font-semibold text-[17px] tracking-tight text-white leading-tight">KD's Garage</span>
+<span class="text-[11px] text-text-muted tracking-wide font-medium">Fleet Intelligence</span>
+</div>
+</div>
+<!-- Main Nav Pills -->
+<nav class="flex flex-col gap-1.5" data-active-classes="bg-gradient-to-r from-[#5a2744] to-[#7e355e] text-white">
+<!-- Active Item with soft glowing gradient -->
+<a class="flex items-center gap-3.5 px-4 py-2.5 rounded-full bg-gradient-to-r from-[#4d223a] via-[#5e2747] to-[#712d54] text-white font-medium text-[14px] border border-white/10 pill-active-glow transition-all" href="code.html">
+<span class="material-symbols-outlined text-[19px] opacity-90">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center gap-3.5 px-4 py-2.5 rounded-full text-text-muted hover:text-white hover:bg-white/[0.04] transition-all text-[14px] font-normal" href="interventions.html">
+<span class="material-symbols-outlined text-[19px]">assignment</span>
+<span>Interventions</span>
+</a>
+<a class="flex items-center gap-3.5 px-4 py-2.5 rounded-full text-text-muted hover:text-white hover:bg-white/[0.04] transition-all text-[14px] font-normal" href="telemetry.html">
+<span class="material-symbols-outlined text-[19px]">analytics</span>
+<span>Telemetry</span>
+</a>
+<a class="flex items-center gap-3.5 px-4 py-2.5 rounded-full text-text-muted hover:text-white hover:bg-white/[0.04] transition-all text-[14px] font-normal" href="inventory.html">
+<span class="material-symbols-outlined text-[19px]">storefront</span>
+<span>Inventory</span>
+</a>
+<a class="flex items-center gap-3.5 px-4 py-2.5 rounded-full text-text-muted hover:text-white hover:bg-white/[0.04] transition-all text-[14px] font-normal" href="network.html">
+<span class="material-symbols-outlined text-[19px]">diversity_3</span>
+<span>Network</span>
+</a>
+</nav>
+</div>
+<!-- Bottom Pinned Settings & Status -->
+<div class="flex flex-col gap-2 pt-8 lg:pt-0">
+<a class="flex items-center gap-3.5 px-4 py-2.5 rounded-full text-text-muted hover:text-white hover:bg-white/[0.04] transition-all text-[14px]" href="#">
+<span class="material-symbols-outlined text-[19px]">settings</span>
+<span>Settings</span>
+</a>
+<a class="flex items-center gap-3.5 px-4 py-2.5 rounded-full text-text-muted hover:text-white hover:bg-white/[0.04] transition-all text-[14px]" href="#">
+<span class="material-symbols-outlined text-[19px]">support_agent</span>
+<span>Support</span>
+</a>
+<!-- Live Server Status Indicator Capsule -->
+<div class="mt-4 px-3.5 py-2 rounded-2xl bg-white/[0.03] border border-white/[0.06] flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-accent-emerald animate-pulse"></span>
+<span class="text-[11px] text-text-muted">Fleet Mesh</span>
+</div>
+<span class="text-[11px] text-accent-emerald font-semibold">99.98%</span>
+</div>
+</div>
+</aside>
+<!-- 2. MAIN WORKSPACE CONTENT -->
+<main class="flex-1 flex flex-col gap-6 min-w-0"><div class="flex flex-col w-full">
+<!-- Script to harmonize Sidebar Active Navigation State (Targeting Interventions) -->
+<script>
+    (function syncSidebarNav() {
+      const navLinks = document.querySelectorAll('aside nav a');
+      if (!navLinks || navLinks.length === 0) return;
+      navLinks.forEach((link) => {
+        const text = link.innerText.trim();
+        if (text.includes('Interventions')) {
+          link.className = 'flex items-center gap-3.5 px-4 py-2.5 rounded-full bg-gradient-to-r from-[#4d223a] via-[#5e2747] to-[#712d54] text-white font-medium text-[14px] pill-active-glow transition-all';
+        } else if (text.includes('Dashboard')) {
+          link.className = 'flex items-center gap-3.5 px-4 py-2.5 rounded-full text-text-muted hover:text-white hover:bg-white/[0.04] transition-all text-[14px] font-normal';
+        }
+      });
+    })();
+  </script>
+<!-- Top Executive Bar / Global Context Header -->
+<header class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 pb-6 border-b border-white/[0.04]">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2.5">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium tracking-wide uppercase bg-primary/10 text-primary">
+          Autonomous Dispatch Engine v4.2
+        </span>
+<span class="flex items-center gap-1.5 text-xs text-text-muted font-normal">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary animate-pulse"></span>
+          Cluster Active: Belgaum Sector 04
+        </span>
+</div>
+<h1 class="text-2xl lg:text-3xl font-semibold tracking-tight text-on-surface">
+        Pending Interventions Workspace
+      </h1>
+<p class="text-xs lg:text-sm text-text-muted">
+        Review, override, and sanction machine-recommended supply chain rebalancing maneuvers.
+      </p>
+</div>
+<!-- Right Controls: Universal Search & Operator Identity -->
+<div class="flex flex-wrap items-center gap-3">
+<!-- Search Input Capsule -->
+<div class="relative flex items-center min-w-[240px]">
+<span class="material-symbols-outlined absolute left-3.5 text-[17px] text-text-muted pointer-events-none">search</span>
+<input id="globalSearchInput" class="w-full pl-9 pr-4 py-2 text-xs bg-surface-container-low rounded-full text-on-surface placeholder:text-text-subtle focus:outline-none focus:ring-1 focus:ring-primary/60 transition-all shadow-inner" placeholder="Ask garage.ai anything..." type="text"/>
+<span class="absolute right-3 text-[10px] font-mono text-text-subtle bg-surface-container-high px-1.5 py-0.5 rounded">⌘K</span>
+</div>
+<!-- Quick Action: Sync Gateway Badge -->
+<button class="flex items-center gap-1.5 px-3 py-2 text-xs font-medium rounded-full bg-surface-container hover:bg-surface-container-high text-on-surface transition-colors shadow-sm" id="syncGatewayBtn" title="Active endpoint: http://localhost:8000/api/triage">
+<span class="material-symbols-outlined text-[16px] text-primary">sync_saved_locally</span>
+<span class="hidden sm:inline">Sync Gateway</span>
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+</button>
+<!-- Unified Top Right Controls -->
+  <!-- Notification Bell -->
+  <div class="relative" id="notification-container">
+    <button id="btn-notifications" class="w-9 h-9 rounded-full bg-surface-container-high hover:bg-white/[0.05] border border-white/[0.05] flex items-center justify-center text-text-muted hover:text-white transition-all shadow-sm relative">
+      <span class="material-symbols-outlined text-[17px]">notifications</span>
+      <span class="absolute top-1 right-1 w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse border-2 border-surface-container"></span>
+    </button>
+    <!-- Notification Dropdown -->
+    <div id="notif-dropdown" class="hidden absolute right-0 mt-3 w-80 bg-[#131318] border border-white/[0.08] rounded-xl shadow-2xl z-50 overflow-hidden backdrop-blur-md">
+      <div class="flex items-center justify-between px-4 py-3 border-b border-white/[0.06] bg-[#1a1a22]">
+        <h3 class="text-sm font-semibold text-white tracking-tight">System Alerts</h3>
+        <button class="text-xs font-medium text-text-muted hover:text-white transition-colors">Mark all as read</button>
+      </div>
+      <div class="flex flex-col divide-y divide-white/[0.04]">
+        <div class="flex gap-3.5 px-4 py-3.5 hover:bg-white/[0.02] transition-colors cursor-pointer">
+          <div class="flex-shrink-0 w-8 h-8 rounded-full bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400">
+            <span class="material-symbols-outlined text-[16px]">forum</span>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-sm font-medium text-white leading-tight">Unstructured Log Parsed</span>
+            <span class="text-[12.5px] text-text-muted leading-snug mt-1">WhatsApp: '4 units of SKU-303 damaged on delivery at Gokak.' True stock adjusted automatically.</span>
+            <span class="text-[10px] font-mono text-text-subtle mt-2 uppercase tracking-wider">2 mins ago</span>
+          </div>
+        </div>
+        <div class="flex gap-3.5 px-4 py-3.5 hover:bg-white/[0.02] transition-colors cursor-pointer">
+          <div class="flex-shrink-0 w-8 h-8 rounded-full bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-orange-400">
+            <span class="material-symbols-outlined text-[16px]">warning</span>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-sm font-medium text-white leading-tight">Runout Warning</span>
+            <span class="text-[12.5px] text-text-muted leading-snug mt-1">SKU-101 velocity spiked. Runout updated to 1.5 days.</span>
+            <span class="text-[10px] font-mono text-text-subtle mt-2 uppercase tracking-wider">15 mins ago</span>
+          </div>
+        </div>
+        <div class="flex gap-3.5 px-4 py-3.5 hover:bg-white/[0.02] transition-colors cursor-pointer">
+          <div class="flex-shrink-0 w-8 h-8 rounded-full bg-green-500/10 border border-green-500/20 flex items-center justify-center text-green-400">
+            <span class="material-symbols-outlined text-[16px]">check_circle</span>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-sm font-medium text-white leading-tight">Supabase Sync</span>
+            <span class="text-[12.5px] text-text-muted leading-snug mt-1">Database successfully seeded and reconciled.</span>
+            <span class="text-[10px] font-mono text-text-subtle mt-2 uppercase tracking-wider">1 hour ago</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- User Profile Dropdown -->
+  <div class="relative" id="profile-container">
+    <div id="btn-profile" class="flex items-center gap-2.5 pl-1.5 pr-4 py-1.5 rounded-full bg-surface-container-high border border-white/[0.05] hover:border-white/[0.15] transition-all cursor-pointer">
+      <div class="w-7 h-7 rounded-full bg-gradient-to-tr from-[#9c4b77] to-[#e49bbd] p-[1px] flex items-center justify-center">
+        <div class="w-full h-full rounded-full bg-[#1c1421] flex items-center justify-center text-[11px] font-bold text-primary">
+          RK
+        </div>
+      </div>
+      <div class="flex flex-col text-left">
+        <span class="text-[12px] font-medium text-white leading-tight">Ramesh K.</span>
+        <span class="text-[10px] text-text-muted leading-tight">Head of Purchasing</span>
+      </div>
+      <span class="material-symbols-outlined text-[15px] text-text-subtle ml-1">expand_more</span>
+    </div>
+
+    <!-- Profile Dropdown Panel -->
+    <div id="profile-dropdown" class="hidden absolute right-0 mt-3 w-64 bg-[#131318] border border-white/[0.08] rounded-xl shadow-2xl z-50 overflow-hidden backdrop-blur-md">
+      <!-- Header Area -->
+      <div class="flex flex-col px-4 py-3.5 bg-[#1a1a22]">
+        <span class="text-[14px] font-semibold text-white leading-tight">Ramesh Kulkarni</span>
+        <span class="text-[12px] text-primary font-medium mt-0.5">Head of Purchasing</span>
+        <span class="text-[11px] text-text-muted mt-1 font-mono">ramesh@kdgarage.in</span>
+      </div>
+      <!-- Action Buttons -->
+      <div class="flex flex-col py-1.5 border-t border-white/[0.06]">
+        <button class="profile-action-btn flex items-center gap-3 px-4 py-2 hover:bg-white/[0.03] transition-colors w-full text-left text-[13px] text-text-muted hover:text-white" data-action="Navigating to User Settings...">
+          <span class="material-symbols-outlined text-[18px]">person</span>
+          User Settings
+        </button>
+        <button class="profile-action-btn flex items-center gap-3 px-4 py-2 hover:bg-white/[0.03] transition-colors w-full text-left text-[13px] text-text-muted hover:text-white" data-action="Opening Warehouse Preferences...">
+          <span class="material-symbols-outlined text-[18px]">settings</span>
+          Warehouse Preferences
+        </button>
+        <button class="profile-action-btn flex items-center gap-3 px-4 py-2 hover:bg-white/[0.03] transition-colors w-full text-left text-[13px] text-text-muted hover:text-white" data-action="Accessing API Keys & Integrations...">
+          <span class="material-symbols-outlined text-[18px]">key</span>
+          API Keys & Integrations
+        </button>
+      </div>
+      <!-- Sign Out -->
+      <div class="py-1.5 border-t border-white/[0.06]">
+        <button class="profile-action-btn flex items-center gap-3 px-4 py-2 hover:bg-red-500/10 transition-colors w-full text-left text-[13px] text-red-400 hover:text-red-300" data-action="Session Terminated. Logging out...">
+          <span class="material-symbols-outlined text-[18px]">logout</span>
+          Secure Logout
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+</header>
+<!-- Metric Telemetry Cards Strip -->
+<section class="grid grid-cols-2 lg:grid-cols-4 gap-3 py-6">
+<!-- Card 1 -->
+<div class="p-4 rounded-2xl bg-surface-container-low shadow-sm flex flex-col justify-between relative overflow-hidden group">
+<div class="absolute -right-4 -bottom-4 w-16 h-16 bg-primary/5 rounded-full blur-xl pointer-events-none"></div>
+<div class="flex items-center justify-between text-text-muted">
+<span class="text-xs font-medium">Pending Clearance</span>
+<span class="material-symbols-outlined text-lg text-primary">hourglass_top</span>
+</div>
+<div class="mt-3 flex items-baseline gap-2">
+<span class="text-2xl font-semibold tracking-tight text-on-surface" id="statPendingCount">4 Actions</span>
+<span class="text-[11px] font-medium text-primary">Critical Priority</span>
+</div>
+<span class="text-[11px] text-text-subtle mt-1">Requires supervisor authorization</span>
+</div>
+<!-- Card 2 -->
+<div class="p-4 rounded-2xl bg-surface-container-low shadow-sm flex flex-col justify-between relative overflow-hidden">
+<div class="flex items-center justify-between text-text-muted">
+<span class="text-xs font-medium">Reallocated Capital</span>
+<span class="material-symbols-outlined text-lg text-tertiary">account_balance_wallet</span>
+</div>
+<div class="mt-3 flex items-baseline gap-2">
+<span class="text-2xl font-semibold tracking-tight text-on-surface">₹59,200.00</span>
+<span class="text-[11px] font-medium text-tertiary">-18.4% vs PO standard</span>
+</div>
+<span class="text-[11px] text-text-subtle mt-1">Internal balance conservation</span>
+</div>
+<!-- Card 3 -->
+<div class="p-4 rounded-2xl bg-surface-container-low shadow-sm flex flex-col justify-between relative overflow-hidden">
+<div class="flex items-center justify-between text-text-muted">
+<span class="text-xs font-medium">Impacted Depots</span>
+<span class="material-symbols-outlined text-lg text-secondary">warehouse</span>
+</div>
+<div class="mt-3 flex items-baseline gap-2">
+<span class="text-2xl font-semibold tracking-tight text-on-surface">3 Hubs</span>
+<span class="text-[11px] font-medium text-text-muted">Triangulated</span>
+</div>
+<span class="text-[11px] text-text-subtle mt-1">Belgaum, Gokak, Hubli</span>
+</div>
+<!-- Card 4 -->
+<div class="p-4 rounded-2xl bg-surface-container-low shadow-sm flex flex-col justify-between relative overflow-hidden">
+<div class="flex items-center justify-between text-text-muted">
+<span class="text-xs font-medium">Average Transit Speed</span>
+<span class="material-symbols-outlined text-lg text-primary">local_shipping</span>
+</div>
+<div class="mt-3 flex items-baseline gap-2">
+<span class="text-2xl font-semibold tracking-tight text-on-surface">1.5 Days</span>
+<span class="text-[11px] font-medium text-tertiary">Express Cross-dock</span>
+</div>
+<span class="text-[11px] text-text-subtle mt-1">SLA target: ≤ 2.0 Days</span>
+</div>
+</section>
+<!-- Filter, Search & Bulk Actions Command Deck -->
+<div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 pb-4">
+<!-- Filter Tabs (Frosted Container) -->
+<div class="flex items-center p-1 bg-surface-container-lowest rounded-full overflow-x-auto">
+<button class="filter-tab px-4 py-1.5 text-xs font-semibold rounded-full bg-white text-surface-container-lowest transition-all shadow-sm" data-filter="all">
+        All Pending (4)
+      </button>
+<button class="filter-tab px-4 py-1.5 text-xs font-medium rounded-full text-text-muted hover:text-on-surface transition-all" data-filter="TRANSFER">
+        Transfers (2)
+      </button>
+<button class="filter-tab px-4 py-1.5 text-xs font-medium rounded-full text-text-muted hover:text-on-surface transition-all" data-filter="PURCHASE_ORDER">
+        Purchase Orders (2)
+      </button>
+<button class="filter-tab px-4 py-1.5 text-xs font-medium rounded-full text-text-muted hover:text-on-surface transition-all" data-filter="AUDIT">
+        Audit Trail
+      </button>
+</div>
+<!-- Table Right Operational Controls -->
+<div class="flex items-center gap-2.5">
+<!-- Search Filter Pill -->
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-3 text-sm text-text-muted">filter_alt</span>
+<input class="pl-8 pr-3 py-1.5 text-xs rounded-full bg-surface-container-low text-on-surface placeholder:text-text-subtle focus:outline-none focus:ring-1 focus:ring-primary/40 w-44 lg:w-56" id="tableSearchInput" placeholder="Filter SKU, depot, PO#..." type="text"/>
+</div>
+<!-- Priority Sort Pill -->
+<button class="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-full bg-surface-container-low text-text-muted hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-[15px]">sort</span>
+<span class="hidden sm:inline">High Priority First</span>
+</button>
+<!-- Bulk Action CTA -->
+<button class="flex items-center gap-2 px-4 py-1.5 text-xs font-semibold rounded-full bg-gradient-to-r from-primary-container via-[#b85b8e] to-[#9e4377] text-white shadow-[0_4px_18px_rgba(209,123,169,0.35)] hover:shadow-[0_6px_22px_rgba(209,123,169,0.5)] active:scale-95 transition-all" id="bulkApproveMasterBtn">
+<span class="material-symbols-outlined text-[16px]">done_all</span>
+<span>Bulk Approve All (4 Items)</span>
+</button>
+</div>
+</div>
+<!-- Primary Workspace: High-Density Operations Data Table / Card Rows -->
+<div class="w-full bg-surface-container-low rounded-3xl p-3 md:p-4 shadow-xl flex flex-col gap-2">
+<!-- Header Legend Bar (Desktop) -->
+<div class="hidden lg:grid grid-cols-12 gap-3 px-4 py-2 text-[11px] font-semibold uppercase tracking-wider text-text-subtle">
+<div class="col-span-3">SKU &amp; Item Details</div>
+<div class="col-span-2">Action / Protocol</div>
+<div class="col-span-2">Logistics Route</div>
+<div class="col-span-2">Operational Impact</div>
+<div class="col-span-3 text-right">Autonomous Rationale &amp; Clearance</div>
+</div>
+<!-- Intervention Row 1: SKU-101 (TRANSFER) -->
+<div class="intervention-row group flex flex-col lg:grid lg:grid-cols-12 gap-3.5 items-start lg:items-center p-3.5 rounded-2xl bg-surface-container hover:bg-surface-container-high transition-all" data-depot="Belgaum Gokak North Hub" data-sku="SKU-101" data-type="TRANSFER">
+<!-- Col 1: SKU & Item -->
+<div class="col-span-3 flex items-center gap-3 w-full">
+<div class="w-10 h-10 rounded-xl bg-surface-container-highest flex items-center justify-center text-primary shrink-0 shadow-inner">
+<span class="material-symbols-outlined text-[20px]">inventory_2</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-mono text-xs font-semibold text-primary">SKU-101</span>
+<span class="text-[10px] text-text-subtle px-1.5 py-0.2 rounded bg-surface-container-lowest">North Hub</span>
+</div>
+<span class="text-xs font-medium text-on-surface truncate">Heavy Duty Brake Drum Assembly</span>
+</div>
+</div>
+<!-- Col 2: Action Type Badge -->
+<div class="col-span-2 flex items-center gap-2">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-medium bg-tertiary/15 text-tertiary">
+<span class="material-symbols-outlined text-[13px]">swap_horiz</span>
+          TRANSFER
+        </span>
+<span class="text-[10px] text-text-muted">Inter-depot</span>
+</div>
+<!-- Col 3: Logistics Route -->
+<div class="col-span-2 flex flex-col text-xs">
+<div class="flex items-center gap-1.5 font-medium text-on-surface">
+<span>Belgaum</span>
+<span class="material-symbols-outlined text-xs text-primary">arrow_forward</span>
+<span>Gokak</span>
+</div>
+<div class="flex items-center gap-1 text-[11px] text-text-muted mt-0.5">
+<span class="material-symbols-outlined text-[12px]">schedule</span>
+<span>1 Day Transit (Express Shuttle)</span>
+</div>
+</div>
+<!-- Col 4: Operational Impact -->
+<div class="col-span-2 flex flex-col text-xs">
+<div class="flex items-center gap-1.5 text-on-surface font-semibold">
+<span>56 Units</span>
+<span class="text-text-subtle font-normal">|</span>
+<span class="text-tertiary">₹50.00 Fee</span>
+</div>
+<span class="text-[11px] text-text-muted mt-0.5">Avoids supplier MOQ lockup</span>
+</div>
+<!-- Col 5: Proof of Work Rationale & Actions -->
+<div class="col-span-3 flex flex-col lg:items-end justify-between w-full gap-2.5">
+<div class="p-2 rounded-xl bg-surface-container-lowest text-[11px] text-text-muted leading-relaxed w-full">
+<span class="text-primary font-medium">AI Rationale:</span> Internal transfer utilizes dead capital at flat ₹50.00 fee, avoiding minimum order quantity (MOQ) supplier lockup.
+        </div>
+<div class="flex items-center gap-2 self-end">
+<button class="reject-btn px-3 py-1.5 rounded-full text-xs font-medium text-text-muted hover:text-error hover:bg-error-container/20 transition-all">
+            Reject
+          </button>
+<button class="approve-btn flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-primary-container text-white hover:bg-primary hover:text-surface-container-lowest transition-all shadow-sm">
+<span class="material-symbols-outlined text-[14px]">check</span>
+            Approve
+          </button>
+</div>
+</div>
+</div>
+<!-- Intervention Row 2: SKU-409 (PURCHASE_ORDER) -->
+<div class="intervention-row group flex flex-col lg:grid lg:grid-cols-12 gap-3.5 items-start lg:items-center p-3.5 rounded-2xl bg-surface-container hover:bg-surface-container-high transition-all" data-depot="Western Corridor Pune Belgaum" data-sku="SKU-409" data-type="PURCHASE_ORDER">
+<!-- Col 1: SKU & Item -->
+<div class="col-span-3 flex items-center gap-3 w-full">
+<div class="w-10 h-10 rounded-xl bg-surface-container-highest flex items-center justify-center text-primary-fixed shrink-0 shadow-inner">
+<span class="material-symbols-outlined text-[20px]">electric_bolt</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-mono text-xs font-semibold text-primary">SKU-409</span>
+<span class="text-[10px] text-text-subtle px-1.5 py-0.2 rounded bg-surface-container-lowest">Western Corr.</span>
+</div>
+<span class="text-xs font-medium text-on-surface truncate">Commercial Alternator 24V</span>
+</div>
+</div>
+<!-- Col 2: Action Type Badge -->
+<div class="col-span-2 flex items-center gap-2">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-medium bg-[#f59e0b]/15 text-[#f59e0b]">
+<span class="material-symbols-outlined text-[13px]">shopping_cart</span>
+          PURCHASE ORDER
+        </span>
+<span class="text-[10px] text-text-muted">Procure</span>
+</div>
+<!-- Col 3: Logistics Route -->
+<div class="col-span-2 flex flex-col text-xs">
+<div class="flex items-center gap-1.5 font-medium text-on-surface">
+<span>Pune Central</span>
+<span class="material-symbols-outlined text-xs text-primary">arrow_forward</span>
+<span>Belgaum</span>
+</div>
+<div class="flex items-center gap-1 text-[11px] text-text-muted mt-0.5">
+<span class="material-symbols-outlined text-[12px]">local_shipping</span>
+<span>Tier-1 Direct (3 Days Transit)</span>
+</div>
+</div>
+<!-- Col 4: Operational Impact -->
+<div class="col-span-2 flex flex-col text-xs">
+<div class="flex items-center gap-1.5 text-on-surface font-semibold">
+<span>120 Units</span>
+<span class="text-text-subtle font-normal">|</span>
+<span class="text-on-surface">₹14,200.00 Est.</span>
+</div>
+<span class="text-[11px] text-text-muted mt-0.5">Establishes critical buffer</span>
+</div>
+<!-- Col 5: Proof of Work Rationale & Actions -->
+<div class="col-span-3 flex flex-col lg:items-end justify-between w-full gap-2.5">
+<div class="p-2 rounded-xl bg-surface-container-lowest text-[11px] text-text-muted leading-relaxed w-full">
+<span class="text-primary font-medium">AI Rationale:</span> Regional stock exhausted across secondary garages; procurement executed directly with Tier-1 vendor to prevent vehicle stall.
+        </div>
+<div class="flex items-center gap-2 self-end">
+<button class="reject-btn px-3 py-1.5 rounded-full text-xs font-medium text-text-muted hover:text-error hover:bg-error-container/20 transition-all">
+            Reject
+          </button>
+<button class="approve-btn flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-primary-container text-white hover:bg-primary hover:text-surface-container-lowest transition-all shadow-sm">
+<span class="material-symbols-outlined text-[14px]">check</span>
+            Approve
+          </button>
+</div>
+</div>
+</div>
+<!-- Intervention Row 3: SKU-288 (TRANSFER) -->
+<div class="intervention-row group flex flex-col lg:grid lg:grid-cols-12 gap-3.5 items-start lg:items-center p-3.5 rounded-2xl bg-surface-container hover:bg-surface-container-high transition-all" data-depot="Hubli Gokak Hubli Central" data-sku="SKU-288" data-type="TRANSFER">
+<!-- Col 1: SKU & Item -->
+<div class="col-span-3 flex items-center gap-3 w-full">
+<div class="w-10 h-10 rounded-xl bg-surface-container-highest flex items-center justify-center text-primary shrink-0 shadow-inner">
+<span class="material-symbols-outlined text-[20px]">tune</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-mono text-xs font-semibold text-primary">SKU-288</span>
+<span class="text-[10px] text-text-subtle px-1.5 py-0.2 rounded bg-surface-container-lowest">Hubli Central</span>
+</div>
+<span class="text-xs font-medium text-on-surface truncate">Synthetic Fleet Brake Pads (Ceramic)</span>
+</div>
+</div>
+<!-- Col 2: Action Type Badge -->
+<div class="col-span-2 flex items-center gap-2">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-medium bg-tertiary/15 text-tertiary">
+<span class="material-symbols-outlined text-[13px]">swap_horiz</span>
+          TRANSFER
+        </span>
+<span class="text-[10px] text-text-muted">Expedited</span>
+</div>
+<!-- Col 3: Logistics Route -->
+<div class="col-span-2 flex flex-col text-xs">
+<div class="flex items-center gap-1.5 font-medium text-on-surface">
+<span>Hubli</span>
+<span class="material-symbols-outlined text-xs text-primary">arrow_forward</span>
+<span>Gokak</span>
+</div>
+<div class="flex items-center gap-1 text-[11px] text-text-muted mt-0.5">
+<span class="material-symbols-outlined text-[12px]">speed</span>
+<span>Cross-dock (1 Day Transit)</span>
+</div>
+</div>
+<!-- Col 4: Operational Impact -->
+<div class="col-span-2 flex flex-col text-xs">
+<div class="flex items-center gap-1.5 text-on-surface font-semibold">
+<span>34 Units</span>
+<span class="text-text-subtle font-normal">|</span>
+<span class="text-tertiary">₹85.00 Fee</span>
+</div>
+<span class="text-[11px] text-text-muted mt-0.5">Urgent cross-dock release</span>
+</div>
+<!-- Col 5: Proof of Work Rationale & Actions -->
+<div class="col-span-3 flex flex-col lg:items-end justify-between w-full gap-2.5">
+<div class="p-2 rounded-xl bg-surface-container-lowest text-[11px] text-text-muted leading-relaxed w-full">
+<span class="text-primary font-medium">AI Rationale:</span> Cross-dock expedited transfer fulfills sudden fleet brake-pad spike without warehouse buffer penalty.
+        </div>
+<div class="flex items-center gap-2 self-end">
+<button class="reject-btn px-3 py-1.5 rounded-full text-xs font-medium text-text-muted hover:text-error hover:bg-error-container/20 transition-all">
+            Reject
+          </button>
+<button class="approve-btn flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-primary-container text-white hover:bg-primary hover:text-surface-container-lowest transition-all shadow-sm">
+<span class="material-symbols-outlined text-[14px]">check</span>
+            Approve
+          </button>
+</div>
+</div>
+</div>
+<!-- Intervention Row 4: SKU-812 (PURCHASE_ORDER) -->
+<div class="intervention-row group flex flex-col lg:grid lg:grid-cols-12 gap-3.5 items-start lg:items-center p-3.5 rounded-2xl bg-surface-container hover:bg-surface-container-high transition-all" data-depot="South Bay OEM Hubli" data-sku="SKU-812" data-type="PURCHASE_ORDER">
+<!-- Col 1: SKU & Item -->
+<div class="col-span-3 flex items-center gap-3 w-full">
+<div class="w-10 h-10 rounded-xl bg-surface-container-highest flex items-center justify-center text-primary-fixed shrink-0 shadow-inner">
+<span class="material-symbols-outlined text-[20px]">oil_barrel</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-mono text-xs font-semibold text-primary">SKU-812</span>
+<span class="text-[10px] text-text-subtle px-1.5 py-0.2 rounded bg-surface-container-lowest">South Bay</span>
+</div>
+<span class="text-xs font-medium text-on-surface truncate">Heavy Duty Fuel &amp; Oil Separation Filter</span>
+</div>
+</div>
+<!-- Col 2: Action Type Badge -->
+<div class="col-span-2 flex items-center gap-2">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-medium bg-[#f59e0b]/15 text-[#f59e0b]">
+<span class="material-symbols-outlined text-[13px]">shopping_cart</span>
+          PURCHASE ORDER
+        </span>
+<span class="text-[10px] text-text-muted">Procure</span>
+</div>
+<!-- Col 3: Logistics Route -->
+<div class="col-span-2 flex flex-col text-xs">
+<div class="flex items-center gap-1.5 font-medium text-on-surface">
+<span>OEM Supplier</span>
+<span class="material-symbols-outlined text-xs text-primary">arrow_forward</span>
+<span>Hubli Depot</span>
+</div>
+<div class="flex items-center gap-1 text-[11px] text-text-muted mt-0.5">
+<span class="material-symbols-outlined text-[12px]">flight_takeoff</span>
+<span>Direct OEM Freight (2 Days Transit)</span>
+</div>
+</div>
+<!-- Col 4: Operational Impact -->
+<div class="col-span-2 flex flex-col text-xs">
+<div class="flex items-center gap-1.5 text-on-surface font-semibold">
+<span>45 Units</span>
+<span class="text-text-subtle font-normal">|</span>
+<span class="text-on-surface">₹6,750.00 Est.</span>
+</div>
+<span class="text-[11px] text-text-muted mt-0.5">Stockout prevention protocol</span>
+</div>
+<!-- Col 5: Proof of Work Rationale & Actions -->
+<div class="col-span-3 flex flex-col lg:items-end justify-between w-full gap-2.5">
+<div class="p-2 rounded-xl bg-surface-container-lowest text-[11px] text-text-muted leading-relaxed w-full">
+<span class="text-primary font-medium">AI Rationale:</span> Critical oil filter threshold breached (inventory &lt; 10%); immediate PO release initiated to prevent garage bay stoppage.
+        </div>
+<div class="flex items-center gap-2 self-end">
+<button class="reject-btn px-3 py-1.5 rounded-full text-xs font-medium text-text-muted hover:text-error hover:bg-error-container/20 transition-all">
+            Reject
+          </button>
+<button class="approve-btn flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-primary-container text-white hover:bg-primary hover:text-surface-container-lowest transition-all shadow-sm">
+<span class="material-symbols-outlined text-[14px]">check</span>
+            Approve
+          </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Real-Time Audit / Engine Synchronization Footer -->
+<footer class="mt-5 pt-4 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-text-muted border-t border-white/[0.04]">
+<div class="flex items-center gap-2">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-tertiary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-tertiary"></span>
+</span>
+<span class="font-mono text-[11px] text-on-surface/80">
+        Connected to <span class="text-primary">http://localhost:8000/api/triage</span>
+</span>
+</div>
+<div class="flex items-center gap-4">
+<span class="flex items-center gap-1.5 text-[11px]">
+<span class="material-symbols-outlined text-[14px] text-text-subtle">sync</span>
+        Algorithmic decision tree synchronized: <strong class="text-on-surface font-medium" id="syncTimer">12s ago</strong>
+</span>
+<span class="hidden sm:inline-flex items-center gap-1 text-[11px] font-mono bg-surface-container px-2 py-0.5 rounded text-text-subtle">
+        ⌘ + Enter to Approve Selected
+      </span>
+</div>
+</footer>
+<!-- Workspace Interactive Logic -->
+<script>
+    (function initWorkspaceInteractions() {
+      // Row Approve handler
+      document.querySelectorAll('.approve-btn').forEach((btn) => {
+        btn.addEventListener('click', (e) => {
+          const row = e.target.closest('.intervention-row');
+          if (!row) return;
+          row.style.transition = 'all 0.3s ease';
+          row.classList.add('opacity-40', 'bg-tertiary/10');
+          btn.innerHTML = '<span class="material-symbols-outlined text-[14px]">verified</span> Approved';
+          btn.classList.replace('bg-primary-container', 'bg-tertiary/30');
+          btn.classList.add('text-tertiary');
+          btn.disabled = true;
+          updatePendingCount();
+        });
+      });
+
+      // Row Reject handler
+      document.querySelectorAll('.reject-btn').forEach((btn) => {
+        btn.addEventListener('click', (e) => {
+          const row = e.target.closest('.intervention-row');
+          if (!row) return;
+          row.style.transition = 'all 0.3s ease';
+          row.style.transform = 'translateX(20px)';
+          row.style.opacity = '0';
+          setTimeout(() => {
+            row.remove();
+            updatePendingCount();
+          }, 300);
+        });
+      });
+
+      // Master Bulk Approve
+      const bulkBtn = document.getElementById('bulkApproveMasterBtn');
+      if (bulkBtn) {
+        bulkBtn.addEventListener('click', () => {
+          document.querySelectorAll('.approve-btn').forEach((btn) => {
+            if (!btn.disabled) btn.click();
+          });
+          bulkBtn.innerHTML = '<span class="material-symbols-outlined text-[16px]">task_alt</span><span>Manifest Approved</span>';
+          bulkBtn.classList.replace('from-primary-container', 'from-tertiary-container');
+        });
+      }
+
+      // Sync Gateway feedback
+      const syncBtn = document.getElementById('syncGatewayBtn');
+      if (syncBtn) {
+        syncBtn.addEventListener('click', () => {
+          const icon = syncBtn.querySelector('.material-symbols-outlined');
+          icon.classList.add('animate-spin');
+          setTimeout(() => {
+            icon.classList.remove('animate-spin');
+            document.getElementById('syncTimer').textContent = 'Just now';
+          }, 800);
+        });
+      }
+
+      // Filter Tabs & Search Combination Logic
+      let currentFilter = 'all';
+      let searchQuery = '';
+      const allRows = document.querySelectorAll('.intervention-row');
+
+      function applyInterventionFilters() {
+        allRows.forEach(row => {
+          const rowType = row.getAttribute('data-type');
+          const rowText = (row.getAttribute('data-sku') + ' ' + row.getAttribute('data-depot') + ' ' + row.textContent).toLowerCase();
+          const cleanRowText = rowText.replace(/[-_]/g, '');
+          
+          const matchesFilter = (currentFilter === 'all' || currentFilter === 'AUDIT') ? true : (rowType === currentFilter);
+          
+          let matchesSearch = true;
+          if (searchQuery) {
+            const searchTerms = searchQuery.split(/\s+/);
+            matchesSearch = searchTerms.every(term => {
+              const cleanTerm = term.replace(/[-_]/g, '');
+              return rowText.includes(term) || cleanRowText.includes(cleanTerm);
+            });
+          }
+
+          row.style.display = (matchesFilter && matchesSearch) ? '' : 'none';
+        });
+      }
+
+      // Tab Filtering
+      const tabs = document.querySelectorAll('.filter-tab');
+      tabs.forEach((tab) => {
+        tab.addEventListener('click', () => {
+          tabs.forEach((t) => {
+            t.className = 'filter-tab px-4 py-1.5 text-xs font-medium rounded-full text-text-muted hover:text-on-surface transition-all';
+          });
+          tab.className = 'filter-tab px-4 py-1.5 text-xs font-semibold rounded-full bg-white text-surface-container-lowest transition-all shadow-sm';
+
+          currentFilter = tab.getAttribute('data-filter');
+          applyInterventionFilters();
+        });
+      });
+
+      // Search Filter Inputs (Global and Table)
+      const searchInputs = [document.getElementById('tableSearchInput'), document.getElementById('globalSearchInput')];
+      searchInputs.forEach(input => {
+        if (input) {
+          input.addEventListener('input', (e) => {
+            searchQuery = e.target.value.toLowerCase().trim();
+            // Sync the other input so they stay in lockstep
+            searchInputs.forEach(other => {
+              if (other && other !== input) other.value = e.target.value;
+            });
+            applyInterventionFilters();
+          });
+        }
+      });
+
+      // Keyboard Shortcut ⌘ + Enter
+      window.addEventListener('keydown', (e) => {
+        if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+          if (bulkBtn) bulkBtn.click();
+        }
+      });
+
+      function updatePendingCount() {
+        const remaining = document.querySelectorAll('.intervention-row:not(.opacity-40)').length;
+        const countDisplay = document.getElementById('statPendingCount');
+        if (countDisplay) {
+          countDisplay.textContent = remaining + ' Actions';
+        }
+      }
+    })();
+  </script>
+</div></main>
+</div>
+<!-- Interactive JavaScript Handling -->
+<script>
+    // Micro-interactions for Approve & Reject buttons
+    document.querySelectorAll('.approve-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const card = e.target.closest('.intervention-item');
+        if (!card) return;
+        card.style.transition = 'all 0.3s ease';
+        card.style.opacity = '0.45';
+        card.style.borderColor = 'rgba(66, 225, 141, 0.4)';
+        e.target.innerHTML = 'Approved';
+        e.target.classList.remove('bg-[#52233e]');
+        e.target.classList.add('bg-[#193326]', 'text-accent-emerald', 'border-accent-emerald/30');
+      });
+    });
+
+    document.querySelectorAll('.reject-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const card = e.target.closest('.intervention-item');
+        if (!card) return;
+        card.style.transition = 'all 0.25s ease';
+        card.style.transform = 'translateX(25px)';
+        card.style.opacity = '0';
+        setTimeout(() => {
+          card.remove();
+        }, 260);
+      });
+    });
+
+    const runTriageBtn = document.getElementById('runTriageBtn');
+    if (runTriageBtn) {
+      runTriageBtn.addEventListener('click', () => {
+        runTriageBtn.innerHTML = '<span class="material-symbols-outlined text-[16px] animate-spin">refresh</span><span>Optimizing Topology...</span>';
+        setTimeout(() => {
+          runTriageBtn.innerHTML = '<span class="material-symbols-outlined text-[16px]">verified</span><span>Topology Balanced</span>';
+        }, 1300);
+      });
+    }
+
+    const refreshBtn = document.getElementById('refreshBtn');
+    if (refreshBtn) {
+      refreshBtn.addEventListener('click', () => {
+        refreshBtn.classList.add('rotate-180');
+        setTimeout(() => refreshBtn.classList.remove('rotate-180'), 400);
+      });
+    }
+  </script>
+<script>
+  (function initUnifiedHeader() {
+    const notifBtn = document.getElementById('btn-notifications');
+    const notifDropdown = document.getElementById('notif-dropdown');
+    const notifContainer = document.getElementById('notification-container');
+    
+    const profileBtn = document.getElementById('btn-profile');
+    const profileDropdown = document.getElementById('profile-dropdown');
+    const profileContainer = document.getElementById('profile-container');
+    
+    if (notifBtn && notifDropdown && notifContainer) {
+      notifBtn.addEventListener('click', (e) => {
+        notifDropdown.classList.toggle('hidden');
+        if (profileDropdown && !profileDropdown.classList.contains('hidden')) {
+          profileDropdown.classList.add('hidden');
+        }
+        e.stopPropagation(); 
+        const dot = notifBtn.querySelector('span.bg-red-500');
+        if (dot) {
+          dot.classList.remove('bg-red-500', 'animate-pulse');
+          dot.classList.add('bg-text-subtle');
+        }
+      });
+    }
+
+    if (profileBtn && profileDropdown && profileContainer) {
+      profileBtn.addEventListener('click', (e) => {
+        profileDropdown.classList.toggle('hidden');
+        if (notifDropdown && !notifDropdown.classList.contains('hidden')) {
+          notifDropdown.classList.add('hidden');
+        }
+        e.stopPropagation();
+      });
+    }
+
+    document.addEventListener('click', (e) => {
+      if (notifContainer && notifDropdown && !notifContainer.contains(e.target)) {
+        notifDropdown.classList.add('hidden');
+      }
+      if (profileContainer && profileDropdown && !profileContainer.contains(e.target)) {
+        profileDropdown.classList.add('hidden');
+      }
+    });
+
+    document.querySelectorAll('.profile-action-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation(); 
+        const actionText = btn.getAttribute('data-action');
+        alert(actionText);
+        if (profileDropdown) profileDropdown.classList.add('hidden');
+      });
+    });
+  })();
+</script>
+</body></html>

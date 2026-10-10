@@ -79,25 +79,25 @@
 </div>
 </div>
 <!-- Main Nav Pills -->
-<nav class="flex flex-col gap-1.5" data-active-classes="bg-gradient-to-r from-[#5a2744] to-[#7e355e] text-white">
+<nav class="flex flex-col gap-1.5" id="main-nav">
 <!-- Active Item with soft glowing gradient -->
-<a class="flex items-center gap-3.5 px-4 py-2.5 rounded-full bg-gradient-to-r from-[#4d223a] via-[#5e2747] to-[#712d54] text-white font-medium text-[14px] border border-white/10 pill-active-glow transition-all" href="#">
+<a class="nav-link flex items-center gap-3.5 px-4 py-2.5 rounded-full bg-gradient-to-r from-[#4d223a] via-[#5e2747] to-[#712d54] text-white font-medium text-[14px] border border-white/10 pill-active-glow transition-all" href="code.html" data-section="dashboard">
 <span class="material-symbols-outlined text-[19px] opacity-90">dashboard</span>
 <span>Dashboard</span>
 </a>
-<a class="flex items-center gap-3.5 px-4 py-2.5 rounded-full text-text-muted hover:text-white hover:bg-white/[0.04] transition-all text-[14px] font-normal" href="#">
+<a class="nav-link flex items-center gap-3.5 px-4 py-2.5 rounded-full text-text-muted hover:text-white hover:bg-white/[0.04] transition-all text-[14px] font-normal" href="interventions.html" data-section="interventions">
 <span class="material-symbols-outlined text-[19px]">assignment</span>
 <span>Interventions</span>
 </a>
-<a class="flex items-center gap-3.5 px-4 py-2.5 rounded-full text-text-muted hover:text-white hover:bg-white/[0.04] transition-all text-[14px] font-normal" href="#">
+<a class="nav-link flex items-center gap-3.5 px-4 py-2.5 rounded-full text-text-muted hover:text-white hover:bg-white/[0.04] transition-all text-[14px] font-normal" href="telemetry.html" data-section="telemetry">
 <span class="material-symbols-outlined text-[19px]">analytics</span>
 <span>Telemetry</span>
 </a>
-<a class="flex items-center gap-3.5 px-4 py-2.5 rounded-full text-text-muted hover:text-white hover:bg-white/[0.04] transition-all text-[14px] font-normal" href="#">
+<a class="nav-link flex items-center gap-3.5 px-4 py-2.5 rounded-full text-text-muted hover:text-white hover:bg-white/[0.04] transition-all text-[14px] font-normal" href="inventory.html" data-section="inventory">
 <span class="material-symbols-outlined text-[19px]">storefront</span>
 <span>Inventory</span>
 </a>
-<a class="flex items-center gap-3.5 px-4 py-2.5 rounded-full text-text-muted hover:text-white hover:bg-white/[0.04] transition-all text-[14px] font-normal" href="#">
+<a class="nav-link flex items-center gap-3.5 px-4 py-2.5 rounded-full text-text-muted hover:text-white hover:bg-white/[0.04] transition-all text-[14px] font-normal" href="network.html" data-section="network">
 <span class="material-symbols-outlined text-[19px]">diversity_3</span>
 <span>Network</span>
 </a>
@@ -127,9 +127,9 @@
 <main class="flex-1 flex flex-col gap-6 min-w-0">
 <!-- TOP HEADER (Welcome typography + Top actions + Pill Search) -->
 <div class="flex flex-col gap-5">
-<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 flex-wrap">
 <!-- Welcome Headline -->
-<div>
+<div class="flex-shrink-0">
 <h1 class="text-[28px] md:text-[32px] font-normal tracking-tight text-white flex items-center gap-3">
               Welcome, Operations Lead
             </h1>
@@ -137,49 +137,112 @@
               Here's your real-time supply chain triage overview
             </p>
 </div>
-<!-- Top Right Controls (Bell, Gear, User Capsule) -->
-<div class="flex items-center gap-3 self-start lg:self-auto">
-<!-- Icon Pill: Notifications -->
-<button class="w-10 h-10 rounded-full bg-[#1b1a24] hover:bg-[#232230] border border-white/[0.07] flex items-center justify-center text-text-muted hover:text-white transition-all shadow-sm">
+<!-- Top Right Controls (Bell, User Capsule) -->
+<div class="flex items-center gap-3 flex-wrap self-start lg:self-auto ml-auto">
+<div class="relative" id="notification-container">
+<button id="btn-notifications" class="w-10 h-10 rounded-full bg-[#1b1a24] hover:bg-[#232230] border border-white/[0.07] flex items-center justify-center text-text-muted hover:text-white transition-all shadow-sm relative">
 <span class="material-symbols-outlined text-[18px]">notifications</span>
+<span class="absolute top-1.5 right-1.5 w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse border-2 border-[#1b1a24]"></span>
 </button>
-<!-- Icon Pill: Settings -->
-<button class="w-10 h-10 rounded-full bg-[#1b1a24] hover:bg-[#232230] border border-white/[0.07] flex items-center justify-center text-text-muted hover:text-white transition-all shadow-sm">
-<span class="material-symbols-outlined text-[18px]">settings</span>
-</button>
-<!-- User Pill with Avatar & Email -->
-<div class="flex items-center gap-3 pl-1 pr-4 py-1 rounded-full bg-[#1b1a24] border border-white/[0.07] hover:border-white/[0.15] transition-all cursor-pointer">
-<div class="w-8 h-8 rounded-full bg-gradient-to-tr from-[#9c4b77] to-[#e49bbd] p-[1.5px] flex items-center justify-center">
-<div class="w-full h-full rounded-full bg-[#1c1421] flex items-center justify-center text-[12px] font-bold text-primary">
-                  OL
-                </div>
+<!-- Notification Dropdown -->
+<div id="notif-dropdown" class="hidden absolute right-0 mt-3 w-80 bg-[#131318] border border-white/[0.08] rounded-xl shadow-2xl z-50 overflow-hidden backdrop-blur-md">
+  <div class="flex items-center justify-between px-4 py-3 border-b border-white/[0.06] bg-[#1a1a22]">
+    <h3 class="text-sm font-semibold text-white tracking-tight">System Alerts</h3>
+    <button class="text-xs font-medium text-text-muted hover:text-white transition-colors">Mark all as read</button>
+  </div>
+  <div class="flex flex-col divide-y divide-white/[0.04]">
+    <!-- Alert 1 -->
+    <div class="flex gap-3.5 px-4 py-3.5 hover:bg-white/[0.02] transition-colors cursor-pointer">
+      <div class="flex-shrink-0 w-8 h-8 rounded-full bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400">
+        <span class="material-symbols-outlined text-[16px]">forum</span>
+      </div>
+      <div class="flex flex-col">
+        <span class="text-sm font-medium text-white leading-tight">Unstructured Log Parsed</span>
+        <span class="text-[12.5px] text-text-muted leading-snug mt-1">WhatsApp: '4 units of SKU-303 damaged on delivery at Gokak.' True stock adjusted automatically.</span>
+        <span class="text-[10px] font-mono text-text-subtle mt-2 uppercase tracking-wider">2 mins ago</span>
+      </div>
+    </div>
+    <!-- Alert 2 -->
+    <div class="flex gap-3.5 px-4 py-3.5 hover:bg-white/[0.02] transition-colors cursor-pointer">
+      <div class="flex-shrink-0 w-8 h-8 rounded-full bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-orange-400">
+        <span class="material-symbols-outlined text-[16px]">warning</span>
+      </div>
+      <div class="flex flex-col">
+        <span class="text-sm font-medium text-white leading-tight">Runout Warning</span>
+        <span class="text-[12.5px] text-text-muted leading-snug mt-1">SKU-101 velocity spiked. Runout updated to 1.5 days.</span>
+        <span class="text-[10px] font-mono text-text-subtle mt-2 uppercase tracking-wider">15 mins ago</span>
+      </div>
+    </div>
+    <!-- Alert 3 -->
+    <div class="flex gap-3.5 px-4 py-3.5 hover:bg-white/[0.02] transition-colors cursor-pointer">
+      <div class="flex-shrink-0 w-8 h-8 rounded-full bg-green-500/10 border border-green-500/20 flex items-center justify-center text-green-400">
+        <span class="material-symbols-outlined text-[16px]">check_circle</span>
+      </div>
+      <div class="flex flex-col">
+        <span class="text-sm font-medium text-white leading-tight">Supabase Sync</span>
+        <span class="text-[12.5px] text-text-muted leading-snug mt-1">Database successfully seeded and reconciled.</span>
+        <span class="text-[10px] font-mono text-text-subtle mt-2 uppercase tracking-wider">1 hour ago</span>
+      </div>
+    </div>
+  </div>
 </div>
-<div class="flex flex-col text-left">
-<span class="text-[12.5px] font-medium text-white leading-tight">KD Ops Lead</span>
-<span class="text-[10.5px] text-text-muted leading-tight">ops@kdgarage.in</span>
 </div>
+<!-- User Profile Dropdown -->
+<div class="relative" id="profile-container">
+  <div id="btn-profile" class="flex items-center gap-3 pl-1 pr-4 py-1 rounded-full bg-[#1b1a24] border border-white/[0.07] hover:border-white/[0.15] transition-all cursor-pointer">
+    <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-[#9c4b77] to-[#e49bbd] p-[1.5px] flex items-center justify-center">
+      <div class="w-full h-full rounded-full bg-[#1c1421] flex items-center justify-center text-[12px] font-bold text-primary">
+        RK
+      </div>
+    </div>
+    <div class="flex flex-col text-left">
+      <span class="text-[12.5px] font-medium text-white leading-tight">Ramesh K.</span>
+      <span class="text-[10.5px] text-text-muted leading-tight">Head of Purchasing</span>
+    </div>
+    <span class="material-symbols-outlined text-[16px] text-text-subtle ml-1">expand_more</span>
+  </div>
+
+  <!-- Profile Dropdown Panel -->
+  <div id="profile-dropdown" class="hidden absolute right-0 mt-3 w-64 bg-[#131318] border border-white/[0.08] rounded-xl shadow-2xl z-50 overflow-hidden backdrop-blur-md">
+    <!-- Header Area -->
+    <div class="flex flex-col px-4 py-3.5 bg-[#1a1a22]">
+      <span class="text-[14px] font-semibold text-white leading-tight">Ramesh Kulkarni</span>
+      <span class="text-[12px] text-primary font-medium mt-0.5">Head of Purchasing</span>
+      <span class="text-[11px] text-text-muted mt-1 font-mono">ramesh@kdgarage.in</span>
+    </div>
+    <!-- Action Buttons -->
+    <div class="flex flex-col py-1.5 border-t border-white/[0.06]">
+      <button class="profile-action-btn flex items-center gap-3 px-4 py-2 hover:bg-white/[0.03] transition-colors w-full text-left text-[13px] text-text-muted hover:text-white" data-action="Navigating to User Settings...">
+        <span class="material-symbols-outlined text-[18px]">person</span>
+        User Settings
+      </button>
+      <button class="profile-action-btn flex items-center gap-3 px-4 py-2 hover:bg-white/[0.03] transition-colors w-full text-left text-[13px] text-text-muted hover:text-white" data-action="Opening Warehouse Preferences...">
+        <span class="material-symbols-outlined text-[18px]">settings</span>
+        Warehouse Preferences
+      </button>
+      <button class="profile-action-btn flex items-center gap-3 px-4 py-2 hover:bg-white/[0.03] transition-colors w-full text-left text-[13px] text-text-muted hover:text-white" data-action="Accessing API Keys & Integrations...">
+        <span class="material-symbols-outlined text-[18px]">key</span>
+        API Keys & Integrations
+      </button>
+    </div>
+    <!-- Sign Out -->
+    <div class="py-1.5 border-t border-white/[0.06]">
+      <button class="profile-action-btn flex items-center gap-3 px-4 py-2 hover:bg-red-500/10 transition-colors w-full text-left text-[13px] text-red-400 hover:text-red-300" data-action="Session Terminated. Logging out...">
+        <span class="material-symbols-outlined text-[18px]">logout</span>
+        Secure Logout
+      </button>
+    </div>
+  </div>
 </div>
 </div>
 </div>
 <!-- Filter Pills Bar & Integrated Search Pill (Right side) -->
-<div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
-<!-- Segment Tabs matching reference (Market, Wallet, Tools style) -->
-<div class="flex items-center gap-2">
-<button class="px-5 py-2 rounded-full bg-[#2a2838] border border-white/[0.08] text-white text-[13px] font-medium transition-all shadow-inner">
-              Triage
-            </button>
-<button class="px-5 py-2 rounded-full bg-[#1b1a24] hover:bg-[#22212f] text-text-muted hover:text-white text-[13px] font-medium transition-all">
-              Live Fleet
-            </button>
-<button class="px-5 py-2 rounded-full bg-[#1b1a24] hover:bg-[#22212f] text-text-muted hover:text-white text-[13px] font-medium transition-all">
-              Telemetry
-            </button>
-</div>
-<!-- Search Pill ('Ask helios.ai anything' style) -->
-<div class="relative w-full md:w-80">
-<span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted text-[17px]">sparkles</span>
-<input class="w-full bg-[#1a1923] border border-white/[0.07] text-[13px] text-white placeholder:text-text-muted rounded-full pl-10 pr-9 py-2 outline-none focus:border-primary-container/60 focus:ring-1 focus:ring-primary-container/40 transition-all" placeholder="Ask garage.ai anything" type="text"/>
-<span class="material-symbols-outlined absolute right-3.5 top-1/2 -translate-y-1/2 text-text-subtle text-[15px]">mic</span>
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-3 flex-wrap mt-2">
+
+<!-- Search Pill -->
+<div class="relative w-full md:w-80 ml-auto flex-shrink-0">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-text-muted text-[17px]">search</span>
+<input id="search-bar" class="w-full bg-[#1a1923] border border-white/[0.07] text-[13px] text-white placeholder:text-text-muted rounded-full pl-11 pr-5 py-2 outline-none focus:border-primary-container/60 focus:ring-1 focus:ring-primary-container/40 transition-all shadow-inner" placeholder="Ask Onyx anything" type="text"/>
 </div>
 </div>
 </div>
@@ -220,7 +283,7 @@
               </p>
 </div>
 <div class="relative z-10 mt-4">
-<button class="w-full py-2.5 px-4 rounded-full bg-gradient-to-r from-[#b3598c] via-[#c66e9f] to-[#dd88b7] text-white font-medium text-[13px] shadow-[0_4px_18px_rgba(199,109,158,0.35)] hover:opacity-95 active:scale-[0.99] transition-all flex items-center justify-center gap-2" id="runTriageBtn">
+<button class="w-full py-2.5 px-4 rounded-full bg-gradient-to-r from-[#b3598c] via-[#c66e9f] to-[#dd88b7] text-white font-medium text-[13px] shadow-[0_4px_18px_rgba(199,109,158,0.35)] hover:opacity-95 active:scale-[0.99] transition-all flex items-center justify-center gap-2" id="btn-triage">
 <span class="material-symbols-outlined text-[16px]">psychology</span>
 <span>Run Auto-Triage</span>
 </button>
@@ -615,22 +678,62 @@
 </div>
 </main>
 </div>
+<!-- FLOATING CHAT WIDGET -->
+<div id="ai-chat-widget" class="fixed bottom-6 right-6 w-80 lg:w-[350px] rounded-3xl bg-[#14131b]/95 border border-white/[0.08] shadow-[0_20px_60px_rgba(0,0,0,0.8)] backdrop-blur-2xl flex flex-col z-50 overflow-hidden transition-all duration-300">
+  
+  <div class="px-4 py-3 border-b border-white/[0.08] flex items-center justify-between bg-gradient-to-r from-[#1d1b27] to-[#14131b] cursor-pointer" id="chat-header">
+    <div class="flex items-center gap-2.5">
+      <div class="w-7 h-7 rounded-full bg-gradient-to-tr from-[#3a1b2d] to-[#682a4d] border border-white/10 flex items-center justify-center text-primary shadow-inner">
+        <span class="material-symbols-outlined text-[15px]">smart_toy</span>
+      </div>
+      <div class="flex flex-col">
+        <span class="text-[13px] font-semibold text-white leading-tight">Onyx</span>
+        <span class="text-[9px] text-accent-emerald tracking-wide font-medium flex items-center gap-1">
+          <span class="w-1.5 h-1.5 rounded-full bg-accent-emerald animate-pulse"></span> Online
+        </span>
+      </div>
+    </div>
+    <button id="chat-toggle" class="text-text-muted hover:text-white transition-colors">
+      <span class="material-symbols-outlined text-[18px]">expand_less</span>
+    </button>
+  </div>
+
+  <div id="chat-body" class="flex flex-col h-[350px] hidden" style="display: none;">
+    <div id="chat-messages" class="flex-1 p-4 overflow-y-auto flex flex-col gap-3 text-[13px]">
+      <div class="flex items-start gap-2 max-w-[85%] mt-1">
+        <div class="w-6 h-6 rounded-full bg-[#1b1a24] border border-white/[0.08] flex-shrink-0 flex items-center justify-center text-primary mt-0.5">
+          <span class="material-symbols-outlined text-[13px]">smart_toy</span>
+        </div>
+        <div class="bg-[#242330] border border-white/[0.05] rounded-2xl rounded-tl-none p-2.5 text-white shadow-sm leading-relaxed">
+          System Online. Type <span class="text-primary font-mono text-[11px] px-1 bg-black/20 rounded">status</span> to triage, or <span class="text-accent-emerald font-mono text-[11px] px-1 bg-black/20 rounded">approve</span> to execute.
+        </div>
+      </div>
+    </div>
+    </div>
+    <div class="p-3 border-t border-white/[0.08] bg-[#1a1923] flex items-center gap-2">
+      <input type="text" id="chat-input" class="flex-1 bg-[#242330] border border-white/[0.05] rounded-xl px-3 py-2 text-[13px] text-white placeholder-text-muted focus:outline-none focus:border-primary-container/50 transition-colors" placeholder="Ask Onyx to status or approve..." autocomplete="off">
+      <button id="chat-send" class="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#52233e] to-[#682c4f] hover:opacity-90 flex items-center justify-center text-white border border-white/10 transition-all shadow-sm">
+        <span class="material-symbols-outlined text-[16px]">send</span>
+      </button>
+    </div>
+  </div>
+</div>
 <!-- Interactive JavaScript Handling -->
 <script>
     let currentInterventions = [];
     let currentCapital = 0;
 
     async function loadData() {
-      const runTriageBtn = document.getElementById('runTriageBtn');
+      const runTriageBtn = document.getElementById('btn-triage');
       if (runTriageBtn) {
         runTriageBtn.innerHTML = '<span class="material-symbols-outlined text-[16px] animate-spin">refresh</span><span>Fetching Live Data...</span>';
       }
 
       try {
         const res = await fetch('http://localhost:8000/api/triage');
+        if (!res.ok) throw new Error("API not ok");
         const data = await res.json();
         
-        // Update summaries
         const summary = data.triage_summary;
         const critEl = document.getElementById('stat-critical');
         if (critEl) critEl.innerText = summary.critical_items_count.toString().padStart(2, '0') + ' SKUs';
@@ -641,12 +744,10 @@
         const alertsEl = document.getElementById('stat-alerts');
         if (alertsEl) alertsEl.innerText = summary.unlogged_alerts_parsed ? '100%' : '0%';
         
-        currentInterventions = data.interventions;
-        
+        currentInterventions = data.interventions || [];
         renderUI();
-        
       } catch (err) {
-        console.error(err);
+        console.error("Failed to load data:", err);
       } finally {
         if (runTriageBtn) {
           runTriageBtn.innerHTML = '<span class="material-symbols-outlined text-[16px]">psychology</span><span>Run Auto-Triage</span>';
@@ -655,11 +756,12 @@
     }
     
     function renderUI() {
-        // Calculate Total Capital at Risk
         currentCapital = currentInterventions.reduce((sum, item) => sum + (item.estimated_cost || 0), 0);
-        updateCapitalUI();
+        const capitalEl = document.getElementById('total-capital');
+        if (capitalEl) {
+            capitalEl.innerText = `₹ ${currentCapital.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+        }
 
-        // Render Watchlist
         const watchlist = document.getElementById('watchlist-container');
         if (watchlist) {
             watchlist.innerHTML = '';
@@ -693,7 +795,6 @@
             });
         }
         
-        // Render Bottom Interventions Container
         const container = document.getElementById('interventionContainer');
         if (container) {
             container.innerHTML = '';
@@ -732,6 +833,9 @@
                       </div>
                     </div>
                     <div class="flex items-center gap-2">
+                      <button class="reject-btn px-3.5 py-1 rounded-full bg-[#201f2b] hover:bg-error/20 hover:text-red-300 text-text-muted text-[12px] font-medium transition-all">
+                        Reject
+                      </button>
                       <button class="approve-btn px-4 py-1 rounded-full bg-[#52233e] hover:bg-[#682c4f] border border-white/10 text-white text-[12px] font-medium transition-all shadow-sm">
                         Approve
                       </button>
@@ -744,100 +848,382 @@
         }
         
         attachEventListeners();
+        updateApproveAllCount();
     }
     
-    function updateCapitalUI() {
-        const capitalEl = document.getElementById('total-capital');
-        if (capitalEl) {
-            capitalEl.innerText = `₹ ${currentCapital.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+    async function executeApproval(itemsToApprove, successCallback) {
+        try {
+            // As requested, we loop through and hit the single /api/execute endpoint
+            for (let item of itemsToApprove) {
+                const res = await fetch('http://localhost:8000/api/execute', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action_type: item.action_type,
+                        sku: item.sku,
+                        from: item.from,
+                        to: item.to,
+                        quantity: item.quantity
+                    })
+                });
+                if (!res.ok) throw new Error("Approval failed");
+            }
+            showToast('Execution successful');
+            successCallback();
+        } catch(e) {
+            console.error(e);
+            showToast('Failed to execute action.');
         }
     }
 
     function removeIntervention(sku) {
         const itemIndex = currentInterventions.findIndex(i => i.sku === sku);
         if (itemIndex > -1) {
-            currentCapital -= currentInterventions[itemIndex].estimated_cost || 0;
-            updateCapitalUI();
             currentInterventions.splice(itemIndex, 1);
+            renderUI();
         }
     }
 
     function attachEventListeners() {
-      // Bottom Container Approvals
+      // Single Bottom Approval
       document.querySelectorAll('.approve-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
           const card = e.target.closest('.intervention-item');
           const sku = card.getAttribute('data-sku');
+          const item = currentInterventions.find(i => i.sku === sku);
           
-          card.style.transition = 'all 0.3s ease';
-          card.style.opacity = '0.45';
-          card.style.borderColor = 'rgba(66, 225, 141, 0.4)';
-          e.target.innerHTML = 'Approved';
-          e.target.classList.remove('bg-[#52233e]', 'hover:bg-[#682c4f]');
-          e.target.classList.add('bg-[#193326]', 'text-accent-emerald', 'border-accent-emerald/30');
+          e.target.innerHTML = '<span class="material-symbols-outlined text-[14px] animate-spin">refresh</span>';
           
-          showToast('[Action Executed] Database mutated successfully.');
-          removeIntervention(sku);
-          
-          setTimeout(() => {
-            card.style.transform = 'translateY(-10px)';
-            card.style.opacity = '0';
-            setTimeout(() => card.remove(), 300);
-            
-            // Also remove from watchlist if it exists
-            const wlCard = document.querySelector(`.watchlist-item[data-sku="${sku}"]`);
-            if (wlCard) wlCard.remove();
-          }, 800);
+          executeApproval([item], () => {
+              card.style.transition = 'all 0.3s ease';
+              card.style.opacity = '0';
+              card.style.transform = 'translateY(-10px)';
+              setTimeout(() => removeIntervention(sku), 300);
+          });
         });
       });
 
-      // Watchlist Approvals
+      // Watchlist Approval
       document.querySelectorAll('.wl-approve-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
           const card = e.target.closest('.watchlist-item');
           const sku = card.getAttribute('data-sku');
+          const item = currentInterventions.find(i => i.sku === sku);
           
-          card.style.transition = 'all 0.3s ease';
-          card.style.transform = 'translateX(25px)';
-          card.style.opacity = '0';
-          
-          showToast('[Action Executed] Database mutated successfully.');
-          removeIntervention(sku);
-          
-          setTimeout(() => {
-            card.remove();
-            
-            // Also remove from bottom container if it exists
-            const btmCard = document.querySelector(`.intervention-item[data-sku="${sku}"]`);
-            if (btmCard) btmCard.remove();
-          }, 300);
+          executeApproval([item], () => {
+              card.style.transition = 'all 0.3s ease';
+              card.style.opacity = '0';
+              card.style.transform = 'translateX(25px)';
+              setTimeout(() => removeIntervention(sku), 300);
+          });
         });
+      });
+      
+      // Reject Buttons
+      document.querySelectorAll('.reject-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const card = e.target.closest('.intervention-item');
+          const sku = card.getAttribute('data-sku');
+          card.style.opacity = '0';
+          setTimeout(() => removeIntervention(sku), 300);
+        });
+      });
+      
+    }
+
+    // --- SIDEBAR NAV LOGIC ---
+    document.querySelectorAll('.nav-link').forEach(link => {
+      link.addEventListener('click', (e) => {
+        const href = link.getAttribute('href');
+        if (href && href !== '#') {
+            window.location.href = href;
+            return;
+        }
+        e.preventDefault();
+        const section = link.getAttribute('data-section');
+        // Update active state visually
+        document.querySelectorAll('.nav-link').forEach(l => {
+          l.className = 'nav-link flex items-center gap-3.5 px-4 py-2.5 rounded-full text-text-muted hover:text-white hover:bg-white/[0.04] transition-all text-[14px] font-normal';
+        });
+        link.className = 'nav-link flex items-center gap-3.5 px-4 py-2.5 rounded-full bg-gradient-to-r from-[#4d223a] via-[#5e2747] to-[#712d54] text-white font-medium text-[14px] border border-white/10 pill-active-glow transition-all';
+        
+        if (section === 'dashboard') {
+          loadData();
+          showToast('Dashboard refreshed');
+        } else if (section === 'interventions') {
+          // Scroll to interventions
+          const el = document.getElementById('interventionContainer');
+          if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          showToast('Viewing Pending Interventions');
+        } else {
+          showToast(section.charAt(0).toUpperCase() + section.slice(1) + ' module — coming in v3.0');
+        }
+      });
+    });
+
+    // --- TAB PILLS LOGIC ---
+    document.querySelectorAll('.tab-pill').forEach(pill => {
+      pill.addEventListener('click', () => {
+        // Update active visual
+        document.querySelectorAll('.tab-pill').forEach(p => {
+          p.className = 'tab-pill px-5 py-2 rounded-full bg-[#1b1a24] hover:bg-[#22212f] text-text-muted hover:text-white text-[13px] font-medium transition-all';
+        });
+        pill.className = 'tab-pill px-5 py-2 rounded-full bg-[#2a2838] border border-white/[0.08] text-white text-[13px] font-medium transition-all shadow-inner';
+        
+        const tab = pill.getAttribute('data-tab');
+        if (tab === 'triage') {
+          loadData();
+          showToast('Triage view active');
+        } else {
+          showToast(tab.charAt(0).toUpperCase() + tab.slice(1) + ' view — coming in v3.0');
+        }
+      });
+    });
+
+    // --- NOTIFICATIONS & PROFILE DROPDOWNS ---
+    const notifBtn = document.getElementById('btn-notifications');
+    const notifDropdown = document.getElementById('notif-dropdown');
+    const notifContainer = document.getElementById('notification-container');
+    
+    const profileBtn = document.getElementById('btn-profile');
+    const profileDropdown = document.getElementById('profile-dropdown');
+    const profileContainer = document.getElementById('profile-container');
+    
+    if (notifBtn && notifDropdown && notifContainer) {
+      notifBtn.addEventListener('click', (e) => {
+        notifDropdown.classList.toggle('hidden');
+        if (profileDropdown && !profileDropdown.classList.contains('hidden')) {
+          profileDropdown.classList.add('hidden');
+        }
+        e.stopPropagation(); 
+        
+        const dot = notifBtn.querySelector('span.bg-red-500');
+        if (dot) {
+          dot.classList.remove('bg-red-500', 'animate-pulse');
+          dot.classList.add('bg-text-subtle');
+        }
       });
     }
 
+    if (profileBtn && profileDropdown && profileContainer) {
+      profileBtn.addEventListener('click', (e) => {
+        profileDropdown.classList.toggle('hidden');
+        if (notifDropdown && !notifDropdown.classList.contains('hidden')) {
+          notifDropdown.classList.add('hidden');
+        }
+        e.stopPropagation();
+      });
+    }
+
+    document.addEventListener('click', (e) => {
+      if (notifContainer && notifDropdown && !notifContainer.contains(e.target)) {
+        notifDropdown.classList.add('hidden');
+      }
+      if (profileContainer && profileDropdown && !profileContainer.contains(e.target)) {
+        profileDropdown.classList.add('hidden');
+      }
+    });
+
+    // Sub-buttons interactive alert
+    document.querySelectorAll('.profile-action-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation(); 
+        const actionText = btn.getAttribute('data-action');
+        alert(actionText);
+        if (profileDropdown) profileDropdown.classList.add('hidden');
+      });
+    });
+
+    // --- SEARCH BAR -> ONYX CHAT ---
+    const searchBar = document.getElementById('search-bar');
+    if (searchBar) {
+      searchBar.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' && searchBar.value.trim()) {
+          showToast('Global search is under construction.');
+          searchBar.value = '';
+        }
+      });
+    }
+
+    // --- SIDEBAR BOTTOM LINKS ---
+    document.querySelectorAll('aside a[href="#"]').forEach(link => {
+      if (!link.classList.contains('nav-link')) {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          const text = link.textContent.trim();
+          showToast(text + ' — coming in v3.0');
+        });
+      }
+    });
+
+    // --- WATCHLIST FILTER PILLS ---
+    const watchlistPills = document.querySelectorAll('#watchlist-container');
+    // The filter pills in the watchlist header (Critical/Excess/Resolved)
+    document.querySelectorAll('.watchlist-filter-pill').forEach(pill => {
+        pill.addEventListener('click', () => showToast('Filter: ' + pill.textContent.trim()));
+    });
+
     function showToast(msg) {
       const toast = document.createElement('div');
-      toast.className = 'fixed bottom-5 right-5 bg-[#193326]/90 text-accent-emerald border border-accent-emerald/30 px-4 py-2 rounded-xl text-[13px] font-medium shadow-lg backdrop-blur-md z-50 transition-all duration-300 transform translate-y-10 opacity-0 flex items-center gap-2';
+      toast.className = 'fixed bottom-5 left-1/2 -translate-x-1/2 bg-[#193326]/90 text-accent-emerald border border-accent-emerald/30 px-5 py-2.5 rounded-full text-[13px] font-medium shadow-2xl backdrop-blur-md z-[100] transition-all duration-300 transform translate-y-10 opacity-0 flex items-center gap-2';
       toast.innerHTML = `<span class="material-symbols-outlined text-[18px]">check_circle</span> ${msg}`;
       document.body.appendChild(toast);
       
-      requestAnimationFrame(() => {
-        toast.classList.remove('translate-y-10', 'opacity-0');
-      });
-      
+      requestAnimationFrame(() => toast.classList.remove('translate-y-10', 'opacity-0'));
       setTimeout(() => {
         toast.classList.add('translate-y-10', 'opacity-0');
         setTimeout(() => toast.remove(), 300);
       }, 3000);
     }
 
-    const runTriageBtn = document.getElementById('runTriageBtn');
+    const runTriageBtn = document.getElementById('btn-triage');
     if (runTriageBtn) {
-      runTriageBtn.addEventListener('click', () => {
-        loadData();
-      });
+      runTriageBtn.addEventListener('click', loadData);
     }
     
-    document.addEventListener('DOMContentLoaded', loadData);
+    // Refresh & Approve All Buttons
+    const refreshBtn = document.getElementById('refreshBtn');
+    if(refreshBtn) refreshBtn.addEventListener('click', loadData);
+    
+    const approveAllBtn = document.getElementById('approveAllBtn');
+    if(approveAllBtn) {
+        approveAllBtn.addEventListener('click', () => {
+            if(currentInterventions.length === 0) {
+              showToast('No pending interventions to approve');
+              return;
+            }
+            approveAllBtn.innerHTML = '<span class="material-symbols-outlined text-[14px] animate-spin">refresh</span> Processing...';
+            executeApproval(currentInterventions, () => {
+                currentInterventions = [];
+                renderUI();
+                approveAllBtn.innerHTML = '<span class="material-symbols-outlined text-[16px]">done_all</span><span>All Approved</span>';
+            });
+        });
+    }
+
+    // Update approve all count whenever data changes
+    function updateApproveAllCount() {
+      if (approveAllBtn && currentInterventions.length > 0) {
+        approveAllBtn.querySelector('span:last-child').textContent = 'Approve All (' + currentInterventions.length + ' Items)';
+      } else if (approveAllBtn) {
+        approveAllBtn.querySelector('span:last-child').textContent = 'No Pending Items';
+      }
+    }
+    
+    // --- CHAT WIDGET LOGIC ---
+    const chatInput = document.getElementById('chat-input');
+    const chatSend = document.getElementById('chat-send');
+    const chatMessages = document.getElementById('chat-messages');
+    const chatBody = document.getElementById('chat-body');
+    const chatHeader = document.getElementById('chat-header');
+    const chatToggle = document.getElementById('chat-toggle');
+    const aiChatWidget = document.getElementById('ai-chat-widget');
+    
+    // Auto-open chat slightly later for dramatic effect
+    let chatIsOpen = false;
+
+    if (chatHeader) {
+        chatHeader.addEventListener('click', () => {
+            chatIsOpen = !chatIsOpen;
+            if (chatIsOpen) {
+                chatBody.style.display = 'flex';
+                chatToggle.innerHTML = '<span class="material-symbols-outlined text-[18px]">expand_more</span>';
+            } else {
+                chatBody.style.display = 'none';
+                chatToggle.innerHTML = '<span class="material-symbols-outlined text-[18px]">expand_less</span>';
+            }
+        });
+    }
+
+    function addMessage(text, isUser = false, msgId = null) {
+        if(!chatMessages) return;
+        const msgDiv = document.createElement('div');
+        if (msgId) msgDiv.id = msgId;
+        
+        if (isUser) {
+            msgDiv.className = 'flex flex-col items-end gap-1 w-full mt-1';
+            msgDiv.innerHTML = `
+                <div class="bg-primary/20 border border-primary/30 rounded-2xl rounded-tr-none p-2.5 text-white shadow-sm leading-relaxed max-w-[85%] self-end">
+                    ${text}
+                </div>
+            `;
+        } else {
+            msgDiv.className = 'flex items-start gap-2 max-w-[85%] mt-1';
+            msgDiv.innerHTML = `
+                <div class="w-6 h-6 rounded-full bg-[#1b1a24] border border-white/[0.08] flex-shrink-0 flex items-center justify-center text-primary mt-0.5">
+                  <span class="material-symbols-outlined text-[13px]">smart_toy</span>
+                </div>
+                <div class="bg-[#242330] border border-white/[0.05] rounded-2xl rounded-tl-none p-2.5 text-white shadow-sm leading-relaxed">
+                    ${text}
+                </div>
+            `;
+        }
+        
+        chatMessages.appendChild(msgDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    async function handleChatInput() {
+        if(!chatInput) return;
+        const text = chatInput.value.trim().toLowerCase();
+        if (!text) return;
+        
+        addMessage(chatInput.value, true);
+        chatInput.value = '';
+        
+        if (text === 'status' || text === 'report') {
+            setTimeout(() => addMessage('Fetching live database...'), 300);
+            setTimeout(() => {
+                loadData(); 
+                setTimeout(() => addMessage('Dashboard updated. Found critical stockouts.'), 500);
+            }, 1000);
+        } else if (text === 'approve' || text === 'approve all') {
+            if(currentInterventions.length === 0) {
+                setTimeout(() => addMessage('No pending interventions to approve.'), 300);
+                return;
+            }
+            setTimeout(() => addMessage('Executing database mutations...'), 300);
+            setTimeout(() => {
+                executeApproval(currentInterventions, () => {
+                    currentInterventions = [];
+                    renderUI();
+                    addMessage('Success. Actions executed.');
+                });
+            }, 1000);
+        } else {
+            setTimeout(async () => {
+                addMessage('<span class="material-symbols-outlined text-[14px] animate-spin">refresh</span> Thinking...', false, 'loading-msg');
+                try {
+                    const res = await fetch('http://localhost:8000/api/chat', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ message: text })
+                    });
+                    const data = await res.json();
+                    // Remove loading message
+                    const loadingMsg = document.getElementById('loading-msg');
+                    if (loadingMsg) loadingMsg.remove();
+                    
+                    addMessage(data.response || 'No response.');
+                } catch (e) {
+                    const loadingMsg = document.getElementById('loading-msg');
+                    if (loadingMsg) loadingMsg.remove();
+                    addMessage('Error: ' + (e.message || String(e)));
+                }
+            }, 300);
+        }
+    }
+
+    if (chatSend) chatSend.addEventListener('click', handleChatInput);
+    if (chatInput) {
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleChatInput();
+        });
+    }
+    
+    document.addEventListener('DOMContentLoaded', () => {
+        // Run triage automatically on load
+        loadData();
+    });
 </script>
 </body></html>

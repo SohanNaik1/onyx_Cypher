@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="web_dashboard" name="shell-type"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "on-secondary-fixed": "#1d0061",
+          "primary-fixed": "#ffd8e9",
+          "error-container": "#93000a",
+          "outline": "#9e8c93",
+          "primary": "#ffafd7",
+          "on-secondary-fixed-variant": "#491ac6",
+          "on-surface": "#e4e1e9",
+          "tertiary-container": "#00ac65",
+          "surface": "#131318",
+          "on-primary": "#58153f",
+          "on-surface-variant": "#d6c1c9",
+          "inverse-primary": "#90446f",
+          "secondary-container": "#4b1ec9",
+          "on-primary-container": "#56143e",
+          "surface-container": "#1f1f24",
+          "surface-container-high": "#2a292f",
+          "tertiary-fixed-dim": "#42e18d",
+          "error": "#ffb4ab",
+          "tertiary": "#42e18d",
+          "surface-container-highest": "#35343a",
+          "inverse-surface": "#e4e1e9",
+          "surface-dim": "#131318",
+          "surface-bright": "#39383e",
+          "secondary": "#cabeff",
+          "on-error": "#690005",
+          "on-secondary": "#320099",
+          "on-primary-fixed": "#3c0029",
+          "on-tertiary": "#00391e",
+          "on-secondary-container": "#bcaeff",
+          "surface-container-lowest": "#0e0e13",
+          "on-tertiary-container": "#00371c",
+          "secondary-fixed-dim": "#cabeff",
+          "primary-container": "#d17ba9",
+          "on-error-container": "#ffdad6",
+          "tertiary-fixed": "#65fea7",
+          "surface-variant": "#35343a",
+          "outline-variant": "#524349",
+          "primary-fixed-dim": "#ffafd7",
+          "secondary-fixed": "#e6deff",
+          "surface-tint": "#ffafd7",
+          "surface-container-low": "#1b1b20",
+          "background": "#131318",
+          "inverse-on-surface": "#303035",
+          "on-background": "#e4e1e9",
+          "text-primary": "#f2eff7",
+          "text-muted": "#8d8b99",
+          "text-subtle": "#656372"
+        },
+        fontFamily: {
+          sans: ["Geist", "sans-serif"]
+        }
+      }
+    }
+  }
+</script>
+<style>
+  @layer base {
+    html, body {
+      margin: 0;
+      padding: 0;
+      background-color: #0b0a10;
+      color: #f2eff7;
+      font-family: 'Geist', sans-serif;
+    }
+    ::-webkit-scrollbar {
+      display: none;
+    }
+  }
+  .pill-active-glow {
+    box-shadow: 0 4px 20px -2px rgba(209, 123, 169, 0.4);
+  }
+  .btn-pink-glow {
+    box-shadow: 0 4px 24px -2px rgba(255, 175, 215, 0.45);
+  }
+</style>
+</head>
+<body class="min-h-screen p-3 md:p-6 lg:p-8 flex items-center justify-center bg-[#0b0a10] relative overflow-x-hidden selection:bg-primary-container selection:text-white">
+<!-- Ambient Plum/Rose Lighting Bleed -->
+<div class="fixed top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[550px] bg-[radial-gradient(ellipse_at_center,rgba(180,95,142,0.16)_0%,rgba(110,48,90,0.05)_50%,transparent_80%)] pointer-events-none blur-3xl z-0"></div>
+<div class="fixed bottom-10 left-10 w-[500px] h-[400px] bg-[radial-gradient(circle,rgba(150,75,120,0.1)_0%,transparent_70%)] pointer-events-none blur-3xl z-0"></div>
+<div class="fixed top-20 right-10 w-[500px] h-[400px] bg-[radial-gradient(circle,rgba(165,85,130,0.08)_0%,transparent_70%)] pointer-events-none blur-3xl z-0"></div>
+<!-- Outer Floating Frame -->
+<div class="relative z-10 w-full max-w-[1400px] bg-[#14131b]/95 border border-white/[0.08] rounded-[36px] shadow-[0_30px_90px_rgba(0,0,0,0.85)] p-5 md:p-7 lg:p-8 backdrop-blur-2xl flex flex-col lg:flex-row gap-7">
+<!-- 1. PERSISTENT LEFT SIDEBAR -->
+<aside class="w-full lg:w-60 flex-shrink-0 flex flex-col justify-between py-2">
+<div class="flex flex-col gap-8">
+<!-- Logo Header -->
+<div class="flex items-center gap-3 px-2">
+<div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-[#3a1b2d] to-[#682a4d] border border-white/10 flex items-center justify-center text-primary shadow-inner">
+<span class="material-symbols-outlined text-[19px]">precision_manufacturing</span>
+</div>
+<div class="flex flex-col">
+<span class="font-semibold text-[17px] tracking-tight text-white leading-tight">KD's Garage</span>
+<span class="text-[11px] text-text-muted tracking-wide font-medium">Fleet Intelligence</span>
+</div>
+</div>
+<!-- Main Nav Links -->
+<nav class="flex flex-col gap-1.5">
+<a class="flex items-center gap-3.5 px-4 py-2.5 rounded-full text-text-muted hover:text-white hover:bg-white/[0.04] transition-all text-[14px] font-normal" href="code.html">
+<span class="material-symbols-outlined text-[19px] opacity-90">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center gap-3.5 px-4 py-2.5 rounded-full text-text-muted hover:text-white hover:bg-white/[0.04] transition-all text-[14px] font-normal" href="interventions.html">
+<span class="material-symbols-outlined text-[19px]">assignment</span>
+<span>Interventions</span>
+</a>
+<a class="flex items-center gap-3.5 px-4 py-2.5 rounded-full text-text-muted hover:text-white hover:bg-white/[0.04] transition-all text-[14px] font-normal" href="telemetry.html">
+<span class="material-symbols-outlined text-[19px]">analytics</span>
+<span>Telemetry</span>
+</a>
+<a class="flex items-center gap-3.5 px-4 py-2.5 rounded-full text-text-muted hover:text-white hover:bg-white/[0.04] transition-all text-[14px] font-normal" href="inventory.html">
+<span class="material-symbols-outlined text-[19px]">storefront</span>
+<span>Inventory</span>
+</a>
+<!-- Network Active Item -->
+<a class="flex items-center gap-3.5 px-4 py-2.5 rounded-full bg-gradient-to-r from-[#4d223a] via-[#5e2747] to-[#712d54] text-white font-medium text-[14px] pill-active-glow transition-all" href="network.html">
+<span class="material-symbols-outlined text-[19px]">diversity_3</span>
+<span>Network</span>
+</a>
+</nav>
+</div>
+<!-- Bottom Pinned Settings & Fleet Status -->
+<div class="flex flex-col gap-2 pt-8 lg:pt-0">
+<a class="flex items-center gap-3.5 px-4 py-2.5 rounded-full text-text-muted hover:text-white hover:bg-white/[0.04] transition-all text-[14px]" href="#">
+<span class="material-symbols-outlined text-[19px]">settings</span>
+<span>Settings</span>
+</a>
+<a class="flex items-center gap-3.5 px-4 py-2.5 rounded-full text-text-muted hover:text-white hover:bg-white/[0.04] transition-all text-[14px]" href="#">
+<span class="material-symbols-outlined text-[19px]">support_agent</span>
+<span>Support</span>
+</a>
+<div class="mt-4 px-3.5 py-2 rounded-2xl bg-white/[0.03] border border-white/[0.06] flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span>
+<span class="text-[11px] text-text-muted">Fleet Mesh</span>
+</div>
+<span class="text-[11px] text-tertiary font-semibold">99.98%</span>
+</div>
+</div>
+</aside>
+<!-- 2. MAIN WORKSPACE CONTENT -->
+<main class="flex-1 flex flex-col gap-5 min-w-0">
+<div class="flex flex-col w-full h-full relative select-none">
+<!-- Minimalist Executive Header -->
+<header class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-2">
+<div class="flex flex-col">
+<div class="flex items-center gap-2.5">
+<h1 class="text-[26px] font-semibold text-text-primary tracking-tight">Depot Topology &amp; Flow</h1>
+<div class="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-tertiary/10 border border-tertiary/20">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary animate-ping"></span>
+<span class="text-[11px] font-medium text-tertiary tracking-wide uppercase">Mesh v4.2 Live</span>
+</div>
+</div>
+<p class="text-[13px] text-text-muted mt-0.5">Real-time vector orchestration and cross-depot autonomous transfers</p>
+</div>
+<!-- Right Controls: View Pills + User Identity -->
+<div class="flex items-center gap-3">
+<!-- Mode Pill Switcher -->
+<div class="flex items-center p-1 rounded-full bg-surface-container-low/80 backdrop-blur-xl border border-white/5 shadow-inner">
+<button class="px-3.5 py-1 rounded-full text-[13px] bg-white text-surface-container-lowest font-medium transition-all shadow-sm" id="viewTopologyBtn">Topology</button>
+<button class="px-3.5 py-1 rounded-full text-[13px] text-text-muted hover:text-white transition-all" id="viewCorridorsBtn">Corridors</button>
+<button class="px-3.5 py-1 rounded-full text-[13px] text-text-muted hover:text-white transition-all" id="viewFleetBtn">Active Fleet</button>
+</div>
+<!-- Unified Top Right Controls -->
+  <!-- Notification Bell -->
+  <div class="relative" id="notification-container">
+    <button id="btn-notifications" class="w-9 h-9 rounded-full bg-surface-container-high hover:bg-white/[0.05] border border-white/[0.05] flex items-center justify-center text-text-muted hover:text-white transition-all shadow-sm relative">
+      <span class="material-symbols-outlined text-[17px]">notifications</span>
+      <span class="absolute top-1 right-1 w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse border-2 border-surface-container"></span>
+    </button>
+    <!-- Notification Dropdown -->
+    <div id="notif-dropdown" class="hidden absolute right-0 mt-3 w-80 bg-[#131318] border border-white/[0.08] rounded-xl shadow-2xl z-50 overflow-hidden backdrop-blur-md">
+      <div class="flex items-center justify-between px-4 py-3 border-b border-white/[0.06] bg-[#1a1a22]">
+        <h3 class="text-sm font-semibold text-white tracking-tight">System Alerts</h3>
+        <button class="text-xs font-medium text-text-muted hover:text-white transition-colors">Mark all as read</button>
+      </div>
+      <div class="flex flex-col divide-y divide-white/[0.04]">
+        <div class="flex gap-3.5 px-4 py-3.5 hover:bg-white/[0.02] transition-colors cursor-pointer">
+          <div class="flex-shrink-0 w-8 h-8 rounded-full bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400">
+            <span class="material-symbols-outlined text-[16px]">forum</span>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-sm font-medium text-white leading-tight">Unstructured Log Parsed</span>
+            <span class="text-[12.5px] text-text-muted leading-snug mt-1">WhatsApp: '4 units of SKU-303 damaged on delivery at Gokak.' True stock adjusted automatically.</span>
+            <span class="text-[10px] font-mono text-text-subtle mt-2 uppercase tracking-wider">2 mins ago</span>
+          </div>
+        </div>
+        <div class="flex gap-3.5 px-4 py-3.5 hover:bg-white/[0.02] transition-colors cursor-pointer">
+          <div class="flex-shrink-0 w-8 h-8 rounded-full bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-orange-400">
+            <span class="material-symbols-outlined text-[16px]">warning</span>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-sm font-medium text-white leading-tight">Runout Warning</span>
+            <span class="text-[12.5px] text-text-muted leading-snug mt-1">SKU-101 velocity spiked. Runout updated to 1.5 days.</span>
+            <span class="text-[10px] font-mono text-text-subtle mt-2 uppercase tracking-wider">15 mins ago</span>
+          </div>
+        </div>
+        <div class="flex gap-3.5 px-4 py-3.5 hover:bg-white/[0.02] transition-colors cursor-pointer">
+          <div class="flex-shrink-0 w-8 h-8 rounded-full bg-green-500/10 border border-green-500/20 flex items-center justify-center text-green-400">
+            <span class="material-symbols-outlined text-[16px]">check_circle</span>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-sm font-medium text-white leading-tight">Supabase Sync</span>
+            <span class="text-[12.5px] text-text-muted leading-snug mt-1">Database successfully seeded and reconciled.</span>
+            <span class="text-[10px] font-mono text-text-subtle mt-2 uppercase tracking-wider">1 hour ago</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- User Profile Dropdown -->
+  <div class="relative" id="profile-container">
+    <div id="btn-profile" class="flex items-center gap-2.5 pl-1.5 pr-4 py-1.5 rounded-full bg-surface-container-high border border-white/[0.05] hover:border-white/[0.15] transition-all cursor-pointer">
+      <div class="w-7 h-7 rounded-full bg-gradient-to-tr from-[#9c4b77] to-[#e49bbd] p-[1px] flex items-center justify-center">
+        <div class="w-full h-full rounded-full bg-[#1c1421] flex items-center justify-center text-[11px] font-bold text-primary">
+          RK
+        </div>
+      </div>
+      <div class="flex flex-col text-left">
+        <span class="text-[12px] font-medium text-white leading-tight">Ramesh K.</span>
+        <span class="text-[10px] text-text-muted leading-tight">Head of Purchasing</span>
+      </div>
+      <span class="material-symbols-outlined text-[15px] text-text-subtle ml-1">expand_more</span>
+    </div>
+
+    <!-- Profile Dropdown Panel -->
+    <div id="profile-dropdown" class="hidden absolute right-0 mt-3 w-64 bg-[#131318] border border-white/[0.08] rounded-xl shadow-2xl z-50 overflow-hidden backdrop-blur-md">
+      <!-- Header Area -->
+      <div class="flex flex-col px-4 py-3.5 bg-[#1a1a22]">
+        <span class="text-[14px] font-semibold text-white leading-tight">Ramesh Kulkarni</span>
+        <span class="text-[12px] text-primary font-medium mt-0.5">Head of Purchasing</span>
+        <span class="text-[11px] text-text-muted mt-1 font-mono">ramesh@kdgarage.in</span>
+      </div>
+      <!-- Action Buttons -->
+      <div class="flex flex-col py-1.5 border-t border-white/[0.06]">
+        <button class="profile-action-btn flex items-center gap-3 px-4 py-2 hover:bg-white/[0.03] transition-colors w-full text-left text-[13px] text-text-muted hover:text-white" data-action="Navigating to User Settings...">
+          <span class="material-symbols-outlined text-[18px]">person</span>
+          User Settings
+        </button>
+        <button class="profile-action-btn flex items-center gap-3 px-4 py-2 hover:bg-white/[0.03] transition-colors w-full text-left text-[13px] text-text-muted hover:text-white" data-action="Opening Warehouse Preferences...">
+          <span class="material-symbols-outlined text-[18px]">settings</span>
+          Warehouse Preferences
+        </button>
+        <button class="profile-action-btn flex items-center gap-3 px-4 py-2 hover:bg-white/[0.03] transition-colors w-full text-left text-[13px] text-text-muted hover:text-white" data-action="Accessing API Keys & Integrations...">
+          <span class="material-symbols-outlined text-[18px]">key</span>
+          API Keys & Integrations
+        </button>
+      </div>
+      <!-- Sign Out -->
+      <div class="py-1.5 border-t border-white/[0.06]">
+        <button class="profile-action-btn flex items-center gap-3 px-4 py-2 hover:bg-red-500/10 transition-colors w-full text-left text-[13px] text-red-400 hover:text-red-300" data-action="Session Terminated. Logging out...">
+          <span class="material-symbols-outlined text-[18px]">logout</span>
+          Secure Logout
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+</header>
+<!-- Interactive Air Traffic Control Canvas -->
+<div class="relative w-full h-[620px] rounded-3xl bg-surface-container-lowest/90 border border-white/[0.06] overflow-hidden backdrop-blur-2xl shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]" id="radarStage">
+<!-- Tactical Polar Radar Rings & Coordinates -->
+<svg class="absolute inset-0 w-full h-full pointer-events-none opacity-40" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<radialgradient cx="48%" cy="46%" id="radarRadialGlow" r="50%">
+<stop offset="0%" stop-color="#d17ba9" stop-opacity="0.10"></stop>
+<stop offset="50%" stop-color="#4b1ec9" stop-opacity="0.04"></stop>
+<stop offset="100%" stop-color="#0e0e13" stop-opacity="0"></stop>
+</radialgradient>
+<pattern height="44" id="radarGridPattern" patternunits="userSpaceOnUse" width="44">
+<path d="M 44 0 L 0 0 0 44" fill="none" stroke="rgba(255, 255, 255, 0.03)" stroke-width="0.75"></path>
+</pattern>
+</defs>
+<rect fill="url(#radarGridPattern)" height="100%" width="100%"></rect>
+<rect fill="url(#radarRadialGlow)" height="100%" width="100%"></rect>
+<!-- Concentric Range Rings centered on Belgaum Hub (48%, 46%) -->
+<circle cx="48%" cy="46%" fill="none" r="90" stroke="rgba(209, 123, 169, 0.16)" stroke-dasharray="3 6"></circle>
+<circle cx="48%" cy="46%" fill="none" r="190" stroke="rgba(255, 255, 255, 0.07)" stroke-dasharray="3 7"></circle>
+<circle cx="48%" cy="46%" fill="none" r="310" stroke="rgba(255, 255, 255, 0.035)"></circle>
+<!-- Crosshair Axes -->
+<line stroke="rgba(255, 255, 255, 0.03)" stroke-dasharray="4 8" x1="48%" x2="48%" y1="0%" y2="100%"></line>
+<line stroke="rgba(255, 255, 255, 0.03)" stroke-dasharray="4 8" x1="0%" x2="100%" y1="46%" y2="46%"></line>
+</svg>
+<!-- Geographic HUD Coordinate Watermarks -->
+<div class="absolute top-4 left-6 pointer-events-none flex flex-col gap-0.5 z-10">
+<span class="text-[11px] text-text-subtle tracking-widest font-mono">SECTOR: KA-NORTH / WESTERN CORRIDOR</span>
+<span class="text-[10px] text-text-subtle/80 font-mono">LAT: 15.8497° N · LON: 74.4977° E</span>
+</div>
+<div class="absolute top-4 right-6 pointer-events-none flex items-center gap-2.5 z-10">
+<span class="text-[11px] text-text-subtle font-mono tracking-wider">RADAR SENSITIVITY: HI-RES [OPTIMAL]</span>
+<span class="inline-block w-2 h-2 rounded-full bg-tertiary shadow-[0_0_8px_#42e18d]"></span>
+</div>
+<!-- Active Vector Arcs & Particle Packet Stream -->
+<!-- Node Coords:
+     Tier-1 Pune:   (16%, 22%)  = approx (160, 136) in 1000x620 viewbox
+     Belgaum Hub:   (48%, 46%)  = approx (480, 285)
+     Gokak Depot:   (80%, 25%)  = approx (800, 155)
+     Hubli Depot:   (56%, 76%)  = approx (560, 471)
+-->
+<svg class="absolute inset-0 w-full h-full pointer-events-none z-10" id="vectorRoutesLayer" preserveaspectratio="none" viewbox="0 0 1000 620" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<lineargradient id="gradPuneBelgaum" x1="0%" x2="100%" y1="0%" y2="100%">
+<stop offset="0%" stop-color="#cabeff" stop-opacity="0.8"></stop>
+<stop offset="100%" stop-color="#d17ba9" stop-opacity="0.5"></stop>
+</lineargradient>
+<lineargradient id="gradBelgaumGokak" x1="0%" x2="100%" y1="100%" y2="0%">
+<stop offset="0%" stop-color="#ffafd7" stop-opacity="0.95"></stop>
+<stop offset="100%" stop-color="#ffb4ab" stop-opacity="0.95"></stop>
+</lineargradient>
+<lineargradient id="gradHubliGokak" x1="0%" x2="100%" y1="100%" y2="0%">
+<stop offset="0%" stop-color="#42e18d" stop-opacity="0.75"></stop>
+<stop offset="100%" stop-color="#ffb4ab" stop-opacity="0.5"></stop>
+</lineargradient>
+<filter height="250%" id="glowPacket" width="250%" x="-75%" y="-75%">
+<fegaussianblur in="SourceGraphic" result="blur" stddeviation="3"></fegaussianblur>
+<femerge>
+<femergenode in="blur"></femergenode>
+<femergenode in="SourceGraphic"></femergenode>
+</femerge>
+</filter>
+</defs>
+<!-- Route 1: Pune OEM -> Belgaum Hub (Inbound OEM PO) -->
+<path d="M 160 136 Q 300 200, 480 285" fill="none" id="pathPuneBelgaum" opacity="0.65" stroke="url(#gradPuneBelgaum)" stroke-dasharray="4 6" stroke-width="1.75"></path>
+<!-- Route 2: Belgaum Hub -> Gokak Depot (Active Rebalance Corridor) -->
+<path d="M 480 285 Q 630 200, 800 155" fill="none" id="pathBelgaumGokak" stroke="url(#gradBelgaumGokak)" stroke-width="2.5"></path>
+<!-- Route 3: Hubli Depot -> Gokak Depot (Southern Cross-dock Support) -->
+<path d="M 560 471 Q 700 340, 800 155" fill="none" id="pathHubliGokak" opacity="0.55" stroke="url(#gradHubliGokak)" stroke-dasharray="4 6" stroke-width="1.5"></path>
+<!-- Animated Transfer Packets -->
+<!-- Belgaum -> Gokak: Active rebalance transfer (SKU-101 Brake Drums) -->
+<circle fill="#ffafd7" filter="url(#glowPacket)" r="5">
+<animatemotion dur="4.2s" keypoints="0;1" keytimes="0;1" path="M 480 285 Q 630 200, 800 155" repeatcount="indefinite"></animatemotion>
+</circle>
+<circle fill="#ffafd7" opacity="0.3" r="10">
+<animatemotion dur="4.2s" keypoints="0;1" keytimes="0;1" path="M 480 285 Q 630 200, 800 155" repeatcount="indefinite"></animatemotion>
+</circle>
+<!-- Pune OEM -> Belgaum: Inbound PO Commercial Alternator -->
+<circle fill="#cabeff" filter="url(#glowPacket)" r="4">
+<animatemotion dur="6.8s" path="M 160 136 Q 300 200, 480 285" repeatcount="indefinite"></animatemotion>
+</circle>
+<!-- Hubli -> Gokak: Cross-dock support transfer -->
+<circle fill="#42e18d" filter="url(#glowPacket)" r="3.5">
+<animatemotion dur="5.6s" path="M 560 471 Q 700 340, 800 155" repeatcount="indefinite"></animatemotion>
+</circle>
+</svg>
+<!-- FLOATING ROUTE CALLOUT LABELS (Spatially isolated to prevent any text overlaps) -->
+<!-- Vector Label 1: Pune -> Belgaum Trajectory (Positioned along upper left arc) -->
+<div class="absolute left-[30%] top-[25%] -translate-x-1/2 -translate-y-1/2 pointer-events-auto z-20">
+<div class="px-3 py-1 rounded-full bg-surface-container/90 border border-white/10 backdrop-blur-md flex items-center gap-2 shadow-lg hover:border-secondary/50 transition-all cursor-pointer">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+<span class="text-[11px] text-secondary-fixed-dim font-mono font-medium">PO-9912 Alternator (OEM)</span>
+<span class="text-[10px] text-text-subtle font-mono">Inbound</span>
+</div>
+</div>
+<!-- Vector Label 2: Belgaum -> Gokak Rebalance Route (Positioned cleanly midway along curve) -->
+<div class="absolute left-[64%] top-[30%] -translate-x-1/2 -translate-y-1/2 pointer-events-auto z-20">
+<div class="px-3.5 py-1.5 rounded-full bg-surface-container/95 border border-primary/30 backdrop-blur-md flex items-center gap-2 shadow-[0_8px_24px_rgba(0,0,0,0.5)] hover:border-primary transition-all cursor-pointer">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+<span class="text-[12px] text-primary font-mono font-medium">TRF-402: SKU-101 Brake Drums</span>
+<span class="text-[11px] text-text-subtle font-mono border-l border-white/10 pl-2">42km to dest</span>
+</div>
+</div>
+<!-- SPATIAL NODES -->
+<!-- NODE 1: TIER-1 OEM SUPPLIERS (Pune Axis - Left Top: 16%, 22%) -->
+<div class="absolute left-[16%] top-[22%] -translate-x-1/2 -translate-y-1/2 flex flex-col items-center group cursor-pointer z-30" onclick="showNodeDetail('Pune Tier-1 OEM Gateway', 'Manufacturer dispatch corridor with commercial telemetry tracking PO-9912.', 'Direct Procurement', 'text-secondary')">
+<div class="relative w-12 h-12 rounded-2xl bg-surface-container-high/90 border border-secondary/30 p-1 flex items-center justify-center group-hover:scale-105 group-hover:border-secondary transition-transform shadow-xl">
+<div class="w-full h-full rounded-xl bg-[#1b172a] flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-[22px]">factory</span>
+</div>
+<div class="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-secondary flex items-center justify-center ring-2 ring-surface-container-lowest">
+<span class="w-1 h-1 rounded-full bg-surface-container-lowest"></span>
+</div>
+</div>
+<!-- Clean Dedicated Callout -->
+<div class="mt-2 px-3 py-1.5 rounded-xl bg-surface-container/90 border border-white/10 backdrop-blur-xl shadow-lg flex flex-col items-center text-center">
+<div class="flex items-center gap-1.5">
+<span class="text-[13px] font-medium text-text-primary leading-none">Tier-1 Suppliers</span>
+<span class="text-[10px] text-secondary font-mono font-semibold px-1 py-0.5 rounded bg-secondary/15">PUNE</span>
+</div>
+<span class="text-[11px] text-text-muted mt-1 font-mono">PO-9912 Dispatched</span>
+</div>
+</div>
+<!-- NODE 2: BELGAUM CENTRAL HUB (Primary Western Hub: 48%, 46%) -->
+<div class="absolute left-[48%] top-[46%] -translate-x-1/2 -translate-y-1/2 flex flex-col items-center group cursor-pointer z-30" onclick="showNodeDetail('Belgaum Central Hub', 'Surplus inventory buffer reallocating ₹142,500 idle capital to Northern corridor.', 'Optimal Surplus', 'text-primary')">
+<!-- Ambient Ping Aura -->
+<div class="absolute w-28 h-28 -inset-7 rounded-full bg-primary/15 blur-xl pointer-events-none group-hover:bg-primary/25 transition-all"></div>
+<!-- Center Pill/Circle Node -->
+<div class="relative w-14 h-14 rounded-2xl bg-gradient-to-tr from-surface-container to-surface-container-high border border-primary/40 p-1 shadow-2xl transition-transform duration-300 group-hover:scale-110 flex items-center justify-center">
+<div class="w-full h-full rounded-xl bg-gradient-to-br from-[#4d223a] to-[#24121d] flex items-center justify-center text-primary shadow-inner">
+<span class="material-symbols-outlined text-[24px]">hub</span>
+</div>
+<div class="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-primary flex items-center justify-center ring-2 ring-surface-container-lowest shadow-[0_0_8px_#ffafd7]">
+<span class="w-1.5 h-1.5 rounded-full bg-on-primary"></span>
+</div>
+</div>
+<!-- Clean Separated Metadata Card -->
+<div class="mt-2.5 px-3.5 py-2 rounded-2xl bg-surface-container/95 border border-primary/25 backdrop-blur-xl shadow-2xl flex flex-col items-center text-center transition-all group-hover:border-primary/40">
+<div class="flex items-center gap-1.5">
+<span class="text-[14px] font-semibold text-text-primary leading-tight">Belgaum Hub</span>
+<span class="text-[10px] text-primary font-mono font-semibold px-1.5 py-0.2 rounded bg-primary/20">PRIMARY HUB</span>
+</div>
+<div class="flex items-center gap-2 mt-1.5 text-[11px]">
+<span class="text-text-muted">Excess: <span class="text-primary font-mono font-medium">₹142,500</span></span>
+<span class="w-1 h-1 rounded-full bg-text-subtle"></span>
+<span class="text-tertiary font-medium">1 Active Outbound Transfer</span>
+</div>
+</div>
+</div>
+<!-- NODE 3: GOKAK REGIONAL DEPOT (Critical Shortage / Top Right: 80%, 25%) -->
+<div class="absolute left-[80%] top-[25%] -translate-x-1/2 -translate-y-1/2 flex flex-col items-center group cursor-pointer z-30" onclick="showNodeDetail('Gokak Regional Depot', 'Depot is operating at 1.5-day safety threshold. 2 emergency vector transfers en route.', 'Critical Shortage / 1.5d Buffer', 'text-error')">
+<!-- Alarm Glow -->
+<div class="absolute w-28 h-28 -inset-7 rounded-full bg-error/20 blur-xl pointer-events-none animate-pulse"></div>
+<!-- Pulsing Node Pill -->
+<div class="relative w-13 h-13 rounded-2xl bg-surface-container-high border border-error/50 p-1 shadow-2xl transition-transform duration-300 group-hover:scale-110 flex items-center justify-center">
+<div class="w-full h-full rounded-xl bg-gradient-to-tr from-[#3f1618] to-[#250d0f] flex items-center justify-center text-error shadow-inner">
+<span class="material-symbols-outlined text-[24px]">warning</span>
+</div>
+<span class="absolute -top-1 -right-1 flex h-3.5 w-3.5">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-error opacity-75"></span>
+<span class="relative inline-flex rounded-full h-3.5 w-3.5 bg-error ring-2 ring-surface-container-lowest"></span>
+</span>
+</div>
+<!-- Clean Gokak Depot Card with Non-Colliding Layout -->
+<div class="mt-2.5 px-4 py-2.5 rounded-2xl bg-surface-container/95 border border-error/35 backdrop-blur-xl shadow-2xl flex flex-col items-start w-52 transition-all group-hover:border-error/60">
+<div class="flex items-center justify-between w-full">
+<span class="text-[14px] font-semibold text-error leading-tight">Gokak Depot</span>
+<span class="text-[10px] text-error font-mono font-semibold px-2 py-0.5 rounded-full bg-error/15 border border-error/20">1.5d BUFFER</span>
+</div>
+<div class="mt-1.5 flex flex-col gap-0.5 w-full border-t border-white/5 pt-1.5">
+<div class="flex items-center justify-between text-[11px]">
+<span class="text-text-muted">Status:</span>
+<span class="text-error font-medium">Critical Shortage</span>
+</div>
+<div class="flex items-center justify-between text-[11px]">
+<span class="text-text-muted">Inbound:</span>
+<span class="text-text-primary font-mono font-medium">2 Shipments En Route</span>
+</div>
+</div>
+</div>
+</div>
+<!-- NODE 4: HUBLI CROSS-DOCK DEPOT (Bottom Axis: 56%, 76%) -->
+<div class="absolute left-[56%] top-[76%] -translate-x-1/2 -translate-y-1/2 flex flex-col items-center group cursor-pointer z-30" onclick="showNodeDetail('Hubli Cross-Dock Depot', 'Healthy equilibrium. Acting as synthetic relief gateway for Northern spillover.', 'Nominal Cross-Dock', 'text-tertiary')">
+<div class="relative w-12 h-12 rounded-2xl bg-surface-container-high border border-tertiary/40 p-1 shadow-xl transition-transform duration-300 group-hover:scale-105 flex items-center justify-center">
+<div class="w-full h-full rounded-xl bg-gradient-to-br from-[#12281d] to-[#0c1a13] flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined text-[22px]">swap_horiz</span>
+</div>
+<div class="absolute -bottom-1 -right-1 w-3 h-3 rounded-full bg-tertiary ring-2 ring-surface-container-lowest"></div>
+</div>
+<!-- Clean Hubli Label -->
+<div class="mt-2 px-3.5 py-2 rounded-xl bg-surface-container/90 border border-white/10 backdrop-blur-xl shadow-xl flex flex-col items-center text-center">
+<div class="flex items-center gap-1.5">
+<span class="text-[13px] font-medium text-text-primary leading-none">Hubli Depot</span>
+<span class="text-[10px] text-tertiary font-mono font-semibold px-1.5 py-0.5 rounded bg-tertiary/15">14.0d BUFFER</span>
+</div>
+<span class="text-[11px] text-text-muted mt-1">Status: Nominal Cross-Dock</span>
+</div>
+</div>
+<!-- Live Telemetry Legend (Bottom Left Corner) -->
+<div class="absolute bottom-4 left-6 pointer-events-none hidden md:flex items-center gap-4 z-20">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-1 rounded-full bg-primary"></span>
+<span class="text-[11px] text-text-subtle font-medium">Rebalance Flow</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-1 rounded-full bg-secondary"></span>
+<span class="text-[11px] text-text-subtle font-medium">OEM Inbound</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-1 rounded-full bg-tertiary"></span>
+<span class="text-[11px] text-text-subtle font-medium">Nominal Buffer</span>
+</div>
+</div>
+<!-- Floating Glassmorphic Telemetry Pill (Center Bottom Anchor - Clean Padding & No Overlap) -->
+<div class="absolute bottom-4 left-1/2 -translate-x-1/2 z-30 w-auto max-w-[95%]">
+<div class="px-6 py-2.5 rounded-full bg-surface-container/90 border border-white/10 backdrop-blur-2xl shadow-[0_16px_40px_rgba(0,0,0,0.7)] flex items-center gap-5 md:gap-7 transition-all">
+<!-- Metric 1 -->
+<div class="flex items-center gap-2">
+<span class="text-[11px] text-text-muted uppercase tracking-wider font-medium">Active Routes</span>
+<span class="text-[13px] text-text-primary font-semibold font-mono">3</span>
+</div>
+<div class="h-3 w-px bg-white/10"></div>
+<!-- Metric 2 -->
+<div class="flex items-center gap-2">
+<span class="text-[11px] text-text-muted uppercase tracking-wider font-medium">Fleet In-Transit</span>
+<span class="text-[13px] text-primary font-mono font-semibold">₹14,250</span>
+</div>
+<div class="h-3 w-px bg-white/10 hidden sm:block"></div>
+<!-- Metric 3 -->
+<div class="hidden sm:flex items-center gap-2">
+<span class="text-[11px] text-text-muted uppercase tracking-wider font-medium">Efficiency</span>
+<span class="text-[13px] text-tertiary font-mono font-semibold">94%</span>
+</div>
+<div class="h-3 w-px bg-white/10 hidden lg:block"></div>
+<!-- Metric 4 -->
+<div class="hidden lg:flex items-center gap-2">
+<span class="text-[11px] text-text-muted uppercase tracking-wider font-medium">Auto-Reroutes</span>
+<span class="text-[13px] text-secondary-fixed-dim font-mono font-semibold">2</span>
+</div>
+<!-- Sim Speed Toggle -->
+<div class="flex items-center gap-1.5 pl-1">
+<button class="px-2.5 py-0.5 rounded-full bg-surface-container-high/80 border border-white/10 hover:bg-surface-container-highest transition-colors text-[11px] text-text-primary font-mono font-medium" id="simSpeedBtn">1.0x</button>
+</div>
+</div>
+</div>
+<!-- Interactive Slide-Up Node Inspection Modal -->
+<div class="hidden absolute top-16 right-6 z-40 w-80 p-4 rounded-2xl bg-surface-container/95 border border-white/15 backdrop-blur-2xl shadow-2xl transition-all duration-300" id="nodeDetailDrawer">
+<div class="flex items-start justify-between">
+<div class="flex flex-col">
+<span class="text-[15px] font-semibold text-text-primary" id="drawerTitle">Node Details</span>
+<span class="text-[11px] font-mono mt-0.5 font-medium" id="drawerStatus">Status Active</span>
+</div>
+<button class="w-6 h-6 rounded-full bg-surface-container-high flex items-center justify-center text-text-muted hover:text-white transition-colors" onclick="closeNodeDetail()">
+<span class="material-symbols-outlined text-[15px]">close</span>
+</button>
+</div>
+<p class="text-[12px] text-text-muted mt-2.5 leading-relaxed" id="drawerDesc">Detailed node telemetry.</p>
+<div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between">
+<span class="text-[11px] text-text-subtle font-mono uppercase">Topology Vector</span>
+<button class="px-3 py-1 rounded-full bg-primary/20 text-primary text-[11px] font-medium hover:bg-primary/30 transition-colors">Inspect Live Fleet</button>
+</div>
+</div>
+</div>
+<!-- Client-side Interactive Topology Logic -->
+<script>
+    (function initNetworkTopology() {
+      // Node Inspection Drawer
+      window.showNodeDetail = function(title, desc, status, statusColorClass) {
+        const drawer = document.getElementById('nodeDetailDrawer');
+        if (!drawer) return;
+        document.getElementById('drawerTitle').textContent = title;
+        document.getElementById('drawerDesc').textContent = desc;
+        const statusEl = document.getElementById('drawerStatus');
+        statusEl.textContent = status;
+        statusEl.className = 'text-[11px] font-mono mt-0.5 font-medium ' + statusColorClass;
+        drawer.classList.remove('hidden');
+      };
+
+      window.closeNodeDetail = function() {
+        const drawer = document.getElementById('nodeDetailDrawer');
+        if (drawer) drawer.classList.add('hidden');
+      };
+
+      // Header Mode Buttons
+      const topoBtn = document.getElementById('viewTopologyBtn');
+      const corridorBtn = document.getElementById('viewCorridorsBtn');
+      const fleetBtn = document.getElementById('viewFleetBtn');
+      const buttons = [topoBtn, corridorBtn, fleetBtn];
+
+      buttons.forEach(btn => {
+        if (!btn) return;
+        btn.addEventListener('click', () => {
+          buttons.forEach(b => {
+            b.className = 'px-3.5 py-1 rounded-full text-[13px] text-text-muted hover:text-white transition-all';
+          });
+          btn.className = 'px-3.5 py-1 rounded-full text-[13px] bg-white text-surface-container-lowest font-medium transition-all shadow-sm';
+        });
+      });
+
+      // Simulation Speed Toggle Micro-interaction
+      const speedBtn = document.getElementById('simSpeedBtn');
+      let currentSpeedIndex = 0;
+      const speeds = ['1.0x', '2.0x', '4.0x'];
+      if (speedBtn) {
+        speedBtn.addEventListener('click', () => {
+          currentSpeedIndex = (currentSpeedIndex + 1) % speeds.length;
+          speedBtn.textContent = speeds[currentSpeedIndex];
+        });
+      }
+    })();
+  </script>
+</div>
+</main>
+</div>
+<script>
+  (function initUnifiedHeader() {
+    const notifBtn = document.getElementById('btn-notifications');
+    const notifDropdown = document.getElementById('notif-dropdown');
+    const notifContainer = document.getElementById('notification-container');
+    
+    const profileBtn = document.getElementById('btn-profile');
+    const profileDropdown = document.getElementById('profile-dropdown');
+    const profileContainer = document.getElementById('profile-container');
+    
+    if (notifBtn && notifDropdown && notifContainer) {
+      notifBtn.addEventListener('click', (e) => {
+        notifDropdown.classList.toggle('hidden');
+        if (profileDropdown && !profileDropdown.classList.contains('hidden')) {
+          profileDropdown.classList.add('hidden');
+        }
+        e.stopPropagation(); 
+        const dot = notifBtn.querySelector('span.bg-red-500');
+        if (dot) {
+          dot.classList.remove('bg-red-500', 'animate-pulse');
+          dot.classList.add('bg-text-subtle');
+        }
+      });
+    }
+
+    if (profileBtn && profileDropdown && profileContainer) {
+      profileBtn.addEventListener('click', (e) => {
+        profileDropdown.classList.toggle('hidden');
+        if (notifDropdown && !notifDropdown.classList.contains('hidden')) {
+          notifDropdown.classList.add('hidden');
+        }
+        e.stopPropagation();
+      });
+    }
+
+    document.addEventListener('click', (e) => {
+      if (notifContainer && notifDropdown && !notifContainer.contains(e.target)) {
+        notifDropdown.classList.add('hidden');
+      }
+      if (profileContainer && profileDropdown && !profileContainer.contains(e.target)) {
+        profileDropdown.classList.add('hidden');
+      }
+    });
+
+    document.querySelectorAll('.profile-action-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation(); 
+        const actionText = btn.getAttribute('data-action');
+        alert(actionText);
+        if (profileDropdown) profileDropdown.classList.add('hidden');
+      });
+    });
+  })();
+</script>
+</body></html>
