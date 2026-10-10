@@ -291,7 +291,7 @@
 </div>
 </div>
 <!-- Export Button -->
-<button class="flex items-center gap-2 px-4 py-2 rounded-full bg-surface-container-low hover:bg-white/[0.08] text-text-primary text-label-md font-medium border border-white/[0.08] transition-all shadow-sm">
+<button id="btnExportCsv" class="flex items-center gap-2 px-4 py-2 rounded-full bg-surface-container-low hover:bg-white/[0.08] text-text-primary text-label-md font-medium border border-white/[0.08] transition-all shadow-sm">
 <span class="material-symbols-outlined text-[17px] text-text-muted">download</span>
 <span>Export CSV</span>
 </button>
@@ -393,9 +393,9 @@
 <!-- Left: Filter Pills Segmented -->
 <div class="flex flex-wrap items-center gap-2">
 <!-- Depot Filter Dropdown / Pills -->
-<div class="flex items-center gap-1 p-1 bg-surface-container-lowest/80 rounded-full border border-white/[0.06]">
+<div id="depotFiltersContainer" class="flex items-center gap-1 p-1 bg-surface-container-lowest/80 rounded-full border border-white/[0.06] overflow-x-auto max-w-full">
 <button class="depot-filter px-3 py-1 text-label-md rounded-full bg-white text-surface-container-lowest font-semibold shadow-sm transition-all" data-depot="all">
-          All Depots (3)
+          All Depots
         </button>
 <button class="depot-filter px-3 py-1 text-label-md rounded-full text-text-muted hover:text-white transition-all font-medium" data-depot="gokak">
           Gokak
@@ -553,6 +553,33 @@
           if (el('filter-healthy-count')) el('filter-healthy-count').textContent = `Healthy (${healthySkus})`;
           if (el('filter-excess-count')) el('filter-excess-count').textContent = `Excess (${excessSkus})`;
           if (el('pagination-text')) el('pagination-text').textContent = `1-${totalSkus} of ${totalSkus}`;
+          
+          // Dynamically populate depot filters
+          const depotContainer = document.getElementById('depotFiltersContainer');
+          if (depotContainer) {
+            const rawDepots = [...new Set(data.reconciled.map(i => i.depot))].sort();
+            const depotList = ['all', ...rawDepots];
+            depotContainer.innerHTML = depotList.map(d => {
+              const isAll = d === 'all';
+              const label = isAll ? `All Depots (${rawDepots.length})` : d;
+              const isActive = d.toLowerCase() === currentDepot.toLowerCase();
+              const cls = isActive
+                ? 'depot-filter px-3 py-1 text-label-md rounded-full bg-white text-surface-container-lowest font-semibold shadow-sm transition-all whitespace-nowrap'
+                : 'depot-filter px-3 py-1 text-label-md rounded-full text-text-muted hover:text-white transition-all font-medium whitespace-nowrap';
+              return `<button class="${cls}" data-depot="${d.toLowerCase()}">${label}</button>`;
+            }).join('');
+
+            depotContainer.querySelectorAll('.depot-filter').forEach(btn => {
+              btn.addEventListener('click', () => {
+                depotContainer.querySelectorAll('.depot-filter').forEach(b => {
+                  b.className = 'depot-filter px-3 py-1 text-label-md rounded-full text-text-muted hover:text-white transition-all font-medium whitespace-nowrap';
+                });
+                btn.className = 'depot-filter px-3 py-1 text-label-md rounded-full bg-white text-surface-container-lowest font-semibold shadow-sm transition-all whitespace-nowrap';
+                currentDepot = btn.getAttribute('data-depot');
+                applyFilters();
+              });
+            });
+          }
           
           data.reconciled.forEach(item => {
               const status = item.status || 'HEALTHY';
@@ -712,6 +739,67 @@
           }, 600);
         });
       });
+
+      // Export CSV functionality
+      const exportBtn = document.getElementById('btnExportCsv');
+      if (exportBtn) {
+        exportBtn.addEventListener('click', () => {
+          const rows = document.querySelectorAll('#matrixTableBody tr.matrix-row');
+          if (!rows || rows.length === 0) {
+            alert('No inventory records found to export.');
+            return;
+          }
+
+          const exportRows = [];
+          rows.forEach(row => {
+            if (row.style.display !== 'none') {
+              const sku = row.getAttribute('data-sku') || '';
+              const depot = row.getAttribute('data-depot') || '';
+              const status = row.getAttribute('data-status') || '';
+              const cells = row.querySelectorAll('td');
+              const stock = cells[1] ? (cells[1].querySelector('.font-numeric-card')?.textContent.trim() || cells[1].textContent.trim().split(' ')[0]) : '';
+              const velocity = cells[2] ? cells[2].textContent.trim().replace(/\s+/g, ' ') : '';
+              const pipeline = cells[3] ? cells[3].textContent.trim().replace(/\s+/g, ' ') : '';
+              const runout = cells[4] ? cells[4].textContent.trim().replace(/\s+/g, ' ') : '';
+
+              exportRows.push([
+                `"${sku.replace(/"/g, '""')}"`,
+                `"${depot.toUpperCase().replace(/"/g, '""')}"`,
+                `"${stock.replace(/"/g, '""')}"`,
+                `"${velocity.replace(/"/g, '""')}"`,
+                `"${pipeline.replace(/"/g, '""')}"`,
+                `"${runout.replace(/"/g, '""')}"`,
+                `"${status.replace(/"/g, '""')}"`
+              ]);
+            }
+          });
+
+          if (exportRows.length === 0) {
+            alert('No matching inventory records to export for current filters.');
+            return;
+          }
+
+          const headers = ['SKU', 'Location / Depot', 'Current Stock (Units)', 'Daily Velocity', 'Pipeline / Incoming', 'Runout Projection', 'Health Status'];
+          const csvContent = '\uFEFF' + [headers.join(','), ...exportRows.map(r => r.join(','))].join('\r\n');
+          
+          const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          const timestamp = new Date().toISOString().slice(0, 10);
+          a.href = url;
+          a.download = `zyn_inventory_matrix_${timestamp}.csv`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+
+          const origContent = exportBtn.innerHTML;
+          exportBtn.innerHTML = '<span class="material-symbols-outlined text-[17px] text-tertiary">check_circle</span> <span class="text-tertiary font-semibold">Exported!</span>';
+          setTimeout(() => {
+            exportBtn.innerHTML = origContent;
+          }, 2000);
+        });
+      }
 
       loadInventoryData();
     })();

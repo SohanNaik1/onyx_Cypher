@@ -203,7 +203,8 @@ def chat_with_agent(req: ChatRequest):
         if "stock" in msg or "inventory" in msg:
             inventory = db_state.get("inventory", pd.DataFrame())
             if not inventory.empty:
-                total_stock = inventory['stock_qty'].sum()
+                stock_col = 'stock_qty' if 'stock_qty' in inventory.columns else 'stock'
+                total_stock = int(inventory[stock_col].sum())
                 return {"response": f"The total stock across all locations is {total_stock} units. (Add GEMINI_API_KEY to .env for full LLM capabilities)."}
             return {"response": "Inventory data is currently empty."}
             
@@ -221,9 +222,12 @@ def chat_with_agent(req: ChatRequest):
         
         context = "Current Database Context:\n"
         if not inventory_df.empty:
-            context += f"Inventory Data:\n{inventory_df.to_markdown()}\n\n"
+            stock_col = 'stock_qty' if 'stock_qty' in inventory_df.columns else 'stock'
+            total_stock = int(inventory_df[stock_col].sum())
+            context += f"Total Inventory: {total_stock} units across {len(inventory_df)} SKU-locations.\n"
+            context += f"Inventory Sample:\n{inventory_df.head(25).to_markdown()}\n\n"
         if not po_df.empty:
-            context += f"Purchase Orders Data:\n{po_df.to_markdown()}\n\n"
+            context += f"Purchase Orders Data:\n{po_df.head(25).to_markdown()}\n\n"
             
         system_instruction = "You are Onyx, a supply chain assistant. Use the provided database context to answer questions. You MUST use VERY simple words, explain things as if to a beginner, and avoid complex jargon. Keep your responses EXTREMELY short (1-2 sentences maximum). Do NOT write huge paragraphs."
         

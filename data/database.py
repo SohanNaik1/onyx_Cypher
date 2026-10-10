@@ -45,10 +45,48 @@ def seed_supabase(mock_data: dict):
             supabase.table(table_name).insert(records).execute()
             print(f"Successfully seeded {len(records)} records into '{table_name}' table.")
 
-def fetch_state_from_supabase() -> dict:
-    if not supabase:
-        print("Supabase client not initialized. Cannot fetch data.")
+def load_kdgarage_local() -> dict:
+    kd_dir = os.path.join(os.path.dirname(__file__), "kdgarage")
+    if not os.path.exists(kd_dir):
         return {}
+        
+    data = {}
+    if os.path.exists(os.path.join(kd_dir, "products.csv")):
+        df = pd.read_csv(os.path.join(kd_dir, "products.csv"))
+        data['products'] = df.rename(columns={"product_name": "name"})
+        
+    if os.path.exists(os.path.join(kd_dir, "inventory.csv")):
+        df = pd.read_csv(os.path.join(kd_dir, "inventory.csv"))
+        data['inventory'] = df.rename(columns={"stock": "stock_qty"})
+        
+    if os.path.exists(os.path.join(kd_dir, "purchase_orders.csv")):
+        df = pd.read_csv(os.path.join(kd_dir, "purchase_orders.csv"))
+        data['purchase_orders'] = df.rename(columns={"po": "po_id", "supplier": "supplier_id"})
+        
+    if os.path.exists(os.path.join(kd_dir, "sales.csv")):
+        df = pd.read_csv(os.path.join(kd_dir, "sales.csv"))
+        df['date'] = pd.to_datetime(df['date']).dt.date
+        data['sales'] = df
+        
+    if os.path.exists(os.path.join(kd_dir, "suppliers.csv")):
+        df = pd.read_csv(os.path.join(kd_dir, "suppliers.csv"))
+        data['suppliers'] = df.rename(columns={"supplier": "supplier_id", "price": "unit_price"})
+        
+    data['messages'] = pd.DataFrame([
+        {"timestamp": pd.to_datetime("2026-11-15T08:30:00"), "location": "Gokak", "message_text": "Supervisor alert: 15 units of FLT-1021 damaged at Gokak storage yard."}
+    ])
+    return data
+
+def fetch_state_from_supabase() -> dict:
+    if os.environ.get("DATA_SOURCE", "").upper() == "LOCAL":
+        local_data = load_kdgarage_local()
+        if local_data:
+            print("Loaded KD Garage dataset directly from local files.")
+            return local_data
+
+    if not supabase:
+        print("Supabase client not initialized. Falling back to local dataset.")
+        return load_kdgarage_local()
         
     mock_data = {}
     tables = ['products', 'inventory', 'sales', 'suppliers', 'purchase_orders', 'messages']

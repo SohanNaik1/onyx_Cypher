@@ -57,7 +57,10 @@ def make_decisions(triage_df: pd.DataFrame, all_reconciled_df: pd.DataFrame, sup
         sku_suppliers = suppliers_df[suppliers_df['sku'] == sku]
         if not sku_suppliers.empty:
             sku_suppliers = sku_suppliers.copy()
-            sku_suppliers['total_cost'] = sku_suppliers['unit_price'] * sku_suppliers['moq']
+            price_col = 'unit_price' if 'unit_price' in sku_suppliers.columns else 'price'
+            supplier_id_col = 'supplier_id' if 'supplier_id' in sku_suppliers.columns else 'supplier'
+            
+            sku_suppliers['total_cost'] = sku_suppliers[price_col] * sku_suppliers['moq']
             
             # Prioritize survival: lead_time_days <= runout_days
             valid_suppliers = sku_suppliers[sku_suppliers['lead_time_days'] <= runout_days]
@@ -72,13 +75,14 @@ def make_decisions(triage_df: pd.DataFrame, all_reconciled_df: pd.DataFrame, sup
             qty = int(best_supplier['moq'])
             cost = float(best_supplier['total_cost'])
             lead_time = int(best_supplier['lead_time_days'])
+            supplier_name = str(best_supplier[supplier_id_col])
             
-            rationale = f"Selected faster supplier to prevent imminent stockout (Runout: {runout_days:.1f} days vs Lead Time: {lead_time} days), despite higher unit cost."
+            rationale = f"Selected faster supplier {supplier_name} to prevent imminent stockout (Runout: {runout_days:.1f} days vs Lead Time: {lead_time} days), despite higher unit cost."
             
             decision = {
                 "action_type": "PURCHASE_ORDER",
                 "sku": sku,
-                "from": best_supplier['supplier_id'],
+                "from": supplier_name,
                 "to": loc,
                 "quantity": qty,
                 "estimated_cost": cost,
