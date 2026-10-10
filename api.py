@@ -145,6 +145,10 @@ def serve_inventory_html():
 def serve_network_html():
     return FileResponse("frontend/network.html")
 
+@app.get("/settings.html")
+def serve_settings_html():
+    return FileResponse("frontend/settings.html")
+
 class ChatRequest(BaseModel):
     message: str
 

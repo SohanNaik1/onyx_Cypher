@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>KD's Garage Operations - Settings</title>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="web_dashboard" name="shell-type"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries,typography"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          fontFamily: { sans: ["Geist", "sans-serif"] },
+          colors: {
+            background: "#0c0b11",
+            surface: "#14131b",
+            primary: "#d27da7",
+            "text-main": "#ffffff",
+            "text-muted": "#9696a0",
+            border: "#2a2933",
+            accent: { emerald: "#10b981", rose: "#f43f5e", amber: "#f59e0b", blue: "#3b82f6" },
+            error: "#ff4d4d",
+          },
+          boxShadow: {
+            glow: "0 0 20px -5px rgba(210, 125, 167, 0.4)",
+          }
+        },
+      },
+    };
+</script>
+<style>
+    body { background-color: #0c0b11; color: #ffffff; margin: 0; }
+    .glass-panel { background: rgba(20, 19, 27, 0.6); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.05); }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #2a2933; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #3d3c48; }
+</style>
+</head>
+<body class="h-screen w-full flex overflow-hidden antialiased selection:bg-primary/30">
+
+<!-- SIDEBAR (Fixed) -->
+<aside class="w-[240px] flex-shrink-0 flex flex-col h-full border-r border-white/[0.04] bg-[#0c0b11] relative z-20 hidden lg:flex">
+<div class="h-16 flex items-center px-6 border-b border-white/[0.02]">
+<div class="flex items-center gap-3">
+<div class="w-7 h-7 rounded-lg bg-gradient-to-br from-primary to-[#7a4861] flex items-center justify-center shadow-glow">
+<span class="material-symbols-outlined text-white text-[16px]">bolt</span>
+</div>
+<span class="font-semibold text-[15px] tracking-wide text-white">Onyx<span class="text-text-muted font-normal"> / Core</span></span>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto py-6 px-3 flex flex-col gap-6">
+<nav class="flex flex-col gap-1">
+<a class="nav-link flex items-center gap-3.5 px-4 py-2.5 rounded-full text-text-muted hover:text-white hover:bg-white/[0.04] transition-all text-[14px] font-normal" href="code.html">
+<span class="material-symbols-outlined text-[19px]">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="nav-link flex items-center gap-3.5 px-4 py-2.5 rounded-full text-text-muted hover:text-white hover:bg-white/[0.04] transition-all text-[14px] font-normal" href="interventions.html">
+<span class="material-symbols-outlined text-[19px]">notifications_active</span>
+<span>Interventions</span>
+</a>
+<a class="nav-link flex items-center gap-3.5 px-4 py-2.5 rounded-full text-text-muted hover:text-white hover:bg-white/[0.04] transition-all text-[14px] font-normal" href="telemetry.html">
+<span class="material-symbols-outlined text-[19px]">monitor_heart</span>
+<span>Telemetry</span>
+</a>
+<a class="nav-link flex items-center gap-3.5 px-4 py-2.5 rounded-full text-text-muted hover:text-white hover:bg-white/[0.04] transition-all text-[14px] font-normal" href="inventory.html">
+<span class="material-symbols-outlined text-[19px]">inventory_2</span>
+<span>Inventory</span>
+</a>
+<a class="nav-link flex items-center gap-3.5 px-4 py-2.5 rounded-full text-text-muted hover:text-white hover:bg-white/[0.04] transition-all text-[14px] font-normal" href="network.html">
+<span class="material-symbols-outlined text-[19px]">diversity_3</span>
+<span>Network</span>
+</a>
+</nav>
+</div>
+<!-- Bottom Pinned Settings & Status -->
+<div class="flex flex-col gap-2 pt-8 lg:pt-0 p-3">
+<a class="flex items-center gap-3.5 px-4 py-2.5 rounded-full bg-white/[0.06] text-white transition-all text-[14px]" href="settings.html">
+<span class="material-symbols-outlined text-[19px]">settings</span>
+<span>Settings</span>
+</a>
+<a class="flex items-center gap-3.5 px-4 py-2.5 rounded-full text-text-muted hover:text-white hover:bg-white/[0.04] transition-all text-[14px]" href="#">
+<span class="material-symbols-outlined text-[19px]">support_agent</span>
+<span>Support</span>
+</a>
+<div class="mt-4 px-4 flex items-center gap-2">
+<div class="w-1.5 h-1.5 rounded-full bg-accent-emerald animate-pulse"></div>
+<span class="text-[11px] font-medium text-text-muted uppercase tracking-wider">Fleet Mesh <span class="text-accent-emerald ml-1">99.98%</span></span>
+</div>
+</div>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main class="flex-1 flex flex-col h-full relative overflow-hidden bg-[#0c0b11]">
+  <!-- TOP NAV -->
+  <header class="h-16 flex items-center justify-between px-4 lg:px-8 border-b border-white/[0.02] bg-[#0c0b11]/80 backdrop-blur-md z-20">
+    <div class="flex items-center gap-4">
+      <h1 class="text-lg font-medium text-white hidden sm:block">System Settings</h1>
+    </div>
+    
+    <!-- Top Right Controls -->
+    <div class="flex items-center gap-3 relative">
+      <a href="/index.html" class="flex items-center gap-2 text-[13px] text-red-400 hover:text-red-300 font-medium px-3 py-1.5 rounded-full bg-red-500/10 hover:bg-red-500/20 transition-all cursor-pointer">
+        <span class="material-symbols-outlined text-[16px]">logout</span>
+        Secure Logout
+      </a>
+    </div>
+  </header>
+
+  <!-- SCROLLABLE CONTENT -->
+  <div class="flex-1 overflow-y-auto p-4 lg:p-8 scroll-smooth relative z-10">
+    <div class="max-w-4xl mx-auto space-y-8">
+      
+      <!-- General Settings Card -->
+      <section class="glass-panel rounded-2xl p-6 lg:p-8">
+        <div class="flex items-center gap-3 mb-6">
+          <div class="w-10 h-10 rounded-full bg-[#1b1a24] border border-white/[0.06] flex items-center justify-center text-primary">
+            <span class="material-symbols-outlined">person</span>
+          </div>
+          <div>
+            <h2 class="text-lg font-semibold text-white">Account Details</h2>
+            <p class="text-[13px] text-text-muted">Manage your operator credentials and profile.</p>
+          </div>
+        </div>
+        
+        <div class="space-y-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="space-y-2">
+              <label class="text-[12px] text-text-muted uppercase tracking-wider">Operator Name</label>
+              <input type="text" value="Ramesh Kumar" class="w-full bg-[#121118] border border-white/[0.08] rounded-xl px-4 py-2.5 text-[14px] text-white focus:outline-none focus:border-primary/50" />
+            </div>
+            <div class="space-y-2">
+              <label class="text-[12px] text-text-muted uppercase tracking-wider">Email Address</label>
+              <input type="email" value="ramesh@kdgarage.in" disabled class="w-full bg-[#121118] border border-white/[0.04] rounded-xl px-4 py-2.5 text-[14px] text-text-muted opacity-60 cursor-not-allowed focus:outline-none" />
+            </div>
+          </div>
+          <div class="space-y-2">
+            <label class="text-[12px] text-text-muted uppercase tracking-wider">Role / Clearance</label>
+            <div class="flex items-center gap-3 bg-[#121118] border border-white/[0.08] rounded-xl px-4 py-2.5">
+              <span class="w-2 h-2 rounded-full bg-accent-amber"></span>
+              <span class="text-[14px] text-white font-medium">Level 4 Supervisor</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="mt-8 pt-6 border-t border-white/[0.06] flex justify-end">
+          <button onclick="showToast('Profile updated successfully')" class="px-5 py-2 rounded-full bg-[#52233e] hover:bg-[#682c4f] border border-white/10 text-white text-[13px] font-medium transition-all shadow-sm cursor-pointer">Save Changes</button>
+        </div>
+      </section>
+
+      <!-- Autonomous Agent Config -->
+      <section class="glass-panel rounded-2xl p-6 lg:p-8">
+        <div class="flex items-center justify-between mb-6">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-[#1b1a24] border border-white/[0.06] flex items-center justify-center text-[#cabeff]">
+              <span class="material-symbols-outlined">smart_toy</span>
+            </div>
+            <div>
+              <h2 class="text-lg font-semibold text-white">Autonomous Agent (Onyx)</h2>
+              <p class="text-[13px] text-text-muted">Configure AI behavior and intervention thresholds.</p>
+            </div>
+          </div>
+          <!-- Toggle -->
+          <label class="relative inline-flex items-center cursor-pointer">
+            <input type="checkbox" value="" class="sr-only peer" checked>
+            <div class="w-11 h-6 bg-white/10 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+          </label>
+        </div>
+        
+        <div class="space-y-6">
+          <div class="flex items-center justify-between p-4 rounded-xl bg-[#121118] border border-white/[0.04]">
+            <div>
+              <p class="text-[14px] font-medium text-white">Auto-Approve Low Value Transfers</p>
+              <p class="text-[12px] text-text-muted mt-0.5">Let Onyx automatically approve inventory moves under ₹5,000</p>
+            </div>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" value="" class="sr-only peer">
+              <div class="w-11 h-6 bg-white/10 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+            </label>
+          </div>
+          <div class="flex items-center justify-between p-4 rounded-xl bg-[#121118] border border-white/[0.04]">
+            <div>
+              <p class="text-[14px] font-medium text-white">Strict Stockout Prevention</p>
+              <p class="text-[12px] text-text-muted mt-0.5">Prioritize stock availability over shipping costs</p>
+            </div>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" value="" class="sr-only peer" checked>
+              <div class="w-11 h-6 bg-white/10 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <!-- Danger Zone -->
+      <section class="glass-panel rounded-2xl p-6 lg:p-8 border border-red-500/20">
+        <h2 class="text-lg font-semibold text-red-400 mb-4">Danger Zone</h2>
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl bg-red-500/5 border border-red-500/10 gap-4">
+          <div>
+            <p class="text-[14px] font-medium text-white">Reset Database State</p>
+            <p class="text-[12px] text-text-muted mt-0.5">Wipes all current interventions and rolls back to standard baseline inventory.</p>
+          </div>
+          <button onclick="showToast('Database reset initiated. Reverting state...')" class="px-5 py-2 rounded-full bg-red-500/20 hover:bg-red-500/30 text-red-300 text-[13px] font-medium transition-all whitespace-nowrap cursor-pointer">Reset Database</button>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</main>
+
+<!-- Global Toast Container -->
+<div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2"></div>
+
+<script>
+  function showToast(msg) {
+    const container = document.getElementById('toast-container');
+    const toast = document.createElement('div');
+    toast.className = 'bg-[#1a1923] border border-white/10 text-white px-4 py-3 rounded-xl shadow-lg text-[13px] flex items-center gap-3 transform translate-y-2 opacity-0 transition-all duration-300';
+    toast.innerHTML = `
+      <span class="material-symbols-outlined text-primary text-[18px]">check_circle</span>
+      ${msg}
+    `;
+    container.appendChild(toast);
+    
+    // Animate in
+    requestAnimationFrame(() => {
+        toast.classList.remove('translate-y-2', 'opacity-0');
+    });
+
+    // Remove after 3s
+    setTimeout(() => {
+        toast.classList.add('opacity-0', 'scale-95');
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+  }
+</script>
+
+</body>
+</html>
