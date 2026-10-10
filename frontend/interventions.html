@@ -482,7 +482,7 @@
     
     async function loadInterventions() {
       try {
-        const res = await fetch('http://127.0.0.1:8000/api/triage');
+        const res = await fetch('/api/triage');
         const data = await res.json();
         currentInterventions = data.interventions || [];
         renderUI();
@@ -570,7 +570,7 @@
         btn.innerHTML = '<span class="material-symbols-outlined text-[14px] animate-spin">refresh</span> Processing';
         
         try {
-            const res = await fetch('http://127.0.0.1:8000/api/execute', {
+            const res = await fetch('/api/execute', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(item)
