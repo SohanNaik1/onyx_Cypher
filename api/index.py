@@ -54,6 +54,32 @@ def get_triage_decisions():
     
     messages_df = db_state.get('messages', pd.DataFrame())
     unlogged_alerts_parsed = not messages_df.empty
+    import numpy as np
+    # Build reconciled list for inventory page
+    all_reconciled = reconciled_df.copy()
+    all_reconciled['runout_days'] = np.where(
+        all_reconciled['daily_velocity'] > 0,
+        (all_reconciled['true_stock'] + all_reconciled['incoming_po_qty']) / all_reconciled['daily_velocity'],
+        999.0
+    )
+    conditions = [
+        all_reconciled['runout_days'] <= 3,
+        all_reconciled['runout_days'] > 45
+    ]
+    choices = ['CRITICAL', 'EXCESS']
+    all_reconciled['status'] = np.select(conditions, choices, default='HEALTHY')
+    
+    reconciled_list = []
+    for _, row in all_reconciled.iterrows():
+        reconciled_list.append({
+            "sku": row['sku'],
+            "depot": row['location'],
+            "actual_stock": int(row['true_stock']),
+            "velocity": float(row['daily_velocity']),
+            "pipeline": int(row['incoming_po_qty']),
+            "runout_days": float(row['runout_days']),
+            "status": row['status']
+        })
     
     return {
         "triage_summary": {
@@ -61,7 +87,8 @@ def get_triage_decisions():
             "excess_items_count": excess_count,
             "unlogged_alerts_parsed": unlogged_alerts_parsed
         },
-        "interventions": decisions
+        "interventions": decisions,
+        "reconciled": reconciled_list
     }
 
 class ActionPayload(BaseModel):

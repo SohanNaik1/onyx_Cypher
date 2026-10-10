@@ -7,3 +7,5 @@ uvicorn
 rich
 requests
 google-genai
+tabulate
+numpy

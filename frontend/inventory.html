@@ -310,10 +310,10 @@
 </div>
 <div>
 <div class="flex items-baseline gap-2">
-<span class="font-numeric-hero text-numeric-hero text-white tracking-tight font-semibold">1,420</span>
+<span class="font-numeric-hero text-numeric-hero text-white tracking-tight font-semibold" id="kpi-total-skus">--</span>
 <span class="text-[11px] font-mono text-text-subtle">SKUs</span>
 </div>
-<p class="text-body-sm text-text-muted pt-1">Across 3 regional depots &amp; cross-docks</p>
+<p class="text-body-sm text-text-muted pt-1" id="kpi-depots-text">Across regional depots</p>
 </div>
 <div class="mt-3 pt-3 border-t border-white/[0.04] flex items-center justify-between text-label-sm">
 <span class="text-text-subtle">Active Channels</span>
@@ -331,12 +331,12 @@
 </div>
 <div>
 <div class="flex items-baseline gap-2">
-<span class="font-numeric-hero text-numeric-hero text-white tracking-tight font-semibold">85%</span>
+<span class="font-numeric-hero text-numeric-hero text-white tracking-tight font-semibold" id="kpi-health-pct">--</span>
 <span class="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-tertiary/10 text-tertiary border border-tertiary/20">
 <span class="material-symbols-outlined text-[13px]">arrow_upward</span> +3.2%
           </span>
 </div>
-<p class="text-body-sm text-text-muted pt-1">1,207 SKUs within optimal replenishment buffer</p>
+<p class="text-body-sm text-text-muted pt-1" id="kpi-healthy-text">SKUs within optimal buffer</p>
 </div>
 <div class="mt-3 pt-3 border-t border-white/[0.04] flex items-center justify-between text-label-sm">
 <span class="text-text-subtle">Target Compliance</span>
@@ -354,8 +354,8 @@
 </div>
 <div>
 <div class="flex items-baseline gap-2">
-<span class="font-numeric-hero text-numeric-hero text-white tracking-tight font-semibold">₹142,500</span>
-<span class="text-[11px] font-mono text-secondary-fixed-dim">210 SKUs</span>
+<span class="font-numeric-hero text-numeric-hero text-white tracking-tight font-semibold" id="kpi-excess-count">--</span>
+<span class="text-[11px] font-mono text-secondary-fixed-dim" id="kpi-excess-skus">SKUs</span>
 </div>
 <p class="text-body-sm text-text-muted pt-1">Dead stock triage &amp; transfer mitigation target</p>
 </div>
@@ -375,7 +375,7 @@
 </div>
 <div>
 <div class="flex items-baseline gap-2">
-<span class="font-numeric-hero text-numeric-hero text-rose-100 tracking-tight font-semibold">3 SKUs</span>
+<span class="font-numeric-hero text-numeric-hero text-rose-100 tracking-tight font-semibold" id="kpi-critical-count">--</span>
 <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30 uppercase tracking-wider">
             Critical
           </span>
@@ -414,20 +414,20 @@
           All Statuses
         </button>
 <button class="status-filter px-3 py-1 text-label-md rounded-full text-rose-300/80 hover:text-rose-200 transition-all font-medium flex items-center gap-1" data-status="CRITICAL">
-<span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span> Critical (3)
+<span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span> <span id="filter-critical-count">Critical</span>
         </button>
 <button class="status-filter px-3 py-1 text-label-md rounded-full text-text-muted hover:text-white transition-all font-medium flex items-center gap-1" data-status="HEALTHY">
-<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span> Healthy (1,207)
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span> <span id="filter-healthy-count">Healthy</span>
         </button>
 <button class="status-filter px-3 py-1 text-label-md rounded-full text-text-muted hover:text-white transition-all font-medium flex items-center gap-1" data-status="EXCESS">
-<span class="w-1.5 h-1.5 rounded-full bg-blue-400"></span> Excess (210)
+<span class="w-1.5 h-1.5 rounded-full bg-blue-400"></span> <span id="filter-excess-count">Excess</span>
         </button>
 </div>
 </div>
 <!-- Right: Telemetry Sync Status Indicator -->
 <div class="flex items-center justify-between md:justify-end gap-3 text-label-sm text-text-muted px-2">
 <div class="flex items-center gap-2">
-<span class="font-mono text-text-primary font-medium" id="matrixRowCount">Showing 6 of 1,420 SKUs</span>
+<span class="font-mono text-text-primary font-medium" id="matrixRowCount">Loading...</span>
 </div>
 <span class="text-white/[0.1]">•</span>
 <div class="flex items-center gap-1.5">
@@ -468,7 +468,7 @@
 <option>100</option>
 </select>
 <span class="text-white/[0.1] mx-1">|</span>
-<span>Showing <span class="text-white font-medium">1-6</span> of <span class="text-white font-medium">1,420</span> SKUs</span>
+<span>Showing <span class="text-white font-medium" id="pagination-text">--</span> SKUs</span>
 </div>
 <div class="flex items-center gap-2">
 <button class="px-2.5 py-1 rounded-lg bg-surface-container-lowest border border-white/[0.06] text-text-muted hover:text-white transition-colors disabled:opacity-40" disabled="">
@@ -500,7 +500,7 @@
 <div class="flex items-center gap-4 text-text-subtle font-mono text-[11px]">
 <span class="flex items-center gap-1.5">
 <span class="material-symbols-outlined text-[14px] text-tertiary">bolt</span>
-        1,420 Runout vectors refreshed in <strong class="text-text-primary">18ms</strong>
+        Runout vectors refreshed
 </span>
 <span class="text-white/[0.1]">•</span>
 <span>Postgres Logical Replication: 0 lag</span>
@@ -530,9 +530,29 @@
           tbody.innerHTML = '';
           
           if (!data.reconciled || data.reconciled.length === 0) {
-              tbody.innerHTML = '<tr><td colspan="7" class="py-10 text-center text-text-muted">No inventory data found.</td></tr>';
+              tbody.innerHTML = '<tr><td colspan="7" class="py-10 text-center text-text-muted">No inventory data found. Click Run Auto-Triage on the Dashboard first.</td></tr>';
               return;
           }
+          
+          // Update KPI cards dynamically
+          const totalSkus = data.reconciled.length;
+          const criticalSkus = data.reconciled.filter(i => i.status === 'CRITICAL').length;
+          const excessSkus = data.reconciled.filter(i => i.status === 'EXCESS').length;
+          const healthySkus = data.reconciled.filter(i => i.status === 'HEALTHY').length;
+          const healthPct = totalSkus > 0 ? Math.round((healthySkus / totalSkus) * 100) : 0;
+          
+          const el = id => document.getElementById(id);
+          if (el('kpi-total-skus')) el('kpi-total-skus').textContent = totalSkus;
+          if (el('kpi-depots-text')) el('kpi-depots-text').textContent = `Across ${[...new Set(data.reconciled.map(i => i.depot))].length} depots`;
+          if (el('kpi-health-pct')) el('kpi-health-pct').textContent = healthPct + '%';
+          if (el('kpi-healthy-text')) el('kpi-healthy-text').textContent = `${healthySkus} SKUs within optimal buffer`;
+          if (el('kpi-excess-count')) el('kpi-excess-count').textContent = excessSkus + ' SKUs';
+          if (el('kpi-excess-skus')) el('kpi-excess-skus').textContent = 'Excess';
+          if (el('kpi-critical-count')) el('kpi-critical-count').textContent = criticalSkus + ' SKUs';
+          if (el('filter-critical-count')) el('filter-critical-count').textContent = `Critical (${criticalSkus})`;
+          if (el('filter-healthy-count')) el('filter-healthy-count').textContent = `Healthy (${healthySkus})`;
+          if (el('filter-excess-count')) el('filter-excess-count').textContent = `Excess (${excessSkus})`;
+          if (el('pagination-text')) el('pagination-text').textContent = `1-${totalSkus} of ${totalSkus}`;
           
           data.reconciled.forEach(item => {
               const status = item.status || 'HEALTHY';
