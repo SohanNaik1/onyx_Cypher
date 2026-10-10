@@ -522,7 +522,7 @@
       // 2. Matrix Filtering Logic
       async function loadInventoryData() {
         try {
-          const res = await fetch('/api/triage');
+          const res = await fetch('/api/triage', { cache: 'no-store' });
           if (!res.ok) throw new Error('API Error');
           const data = await res.json();
           

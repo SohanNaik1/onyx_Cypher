@@ -482,7 +482,7 @@
     
     async function loadInterventions() {
       try {
-        const res = await fetch('/api/triage');
+        const res = await fetch('/api/triage', { cache: 'no-store' });
         const data = await res.json();
         currentInterventions = data.interventions || [];
         renderUI();

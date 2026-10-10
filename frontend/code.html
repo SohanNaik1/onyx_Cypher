@@ -551,7 +551,7 @@
       }
 
       try {
-        const res = await fetch('/api/triage');
+        const res = await fetch('/api/triage', { cache: 'no-store' });
         if (!res.ok) throw new Error("API not ok");
         const data = await res.json();
         

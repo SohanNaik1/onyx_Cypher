@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
@@ -39,7 +39,10 @@ class ApproveRequest(BaseModel):
     interventions: List[InterventionItem]
 
 @app.get("/api/triage")
-def get_triage_decisions():
+def get_triage_decisions(response: Response):
+    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "0"
     db_state = fetch_state_from_supabase()
     
     if not db_state:
