@@ -588,15 +588,15 @@
 <div class="relative w-full pt-4">
 <!-- Pinpoint Tooltip Card positioned exactly above the curve drop line -->
 <div class="relative flex justify-center mb-1">
-<div class="px-4 py-2 rounded-2xl bg-[#23212d] border border-white/[0.09] shadow-xl flex items-center gap-3">
+<div class="px-4 py-2 rounded-2xl bg-[#23212d] border border-white/[0.09] shadow-xl flex items-center gap-3 transition-all duration-300">
 <div class="flex flex-col text-left">
-<span class="text-[10px] text-text-muted">1st Jun 2025</span>
-<span class="text-[14px] font-semibold text-white">₹ 16,500</span>
+<span id="chart-date" class="text-[10px] text-text-muted transition-all">1st Jun 2025</span>
+<span id="chart-value" class="text-[14px] font-semibold text-white transition-all">₹ 16,500</span>
 </div>
-<span class="px-2 py-0.5 rounded-full bg-accent-emerald/15 text-accent-emerald text-[10px] font-medium flex items-center gap-0.5">
-<span class="material-symbols-outlined text-[11px]">arrow_upward</span>
-                +35%
-              </span>
+<span id="chart-percent-badge" class="px-2 py-0.5 rounded-full bg-accent-emerald/15 text-accent-emerald text-[10px] font-medium flex items-center gap-0.5 transition-all">
+<span id="chart-icon" class="material-symbols-outlined text-[11px]">arrow_upward</span>
+<span id="chart-percent">+35%</span>
+</span>
 </div>
 </div>
 <!-- Y-axis labels and Chart Grid Canvas -->
@@ -628,19 +628,19 @@
 </lineargradient>
 </defs>
 <!-- Soft area under curve -->
-<path d="M 0,40 Q 60,35 120,60 T 240,65 T 360,55 T 480,75 T 600,45 T 720,85 T 840,115 T 940,95 L 1000,105 L 1000,160 L 0,160 Z" fill="url(#chartGradient)"></path>
+<path id="chart-area" d="M 0,40 Q 60,35 120,60 T 240,65 T 360,55 T 480,75 T 600,45 T 720,85 T 840,115 T 940,95 L 1000,105 L 1000,160 L 0,160 Z" fill="url(#chartGradient)" style="transition: d 0.5s ease;"></path>
 <!-- Glowing Main Curve Line -->
-<path d="M 0,40 Q 60,35 120,60 T 240,65 T 360,55 T 480,75 T 600,45 T 720,85 T 840,115 T 940,95 L 1000,105" fill="none" stroke="#d582af" stroke-linecap="round" stroke-width="2.5"></path>
+<path id="chart-line" d="M 0,40 Q 60,35 120,60 T 240,65 T 360,55 T 480,75 T 600,45 T 720,85 T 840,115 T 940,95 L 1000,105" fill="none" stroke="#d582af" stroke-linecap="round" stroke-width="2.5" style="transition: d 0.5s ease;"></path>
 <!-- Dashed drop indicator line at pinpoint (x=600) -->
-<line opacity="0.6" stroke="#ffafd7" stroke-dasharray="3 3" stroke-width="1.5" x1="600" x2="600" y1="45" y2="160"></line>
+<line id="chart-drop-line" opacity="0.6" stroke="#ffafd7" stroke-dasharray="3 3" stroke-width="1.5" x1="600" x2="600" y1="45" y2="160" style="transition: all 0.5s ease;"></line>
 <!-- Highlight node circle with glowing aura -->
-<circle cx="600" cy="45" fill="#ffffff" r="7" stroke="#c76d9e" stroke-width="3"></circle>
-<circle cx="600" cy="45" fill="#ffafd7" opacity="0.2" r="14"></circle>
+<circle id="chart-node-1" cx="600" cy="45" fill="#ffffff" r="7" stroke="#c76d9e" stroke-width="3" style="transition: all 0.5s ease;"></circle>
+<circle id="chart-node-2" cx="600" cy="45" fill="#ffafd7" opacity="0.2" r="14" style="transition: all 0.5s ease;"></circle>
 </svg>
 </div>
 </div>
 <!-- X-Axis Months (Jan, Feb, Mar, etc.) -->
-<div class="flex justify-between items-center text-[10px] text-text-subtle pt-3 pl-10 pr-2 select-none">
+<div id="chart-x-axis" class="flex justify-between items-center text-[10px] text-text-subtle pt-3 pl-10 pr-2 select-none">
 <span>Jan</span>
 <span>Feb</span>
 <span>Mar</span>
@@ -1070,13 +1070,71 @@
     const watchlistPills = document.querySelectorAll('#watchlist-container');
 
     // --- DURATION PILLS ---
+    const chartData = {
+      '1D': {
+        path: 'M 0,140 Q 200,150 400,135 T 600,140 T 800,130 L 1000,135',
+        x: 400, y: 135, date: '14:00', value: '₹ 250', percent: '0%', icon: 'remove', color: 'text-text-muted', bg: 'bg-white/10',
+        labels: '<span>00:00</span><span>06:00</span><span>12:00</span><span class="text-white font-medium">14:00</span><span>18:00</span><span>23:59</span>'
+      },
+      '1W': {
+        path: 'M 0,90 Q 200,70 400,110 T 700,60 T 900,80 L 1000,90',
+        x: 700, y: 60, date: 'Tuesday', value: '₹ 1,850', percent: '+2%', icon: 'arrow_upward', color: 'text-accent-emerald', bg: 'bg-accent-emerald/15',
+        labels: '<span>Mon</span><span class="text-white font-medium">Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>'
+      },
+      '1M': {
+        path: 'M 0,120 Q 150,110 300,130 T 500,100 T 700,90 T 850,110 L 1000,120',
+        x: 700, y: 90, date: '3rd Oct 2025', value: '₹ 4,300', percent: '-8%', icon: 'arrow_downward', color: 'text-red-400', bg: 'bg-red-400/15',
+        labels: '<span>Week 1</span><span>Week 2</span><span>Week 3</span><span class="text-white font-medium">Week 4</span>'
+      },
+      '6M': {
+        path: 'M 0,70 Q 100,50 200,90 T 400,60 T 600,100 T 800,70 T 900,80 L 1000,65',
+        x: 800, y: 70, date: '15th Sep 2025', value: '₹ 11,200', percent: '+12%', icon: 'arrow_upward', color: 'text-accent-emerald', bg: 'bg-accent-emerald/15',
+        labels: '<span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span class="text-white font-medium">Sep</span><span>Oct</span>'
+      },
+      '1Y': {
+        path: 'M 0,40 Q 60,35 120,60 T 240,65 T 360,55 T 480,75 T 600,45 T 720,85 T 840,115 T 940,95 L 1000,105',
+        x: 600, y: 45, date: '1st Jun 2025', value: '₹ 16,500', percent: '+35%', icon: 'arrow_upward', color: 'text-accent-emerald', bg: 'bg-accent-emerald/15',
+        labels: '<span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span class="text-white font-medium">Jun</span><span>Jul</span><span>Aug</span><span>Sep</span>'
+      }
+    };
+
     document.querySelectorAll('.duration-pill').forEach(pill => {
       pill.addEventListener('click', (e) => {
         document.querySelectorAll('.duration-pill').forEach(p => {
           p.className = 'duration-pill px-3.5 py-1 rounded-full text-text-muted hover:text-white text-[12px] font-medium transition-colors';
         });
         e.target.className = 'duration-pill px-3.5 py-1 rounded-full bg-gradient-to-r from-[#5a2744] to-[#773359] text-white text-[12px] font-medium shadow-sm active-pill';
-        showToast('Timeframe updated: ' + e.target.textContent);
+        
+        const period = e.target.textContent;
+        const data = chartData[period];
+        if (data) {
+          // Update Graph Paths
+          document.getElementById('chart-line').setAttribute('d', data.path);
+          document.getElementById('chart-area').setAttribute('d', data.path + ' L 1000,160 L 0,160 Z');
+          
+          // Update Nodes & Drop Line
+          document.getElementById('chart-drop-line').setAttribute('x1', data.x);
+          document.getElementById('chart-drop-line').setAttribute('x2', data.x);
+          document.getElementById('chart-drop-line').setAttribute('y1', data.y);
+          document.getElementById('chart-node-1').setAttribute('cx', data.x);
+          document.getElementById('chart-node-1').setAttribute('cy', data.y);
+          document.getElementById('chart-node-2').setAttribute('cx', data.x);
+          document.getElementById('chart-node-2').setAttribute('cy', data.y);
+          
+          // Update Tooltip Data
+          document.getElementById('chart-date').textContent = data.date;
+          document.getElementById('chart-value').textContent = data.value;
+          document.getElementById('chart-percent').textContent = data.percent;
+          document.getElementById('chart-icon').textContent = data.icon;
+          
+          const badge = document.getElementById('chart-percent-badge');
+          badge.className = `px-2 py-0.5 rounded-full ${data.bg} ${data.color} text-[10px] font-medium flex items-center gap-0.5 transition-all`;
+          
+          // Update X-Axis
+          document.getElementById('chart-x-axis').innerHTML = data.labels;
+        }
+        
+        showToast('Data timeframe updated to ' + period);
       });
     });
 
