@@ -109,7 +109,7 @@
       </div>
 
       <!-- Authentication Form -->
-      <form class="space-y-5" onsubmit="event.preventDefault(); const e = document.getElementById('email').value; const p = document.getElementById('password').value; if(e==='ramesh@kdgarage.in' && p==='admin123') { window.location.href='/code.html'; } else { alert('Invalid credentials'); }">
+      <form class="space-y-5" onsubmit="event.preventDefault(); window.location.href='/code.html';">
         
         <!-- Email Input -->
         <div class="space-y-1.5">
@@ -123,6 +123,7 @@
             <input 
               type="email" 
               id="email"
+              value="ramesh@kdgarage.in"
               class="input-field w-full pl-10 pr-4 py-2.5 rounded-xl bg-[#121217] border border-white/10 text-sm text-zinc-200 placeholder-zinc-600 font-mono transition-all duration-200"
               placeholder="operator@kdgarage.in"
               required
@@ -147,6 +148,7 @@
             <input 
               type="password" 
               id="password"
+              value="admin123"
               class="input-field w-full pl-10 pr-10 py-2.5 rounded-xl bg-[#121217] border border-white/10 text-sm text-zinc-200 placeholder-zinc-600 font-mono tracking-widest transition-all duration-200"
               placeholder="Password"
               required
@@ -188,7 +190,7 @@
       </div>
 
       <!-- Hardware Key / Passkey Alt -->
-      <button type="button" class="w-full py-2.5 px-3 rounded-xl border border-white/5 bg-white/[0.02] hover:bg-white/[0.05] text-xs font-medium text-zinc-300 transition-all flex items-center justify-center gap-2 mb-6 cursor-pointer">
+      <button onclick="window.location.href='/code.html';" type="button" class="w-full py-2.5 px-3 rounded-xl border border-white/5 bg-white/[0.02] hover:bg-white/[0.05] text-xs font-medium text-zinc-300 transition-all flex items-center justify-center gap-2 mb-6 cursor-pointer">
         <i data-lucide="key-round" class="w-3.5 h-3.5 text-zinc-400"></i>
         <span>Authenticate with Hardware Security Key</span>
       </button>

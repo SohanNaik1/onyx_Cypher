@@ -98,12 +98,15 @@ def fetch_state_from_supabase() -> dict:
         
         if not df.empty:
             # Convert date/time columns back to appropriate formats expected by the engine
-            if table_name == 'sales':
-                df['date'] = pd.to_datetime(df['date']).dt.date
-            elif table_name == 'purchase_orders':
-                df['expected_date'] = pd.to_datetime(df['expected_date']).dt.date
-            elif table_name == 'messages':
-                df['timestamp'] = pd.to_datetime(df['timestamp'])
+            try:
+                if table_name == 'sales' and 'date' in df.columns:
+                    df['date'] = pd.to_datetime(df['date'], format='mixed', errors='coerce').dt.date
+                elif table_name == 'purchase_orders' and 'expected_date' in df.columns:
+                    df['expected_date'] = pd.to_datetime(df['expected_date'], format='mixed', errors='coerce').dt.date
+                elif table_name == 'messages' and 'timestamp' in df.columns:
+                    df['timestamp'] = pd.to_datetime(df['timestamp'], format='mixed', errors='coerce')
+            except Exception as date_err:
+                print(f"Warning parsing dates for {table_name}: {date_err}")
                 
         mock_data[table_name] = df
         
